@@ -1,0 +1,3 @@
+weaponDPS = weaponDPS + (AP / 14)
+Judgement of the Righteous = 219 + (0.7143 * SP)
+Judgement of Vengeance = (120 * Stacks) + (0.4286 * SP)
