@@ -1,0 +1,54 @@
+<table *ngIf="gearOptions.length > 0" mat-table [dataSource]="gearOptions" class="mat-elevation-z8">
+  <ng-container matColumnDef="armor">
+    <th mat-header-cell *matHeaderCellDef>Armor</th>
+    <td mat-cell *matCellDef="let armor">{{armor.stats.armor}}</td>
+  </ng-container>
+  <ng-container matColumnDef="stamina">
+    <th mat-header-cell *matHeaderCellDef>Stam</th>
+    <td mat-cell *matCellDef="let armor">{{armor.stats.stamina}}</td>
+  </ng-container>
+  <ng-container matColumnDef="intellect">
+    <th mat-header-cell *matHeaderCellDef>Int</th>
+    <td mat-cell *matCellDef="let armor">{{armor.stats.intellect}}</td>
+  </ng-container>
+  <ng-container matColumnDef="strength">
+    <th mat-header-cell *matHeaderCellDef>Str</th>
+    <td mat-cell *matCellDef="let armor">{{armor.stats.strength}}</td>
+  </ng-container>
+  <ng-container matColumnDef="agility">
+    <th mat-header-cell *matHeaderCellDef>Agi</th>
+    <td mat-cell *matCellDef="let armor">{{armor.stats.agility}}</td>
+  </ng-container>
+  <ng-container matColumnDef="spirit">
+    <th mat-header-cell *matHeaderCellDef>Spirit</th>
+    <td mat-cell *matCellDef="let armor">{{armor.stats.spirit}}</td>
+  </ng-container>
+  <ng-container matColumnDef="meleeHit">
+    <th mat-header-cell *matHeaderCellDef>Hit</th>
+    <td mat-cell *matCellDef="let armor">{{armor.stats.meleeHit}}</td>
+  </ng-container>
+  <ng-container matColumnDef="meleeCrit">
+    <th mat-header-cell *matHeaderCellDef>Crit</th>
+    <td mat-cell *matCellDef="let armor">{{armor.stats.meleeCrit}}</td>
+  </ng-container>
+  <ng-container matColumnDef="expertise">
+    <th mat-header-cell *matHeaderCellDef>Expertise</th>
+    <td mat-cell *matCellDef="let armor">{{armor.stats.expertise}}</td>
+  </ng-container>
+  <ng-container matColumnDef="spellHit">
+    <th mat-header-cell *matHeaderCellDef>Spell Hit</th>
+    <td mat-cell *matCellDef="let armor">{{armor.stats.spellHit}}</td>
+  </ng-container>
+  <ng-container matColumnDef="spellCrit">
+    <th mat-header-cell *matHeaderCellDef>Spell Crit</th>
+    <td mat-cell *matCellDef="let armor">{{armor.stats.spellCrit}}</td>
+  </ng-container>
+  <ng-container matColumnDef="spellPower">
+    <th mat-header-cell *matHeaderCellDef>Spell Power</th>
+    <td mat-cell *matCellDef="let armor">{{armor.stats.spellPower}}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+</table>

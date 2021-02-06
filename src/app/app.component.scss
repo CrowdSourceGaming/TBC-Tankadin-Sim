@@ -1,0 +1,16 @@
+@import "~src/styles_variables.scss";
+
+.stats {
+  width: 300px
+}
+
+.gear {
+  flex: 1;
+  overflow: hidden;
+}
+
+h1 {
+  background-color: $primary;
+  padding: 10px;
+
+}

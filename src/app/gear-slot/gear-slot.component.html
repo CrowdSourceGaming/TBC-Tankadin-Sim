@@ -1,0 +1,7 @@
+<div>
+  <mat-tab-group>
+    <mat-tab *ngFor="let slot of slots" label="{{slot | titlecase}}">
+      <app-gear-selector [gearType]="getGearType(slot)"></app-gear-selector>
+    </mat-tab>
+  </mat-tab-group>
+</div>

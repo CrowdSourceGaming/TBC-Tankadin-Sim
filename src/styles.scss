@@ -1,1 +1,27 @@
+@import "src/styles_variables.scss";
+@import "~@angular/material/theming";
+
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 10;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.dark-theme {
+  $dark-primary: mat-palette($mat-pink);
+  $dark-accent: mat-palette($mat-blue-gray);
+  $dark-warn: mat-palette($mat-deep-orange);
+  $dark-theme: mat-dark-theme($dark-primary, $dark-accent, $dark-warn);
+
+  @include angular-material-theme($dark-theme);
+}
+
+.flex-grid {
+  display: flex;
+  width: 100%;
+}
