@@ -61,5 +61,8 @@ const level70PaladinStats: ItemStats = {
   intellect: 63,
   spirit: 68,
   meleeHit: 5,
-  attackRating: 350
+  attackRating: 350,
+  meleeCrit: 5,
+  defense: 350,
+  miss: 5
 }
