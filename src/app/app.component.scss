@@ -1,12 +1,18 @@
 @import "~src/styles_variables.scss";
 
 .stats {
-  width: 300px
+  width: 200px;
+  padding: 30px;
+  border-right: 3px solid black;
+  // max-height: 500px;
+  // overflow: auto;
+  // scrollbar-color: dark;
 }
 
 .gear {
   flex: 1;
   overflow: hidden;
+  padding: 30px;
 }
 
 h1 {

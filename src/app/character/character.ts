@@ -1,18 +1,23 @@
 import { GearSlots } from "./gearslot";
 import { Item } from "./item";
+import { ItemStats } from "./item-stats";
+import { getRaceAttributeValues, Races } from "./races/race";
 import { Spec } from "./spec";
 
 export class Character {
-  spec!: Spec;
-  gear!: { [key in GearSlots]: Item }
+  spec: Spec;
+  gear: { [key in GearSlots]: Item }
+  stats: ItemStats;
 
-  constructor() {
-    this.init();
+  constructor(race: Races = Races.human) {
+    this.spec = new Spec();
+    this.gear = this.initGear();
+    this.stats = this.initStats(race);
+    console.log('character', this);
   }
 
-  private init() {
-    this.spec = new Spec();
-    this.gear = {
+  private initGear() {
+    return {
       head: new Item(),
       neck: new Item(),
       shoulder: new Item(),
@@ -32,4 +37,29 @@ export class Character {
       relic: new Item()
     };
   }
+
+  private initStats(race: Races): ItemStats {
+    const raceAttributes = getRaceAttributeValues(race);
+    const result: ItemStats = {};
+    [raceAttributes, level70PaladinStats].forEach(startingStat => {
+      for (let [key, value] of Object.entries(startingStat)) {
+        if (result[key as keyof ItemStats]) {
+          result[key as keyof ItemStats] += value;
+        } else {
+          result[key as keyof ItemStats] = value;
+        }
+      }
+    })
+    return result;
+  }
+}
+
+const level70PaladinStats: ItemStats = {
+  strength: 104,
+  agility: 57,
+  stamina: 98,
+  intellect: 63,
+  spirit: 68,
+  meleeHit: 5,
+  attackRating: 350
 }

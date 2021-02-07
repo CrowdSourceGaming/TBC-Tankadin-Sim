@@ -1,0 +1,126 @@
+@import '../../styles_variables.scss';
+
+// .table {
+//   width: 100%
+// }
+
+// .mat-column-name {
+//   width: 20% !important;
+// }
+// .mat-column-stats-armor {
+//   width: 6% !important;
+// }
+// .mat-column-stats-stamina {
+//   width: 6% !important;
+// }
+// .mat-column-stats-intellect {
+//   width: 6% !important;
+// }
+// .mat-column-stats-strength {
+//   width: 6% !important;
+// }
+// .mat-column-stats-agility {
+//   width: 6% !important;
+// }
+// .mat-column-stats-spirit {
+//   width: 6% !important;
+// }
+// .mat-column-stats-meleeHit {
+//   width: 6% !important;
+// }
+// .mat-column-stats-meleeCrit {
+//   width: 6% !important;
+// }
+// .mat-column-stats-expertise {
+//   width: 6% !important;
+// }
+// .mat-column-stats-spellHit {
+//   width: 6% !important;
+// }
+// .mat-column-stats-spellCrit {
+//   width: 6% !important;
+// }
+// .mat-column-stats-spellPower {
+//   width: 6% !important;
+// }
+
+.table {
+  width: 100%
+}
+
+.mat-column-name {
+  flex: 3 !important;
+}
+.mat-column-stats-armor {
+  flex: 1 !important;
+}
+.mat-column-stats-stamina {
+  flex: 1 !important;
+}
+.mat-column-stats-intellect {
+  flex: 1 !important;
+}
+.mat-column-stats-strength {
+  flex: 1 !important;
+}
+.mat-column-stats-agility {
+  flex: 1 !important;
+}
+.mat-column-stats-spirit {
+  flex: 1 !important;
+}
+.mat-column-stats-meleeHit {
+  flex: 1 !important;
+}
+.mat-column-stats-meleeCrit {
+  flex: 1 !important;
+}
+.mat-column-stats-expertise {
+  flex: 1 !important;
+}
+.mat-column-stats-spellHit {
+  flex: 1 !important;
+}
+.mat-column-stats-spellCrit {
+  flex: 1 !important;
+}
+.mat-column-stats-spellPower {
+  flex: 1 !important;
+}
+
+.mat-row, .cdk-row, .mat-header-row {
+  position: relative;
+}
+
+td tr {
+  position: relative !important;
+}
+
+.mat-row{
+  min-height: 0px;
+}
+
+.mat-column-anchor {
+  opacity: .1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0px;
+  padding: 0px;
+}
+
+a {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+a:hover {
+  background-color: $warn;
+}
+
+.selected-item {
+  background-color: $primary;
+}

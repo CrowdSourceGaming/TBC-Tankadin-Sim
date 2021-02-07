@@ -9,20 +9,24 @@ import { GearSlotComponent } from './gear-slot/gear-slot.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { GearSelectorComponent } from './gear-selector/gear-selector.component';
 import { MatTableModule } from '@angular/material/table';
+import {MatSortModule} from '@angular/material/sort';
+import { ReferencesComponent } from './references/references.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     StatsTotalsComponent,
     GearSlotComponent,
-    GearSelectorComponent
+    GearSelectorComponent,
+    ReferencesComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MatTabsModule,
-    MatTableModule
+    MatTableModule,
+    MatSortModule
   ],
   providers: [],
   bootstrap: [AppComponent]

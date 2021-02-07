@@ -6,7 +6,7 @@ export const head: Armor[] = [
     armor: 739,
     intellect: 22,
     meleeCrit: 1,
-    spellPower: 23,
+    spellDamage: 23,
     stamina: 22,
     strength: 20,
     agility: 12,
@@ -15,7 +15,7 @@ export const head: Armor[] = [
   new Armor(ItemType.head, 16955, "Judgement Crown", {
     armor: 696,
     intellect: 23,
-    spellPower: 32,
+    spellDamage: 32,
     spirit: 6,
     stamina: 18,
     strength: 17

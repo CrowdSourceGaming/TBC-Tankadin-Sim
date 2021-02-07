@@ -1,6 +1,123 @@
 <h2> Stats </h2>
+
 <h3>General</h3>
+<div class="flex-grid flex-space-between">
+  <span>Spec</span>
+  <span>0/0/0</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Health</span>
+  <span>0</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Mana</span>
+  <span>0</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>HP5</span>
+  <span>0</span>
+</div>
+
 <h3>Attributes</h3>
-<h3>Melee</h3>
+<div class="flex-grid flex-space-between">
+  <span>Strength</span>
+  <span>{{calculateTotalStats('strength')}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Agility</span>
+  <span>{{calculateTotalStats('agility')}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Stamina</span>
+  <span>{{calculateTotalStats('stamina')}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Intellect</span>
+  <span>{{calculateTotalStats('intellect')}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Spirit</span>
+  <span>{{calculateTotalStats('spirit')}}</span>
+</div>
+
 <h3>Defense</h3>
+<div class="flex-grid flex-space-between">
+  <span>Armor</span>
+  <span>{{calculateTotalStats('armor')}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Defense</span>
+  <span>{{calculateTotalStats('defense')}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Miss</span>
+  <span>{{calculateTotalStats('miss')}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Dodge</span>
+  <span>{{calculateTotalStats('dodge')}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Parry</span>
+  <span>{{calculateTotalStats('parry')}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Block</span>
+  <span>{{calculateTotalStats('block')}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Block Value</span>
+  <span>{{calculateTotalStats('blockValue')}}</span>
+</div>
+
 <h3>Spell</h3>
+<div class="flex-grid flex-space-between">
+  <span>Spell Damage</span>
+  <span>{{calculateTotalStats('spellDamage')}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Spell Crit</span>
+  <span>{{calculateTotalStats('spellCrit')}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Spell Hit</span>
+  <span>{{calculateTotalStats('spellHit')}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Spell Pen</span>
+  <span>{{calculateTotalStats('spellPen')}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Healing</span>
+  <span>{{calculateTotalStats('healing')}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>MP5</span>
+  <span>{{calculateTotalStats('mp5')}}</span>
+</div>
+
+<h3>Melee</h3>
+<div class="flex-grid flex-space-between">
+  <span>Attack Rating</span>
+  <span>{{calculateTotalStats('attackRating')}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Attack Power</span>
+  <span>{{calculateTotalStats('attackPower')}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Damage</span>
+  <span>{{calculateTotalStats('damage')}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Melee Crit</span>
+  <span>{{calculateTotalStats('meleeCrit')}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Melee Hit</span>
+  <span>{{calculateTotalStats('meleeHit')}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Melee Expertise</span>
+  <span>{{calculateTotalStats('meleeExpertise')}}</span>
+</div>
