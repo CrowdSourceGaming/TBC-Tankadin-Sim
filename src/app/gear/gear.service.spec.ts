@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { RetrieveGearFactoryService } from './retrieve-gear-factory.service';
+import { GearService } from './gear.service';
 
 describe('RetrieveGearFactoryService', () => {
-  let service: RetrieveGearFactoryService;
+  let service: GearService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(RetrieveGearFactoryService);
+    service = TestBed.inject(GearService);
   });
 
   it('should be created', () => {

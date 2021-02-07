@@ -4,24 +4,40 @@ import { ItemStats, ItemType } from "./item-stats";
 export class Item {
   name: string = '';
   id: number = 0;
+  _id: number;
   stats: ItemStats = {};
-  validSlots: GearSlots[];
+  validSlot: GearSlots | null;
+  gemSockets: GemSocketColor[] = [];
+  set: GearSet = GearSet.none;
 
-  constructor(gearType: ItemType = ItemType.unkown, id: number = 0, name: string = '', stats: ItemStats = {}) {
+  constructor(gearType: GearSlots | null = null, id: number = 0, name: string = '', stats: ItemStats = {}) {
     this.name = name;
     this.id = id;
-    this.validSlots = this.getValidSlots(gearType);
+    this._id = id;
+    this.validSlot = gearType;
     this.stats = stats;
-  }
 
-  private getValidSlots(gearType: ItemType): GearSlots[] {
-    const validSlots: GearSlots[] = [];
-    if (gearType === ItemType.mainHand || gearType === ItemType.oneHand) {
-      validSlots.push(GearSlots.mainHand);
-    }
-    if (gearType === ItemType.oneHand || gearType === ItemType.offHand || gearType === ItemType.shield){
-      validSlots.push(GearSlots.offHand);
-    }
-    return validSlots;
   }
+}
+
+export enum GemSocketColor {
+  yellow = 'yellow',
+  blue = 'blue',
+  red = 'red',
+  meta = 'meta'
+}
+
+export enum GearSet {
+  none = 'None',
+  righteous = 'Righteous',
+  justicar = 'Justicar',
+  crystalforge = 'Crystalforge',
+  lightbringer = 'Lightbringer',
+  lieutenantCommandersRedoubt = 'Lieutenant Commander\'s Redoubt',
+  fieldMarshalsAegis = 'Field Marshal\'s Aegis',
+  doomplateBattlegear = 'Doomplate Battlegear',
+  grandMarshalsAegis = 'Grand Marshal\'s Aegis',
+  grandMarshalsRedemption = 'Grand Marshal\'s Redemption',
+  grandMarshalsVindication = 'Grand Marshal\'s Vindication',
+  warlordsAegis = 'Warlord\'s Aegis'
 }

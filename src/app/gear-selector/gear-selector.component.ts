@@ -1,11 +1,13 @@
 import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Character } from '../character/character';
 import { GearSlots } from '../character/gearslot';
 import { Item } from '../character/item';
-import { ItemStats, ItemStatsEnum } from '../character/item-stats';
-import { RetrieveGearFactoryService } from '../gear/retrieve-gear-factory.service';
+import { ItemStats, ItemStatsEnum, ItemType } from '../character/item-stats';
+import { GearService } from '../gear/gear.service';
+import { NewGearComponent } from '../new-gear/new-gear.component';
 import { SharedDataService } from '../shared/shared-data.service';
 
 @Component({
@@ -34,24 +36,22 @@ export class GearSelectorComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort)
   sort!: MatSort;
 
-  gearOptions!: MatTableDataSource<Item>;
+  dataSourceGearOptions!: MatTableDataSource<Item>;
   character!: Character;
   ItemStatsEnum = ItemStatsEnum;
+  gearOptions: Item[] = [];
 
-  constructor(private sharedDataService: SharedDataService, private retriveGearFactoryService: RetrieveGearFactoryService) { }
+  constructor(private sharedDataService: SharedDataService, private gearService: GearService, public dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.gearOptions = new MatTableDataSource(this.retriveGearFactoryService.getGearForSlot(this.gearType));
     this.character = this.sharedDataService.character;
+    this.gearService.gearOptions.subscribe(newGearOptions => {
+      this.gearOptions = newGearOptions.filter(gear => gear.validSlot?.includes(this.gearType))
+      console.log('this.gearOptions', this.gearOptions);
+    })
   }
   ngAfterViewInit() {
-    this.gearOptions.sortingDataAccessor = (item: any, path: string): any => {
-      return path.split(`.`)
-        .reduce((accumulator: any, key: string) => {
-          return accumulator ? accumulator[key] : undefined;
-        }, item);
-    }
-    this.gearOptions.sort = this.sort;
+    this.initGearSeletion();
   }
 
   assignGear(item: Item) {
@@ -61,6 +61,31 @@ export class GearSelectorComponent implements OnInit, AfterViewInit {
 
   getValueFromGear(gear: Item, stat: ItemStatsEnum) {
     return gear.stats[stat] || 0;
+  }
+
+  addGearToList(): void {
+    const dialogRef = this.dialog.open(NewGearComponent, {
+      width: '550px',
+      data: { gearSlot: this.gearType }
+    });
+
+    dialogRef.afterClosed().subscribe((newItem: Item) => {
+      if (newItem) {
+        this.gearService.addGearForSlot(newItem, this.gearType);
+      }
+    });
+  }
+
+  private initGearSeletion() {
+
+    this.dataSourceGearOptions = new MatTableDataSource(this.gearOptions);
+    this.dataSourceGearOptions.sortingDataAccessor = (item: any, path: string): any => {
+      return path.split(`.`)
+        .reduce((accumulator: any, key: string) => {
+          return accumulator ? accumulator[key] : undefined;
+        }, item);
+    }
+    this.dataSourceGearOptions.sort = this.sort;
   }
 
   // sortData(sort: Sort) {

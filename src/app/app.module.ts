@@ -13,6 +13,13 @@ import { MatSortModule } from '@angular/material/sort';
 import { ReferencesComponent } from './references/references.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { NewGearComponent } from './new-gear/new-gear.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -20,17 +27,24 @@ import { MatIconModule } from '@angular/material/icon';
     StatsTotalsComponent,
     GearSlotComponent,
     GearSelectorComponent,
-    ReferencesComponent
+    ReferencesComponent,
+    NewGearComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
     MatTabsModule,
     MatTableModule,
     MatSortModule,
     MatTooltipModule,
-    MatIconModule
+    MatIconModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

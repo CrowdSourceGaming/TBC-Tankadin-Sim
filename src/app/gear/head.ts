@@ -1,8 +1,9 @@
 import { Armor } from "../character/armor";
+import { GearSlots } from "../character/gearslot";
 import { ItemStatsEnum, ItemType } from "../character/item-stats";
 
 export const head: Armor[] = [
-  new Armor(ItemType.head, 29068, "Justicar Faceguard", {
+  new Armor(GearSlots.head, 29068, "Justicar Faceguard", {
     [ItemStatsEnum.armor]: 1227,
     [ItemStatsEnum.dodgeRating]: 24,
     [ItemStatsEnum.defenseRating]: 29,
@@ -10,7 +11,7 @@ export const head: Armor[] = [
     [ItemStatsEnum.intellect]: 24,
     [ItemStatsEnum.spellDamage]: 27
   }),
-  new Armor(ItemType.head, 30125, "Crystalforge Faceguard", {
+  new Armor(GearSlots.head, 30125, "Crystalforge Faceguard", {
     [ItemStatsEnum.armor]: 1355,
     [ItemStatsEnum.stamina]: 48,
     [ItemStatsEnum.intellect]: 28,

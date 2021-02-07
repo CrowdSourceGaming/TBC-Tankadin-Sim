@@ -92,67 +92,8 @@
 </div>
 
 
-<!-- <table mat-table [dataSource]="gearOptions" matSort class="mat-elevation-z8 table">
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-    <td mat-cell *matCellDef="let armor"> {{armor.name}} </td>
-  </ng-container>
-  <ng-container matColumnDef="stats.armor">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Armor</th>
-    <td mat-cell *matCellDef="let armor">{{armor.stats.armor}}</td>
-  </ng-container>
-  <ng-container matColumnDef="stats.stamina">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Stam</th>
-    <td mat-cell *matCellDef="let armor">{{armor.stats.stamina}}</td>
-  </ng-container>
-  <ng-container matColumnDef="stats.intellect">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Int</th>
-    <td mat-cell *matCellDef="let armor">{{armor.stats.intellect}}</td>
-  </ng-container>
-  <ng-container matColumnDef="stats.strength">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Str</th>
-    <td mat-cell *matCellDef="let armor">{{armor.stats.strength}}</td>
-  </ng-container>
-  <ng-container matColumnDef="stats.agility">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Agi</th>
-    <td mat-cell *matCellDef="let armor">{{armor.stats.agility}}</td>
-  </ng-container>
-  <ng-container matColumnDef="stats.spirit">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Spirit</th>
-    <td mat-cell *matCellDef="let armor">{{armor.stats.spirit}}</td>
-  </ng-container>
-  <ng-container matColumnDef="stats.meleeHit">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Hit</th>
-    <td mat-cell *matCellDef="let armor">{{armor.stats.meleeHit}}</td>
-  </ng-container>
-  <ng-container matColumnDef="stats.meleeCrit">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Crit</th>
-    <td mat-cell *matCellDef="let armor">{{armor.stats.meleeCrit}}</td>
-  </ng-container>
-  <ng-container matColumnDef="stats.expertise">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Expertise</th>
-    <td mat-cell *matCellDef="let armor">{{armor.stats.expertise}}</td>
-  </ng-container>
-  <ng-container matColumnDef="stats.spellHit">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Spell Hit</th>
-    <td mat-cell *matCellDef="let armor">{{armor.stats.spellHit}}</td>
-  </ng-container>
-  <ng-container matColumnDef="stats.spellCrit">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Spell Crit</th>
-    <td mat-cell *matCellDef="let armor">{{armor.stats.spellCrit}}</td>
-  </ng-container>
-  <ng-container matColumnDef="stats.spellPower">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header>Spell Power</th>
-    <td mat-cell *matCellDef="let armor">{{armor.stats.spellPower}}</td>
-  </ng-container>
-  <ng-container matColumnDef="anchor">
-    <th mat-header-cell *matHeaderCellDef></th>
-    <td mat-cell *matCellDef="let armor">
-      <a attr.data-wowhead="item={{armor.id}}"></a>
-    </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-</table> -->
+<div>
+  <div style="margin-top: 20px;">
+    <button style="float: right" (click)="addGearToList()" mat-raised-button color="accent">Add Gear to list</button>
+  </div>
+</div>
