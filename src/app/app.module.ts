@@ -9,8 +9,10 @@ import { GearSlotComponent } from './gear-slot/gear-slot.component';
 import { MatTabsModule } from '@angular/material/tabs';
 import { GearSelectorComponent } from './gear-selector/gear-selector.component';
 import { MatTableModule } from '@angular/material/table';
-import {MatSortModule} from '@angular/material/sort';
+import { MatSortModule } from '@angular/material/sort';
 import { ReferencesComponent } from './references/references.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { ReferencesComponent } from './references/references.component';
     BrowserAnimationsModule,
     MatTabsModule,
     MatTableModule,
-    MatSortModule
+    MatSortModule,
+    MatTooltipModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]
