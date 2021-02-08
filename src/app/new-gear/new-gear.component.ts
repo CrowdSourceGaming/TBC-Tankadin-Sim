@@ -53,7 +53,6 @@ export class NewGearComponent implements OnInit {
     for (const [key, value] of Object.entries(this.item.stats)) {
       keys.push(key as keyof ItemStats);
     }
-    console.log('keys', keys);
     return keys;
   }
 
@@ -84,7 +83,6 @@ export class NewGearComponent implements OnInit {
       this.item.set = this.createItemFormGroup.get('gearSet')?.value;
       this.item.name = this.createItemFormGroup.get('itemName')?.value;
       this.item.validSlot = this.data.gearSlot;
-      console.log('item', this.item);
       this.dialogRef.close(this.item);
     }
   }

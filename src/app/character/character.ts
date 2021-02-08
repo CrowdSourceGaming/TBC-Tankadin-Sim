@@ -13,7 +13,6 @@ export class Character {
     this.spec = new Spec();
     this.gear = this.initGear();
     this.baseStats = this.initStats(race);
-    console.log('character', this);
   }
 
   calculateTotalStats(stat: ItemStatsEnum): number {

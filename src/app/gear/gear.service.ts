@@ -46,7 +46,6 @@ export class GearService {
   }
 
   private async GetItemsFromDB(): Promise<void> {
-    console.log('calling database');
     const collection: globalThis.Realm.Services.MongoDB.MongoDBCollection<Item> = this.mongoDB.db(DBName).collection(collectionName);
     this.gearOptions.next(await collection.find());
   }
