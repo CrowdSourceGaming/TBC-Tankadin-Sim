@@ -1,0 +1,101 @@
+<h1 mat-dialog-title>Add New Gear</h1>
+<div mat-dialog-content>
+  <form [formGroup]="createItemFormGroup">
+    <div>
+      <mat-form-field>
+        <mat-label>tbcdb link</mat-label>
+        <input formControlName="tbcdbLink" matInput placeholder="https://tbcdb.com/?item=29068">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label>Item Name</mat-label>
+        <input formControlName="itemName" matInput placeholder="Justicar Faceguard">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label>Gear Slot</mat-label>
+        <mat-select formControlName="gearSlot">
+          <mat-option *ngFor="let slot of GearSlots" [value]="slot">
+            {{slot}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label>Part of set?</mat-label>
+        <mat-select formControlName="gearSet">
+          <mat-option *ngFor="let set of GearSets; let i = index;" [value]="set">
+            {{set}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </form>
+
+  <div>
+    <h3>Attributes</h3>
+    <div>
+      <table>
+        <thead>
+          <th>Attribute</th>
+          <th>Value</th>
+          <th></th>
+        </thead>
+        <tbody>
+          <tr *ngFor="let key of getAttributes()">
+            <td>{{key}}</td>
+            <td>{{item.stats[key]}}</td>
+            <td><button style="float:right;" mat-raised-button color="warn" (click)="removeStat(key)">Remove</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <form [formGroup]="addAttributesFormGroup" (ngSubmit)="addAttribute($event); false">
+      <div class="flex-grid flex-space-between">
+        <mat-form-field class="small-form-field">
+          <mat-label>Attribute</mat-label>
+          <mat-select formControlName="attributeName">
+            <mat-option *ngFor="let key of attributeList" [value]="key">{{key}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="small-form-field">
+          <mat-label>Value</mat-label>
+          <input formControlName="attributeValue" matInput placeholder="0">
+        </mat-form-field>
+        <button mat-raised-button color="accent">Add</button>
+      </div>
+    </form>
+  </div>
+
+  <div>
+    <h3>Gem Sockets</h3>
+    <div>
+      <ul>
+        <li class="flex-grid flex-space-between" *ngFor="let socket of item.gemSockets; let i = index;">
+          <span>{{socket}}</span>
+          <span><button mat-raised-button color="warn" (click)="removeGemSocket(i)">Remove</button></span>
+        </li>
+      </ul>
+    </div>
+    <form class="flex-grid flex-space-between" [formGroup]="addGemSocketFormGroup"
+      (ngSubmit)="addGemSocket($event); false">
+      <mat-form-field class="small-form-field">
+        <mat-label>Socket Color</mat-label>
+        <mat-select formControlName="gemSocketColorToAdd">
+          <mat-option *ngFor="let color of GemSocketColors" [value]="color">{{color}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button color="accent">Add</button>
+    </form>
+  </div>
+
+
+  <div mat-dialog-actions>
+    <button mat-raised-button color="accent" (click)="onNoClick()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="createItem()" cdkFocusInitial>Add</button>
+  </div>

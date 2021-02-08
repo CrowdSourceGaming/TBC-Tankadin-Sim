@@ -1,4 +1,4 @@
-@import '../../styles_variables.scss';
+@import "../../styles_variables.scss";
 
 // .table {
 //   width: 100%
@@ -45,11 +45,12 @@
 // }
 
 .table {
-  width: 100%
+  width: 100%;
 }
 
 .mat-column-name {
   flex: 3 !important;
+  justify-content: space-between !important;
 }
 .mat-column-stats-armor {
   flex: 1 !important;
@@ -84,11 +85,28 @@
 .mat-column-stats-spellCrit {
   flex: 1 !important;
 }
-.mat-column-stats-spellPower {
+.mat-column-stats-spellDamage {
+  flex: 1 !important;
+}
+.mat-column-stats-defenseRating {
+  flex: 1 !important;
+}
+.mat-column-stats-dodgeRating {
+  flex: 1 !important;
+}
+.mat-column-stats-parryRating {
+  flex: 1 !important;
+}
+.mat-column-stats-blockRating {
+  flex: 1 !important;
+}
+.mat-column-stats-blockValue {
   flex: 1 !important;
 }
 
-.mat-row, .cdk-row, .mat-header-row {
+.mat-row,
+.cdk-row,
+.mat-header-row {
   position: relative;
 }
 
@@ -96,12 +114,12 @@ td tr {
   position: relative !important;
 }
 
-.mat-row{
+.mat-row {
   min-height: 0px;
 }
 
 .mat-column-anchor {
-  opacity: .1;
+  opacity: 0.1;
   position: absolute;
   top: 0;
   left: 0;
@@ -109,6 +127,7 @@ td tr {
   bottom: 0;
   margin: 0px;
   padding: 0px;
+  border: 0px;
 }
 
 a {
@@ -124,3 +143,17 @@ a:hover {
 .selected-item {
   background-color: $primary;
 }
+
+.mat-cell, .mat-sort-header{
+  border-right: 1px solid black;
+  padding-left: 5px;
+}
+
+:host ::ng-deep .mat-sort-header-content{
+  text-align: left !important;
+}
+
+:host ::ng-deep .mat-sort-header-arrow{
+  margin-right: 5px;
+}
+

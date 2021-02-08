@@ -7,11 +7,11 @@
 </div>
 <div class="flex-grid flex-space-between">
   <span>Health</span>
-  <span>{{calculateHealth()}}</span>
+  <span>{{character.totalHealth}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Mana</span>
-  <span>{{calculateMana()}}</span>
+  <span>{{character.totalMana}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>HP5</span>
@@ -21,103 +21,118 @@
 <h3>Attributes</h3>
 <div class="flex-grid flex-space-between">
   <span>Strength</span>
-  <span>{{calculateTotalStats(ItemStatsEnum.strength)}}</span>
+  <span>{{character.calculateTotalStats(ItemStatsEnum.strength)}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Agility</span>
-  <span>{{calculateTotalStats(ItemStatsEnum.agility)}}</span>
+  <span>{{character.calculateTotalStats(ItemStatsEnum.agility)}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Stamina</span>
-  <span>{{calculateTotalStats(ItemStatsEnum.stamina)}}</span>
+  <span>{{character.calculateTotalStats(ItemStatsEnum.stamina)}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Intellect</span>
-  <span>{{calculateTotalStats(ItemStatsEnum.intellect)}}</span>
+  <span>{{character.calculateTotalStats(ItemStatsEnum.intellect)}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Spirit</span>
-  <span>{{calculateTotalStats(ItemStatsEnum.spirit)}}</span>
+  <span>{{character.calculateTotalStats(ItemStatsEnum.spirit)}}</span>
 </div>
 
 <h3>Defense</h3>
 <div class="flex-grid flex-space-between">
   <span>Armor</span>
-  <span>{{calculateArmor()}}</span>
+  <span>{{character.armor}}</span>
 </div>
 <div class="flex-grid flex-space-between">
-  <span>Defense</span>
-  <span>{{calculateTotalStats(ItemStatsEnum.defense)}}</span>
+  <div>Defense</div>
+  <div>
+    <span [ngClass]="{'warn-background': character.defense < 490}">{{character.defense | number: '1.0-0'}}</span>
+    <mat-icon *ngIf="character.defense < 490" style="font-size: medium;"
+      matTooltip="To be uncritible, you need to have 490 defense" matTooltipPosition="after">help
+    </mat-icon>
+  </div>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Miss</span>
-  <span>{{calculateTotalStats(ItemStatsEnum.miss) | number:'1.2-2'}}%</span>
+  <span>{{character.missChance | number:'1.2-2'}}%</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Dodge</span>
-  <span>{{calculateDodgeChance() | number:'1.2-2' }}%</span>
+  <span>{{character.dodgeChance | number:'1.2-2' }}%</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Parry</span>
-  <span>{{calculateParry() | number:'1.2-2'}}%</span>
+  <span>{{character.parry | number:'1.2-2'}}%</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Block</span>
-  <span>{{calculateBlock() | number:'1.2-2'}}%</span>
+  <span>{{character.blockChance | number:'1.2-2'}}%</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Block Value</span>
-  <span>{{calculateBlockValue() | number: '1.0-0'}}</span>
+  <span>{{character.blockValue | number: '1.0-0'}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <div>Mitigation chance</div>
+  <div>
+    <span [ngClass]="{'warn-background': character.mitigationChance < 72.4}">
+      {{character.mitigationChance | number: '1.2-2'}}%</span>
+    <mat-icon *ngIf="character.mitigationChance < 72.4" style="font-size: medium;"
+      matTooltip="To be uncrushable you must have 72.4% mitigation before holy shield" matTooltipPosition="after">help
+    </mat-icon>
+  </div>
 </div>
 
 <h3>Spell</h3>
 <div class="flex-grid flex-space-between">
   <span>Spell Damage</span>
-  <span>{{calculateTotalStats(ItemStatsEnum.spellDamage)}}</span>
+  <span>{{character.calculateTotalStats(ItemStatsEnum.spellDamage)}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Spell Crit</span>
-  <span>{{calculateSpellCrit()| number:'1.2-2'}}%</span>
+  <span>{{character.spellCrit | number:'1.2-2'}}%</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Spell Hit</span>
-  <span>{{calculateTotalStats(ItemStatsEnum.spellHit)| number:'1.2-2'}}%</span>
+  <span>{{character.spellHit| number:'1.2-2'}}%</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Spell Pen</span>
-  <span>{{calculateTotalStats(ItemStatsEnum.spellPen)}}</span>
+  <span>{{character.calculateTotalStats(ItemStatsEnum.spellPen)}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Healing</span>
-  <span>{{calculateTotalStats(ItemStatsEnum.healing)}}</span>
+  <span>{{character.calculateTotalStats(ItemStatsEnum.healing)}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>MP5</span>
-  <span>{{calculateTotalStats(ItemStatsEnum.mp5)}}</span>
+  <span>{{character.calculateTotalStats(ItemStatsEnum.mp5)}}</span>
 </div>
 
 <h3>Melee</h3>
 <div class="flex-grid flex-space-between">
   <span>Attack Rating</span>
-  <span>{{calculateTotalStats(ItemStatsEnum.attackRating)}}</span>
+  <span>{{character.calculateTotalStats(ItemStatsEnum.attackRating)}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Attack Power</span>
-  <span>{{calculateAttackPower()}}</span>
+  <span>{{character.attackPower}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Damage</span>
-  <span>{{calculateTotalStats(ItemStatsEnum.damage)}}</span>
+  <span>{{character.calculateTotalStats(ItemStatsEnum.damage)}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Melee Crit</span>
-  <span>{{calculateCrit()}}</span>
+  <span>{{character.meleeCrit | number: '1.2-2'}}%</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Melee Hit</span>
-  <span>{{calculateTotalStats(ItemStatsEnum.meleeHit)}}</span>
+  <span>{{character.hitChance | number: '1.2-2'}}%</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Melee Expertise</span>
-  <span>{{calculateTotalStats(ItemStatsEnum.meleeExpertise)}}</span>
+  <span>{{character.expertise | number: '1.2-2'}}</span>
 </div>
