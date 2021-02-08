@@ -20,6 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
+import { APP_BASE_HREF } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,12 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatSelectModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: APP_BASE_HREF,
+      useValue: '/' + (window.location.pathname.split('/')[1] || '')
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
