@@ -63,6 +63,18 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header>Expertise</mat-header-cell>
       <mat-cell *matCellDef="let armor">{{getValueFromGear(armor, ItemStatsEnum.expertiseRating)}}</mat-cell>
     </ng-container>
+    <ng-container matColumnDef="stats.{{ItemStatsEnum.attackSpeed}}">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Attack Speed</mat-header-cell>
+      <mat-cell *matCellDef="let armor">{{getValueFromGear(armor, ItemStatsEnum.attackSpeed)}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="stats.{{ItemStatsEnum.damageMin}}">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Min Damage</mat-header-cell>
+      <mat-cell *matCellDef="let armor">{{getValueFromGear(armor, ItemStatsEnum.damageMin)}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="stats.{{ItemStatsEnum.damageMax}}">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Max Damage</mat-header-cell>
+      <mat-cell *matCellDef="let armor">{{getValueFromGear(armor, ItemStatsEnum.damageMax)}}</mat-cell>
+    </ng-container>
     <!-- Spell -->
     <ng-container matColumnDef="stats.{{ItemStatsEnum.spellHitRating}}">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Spell Hit</mat-header-cell>

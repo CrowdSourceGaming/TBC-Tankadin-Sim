@@ -13,12 +13,11 @@ import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from
 export class NewGearComponent implements OnInit {
 
   item: Item = new Item();
-  GearSlots = Object.keys(GearSlots);
-  attributeList = Object.keys(ItemStatsEnum)
-  Object = Object;
-  GemSocketColors = Object.keys(GemSocketColor);
-  GearSet = GearSet;
-  GearSets = Object.values(GearSet);
+  GearSlots = Object.keys(GearSlots).sort();
+  attributeList = Object.keys(ItemStatsEnum).sort();
+  GemSocketColors = Object.keys(GemSocketColor).sort();
+  GearSets = Object.values(GearSet).sort();
+  selectedGearSlot!: GearSlots;
 
   constructor(
     public dialogRef: MatDialogRef<NewGearComponent>,
@@ -29,19 +28,38 @@ export class NewGearComponent implements OnInit {
     attributeValue: new FormControl('')
   })
 
-  createItemFormGroup = new FormGroup({
-    tbcdbLink: new FormControl('', { validators: [Validators.required, this.validateTBCDBLink()] }),
-    itemName: new FormControl('', { validators: [Validators.required] }),
-    gearSlot: new FormControl({ value: this.data.gearSlot, disabled: true }),
-    gearSet: new FormControl({ value: GearSet.none }, { validators: [Validators.required] })
+  addGemSocketBonusFormGroup = new FormGroup({
+    attributeName: new FormControl(''),
+    attributeValue: new FormControl('')
   })
 
+  createItemFormGroup!: FormGroup;
+
   addGemSocketFormGroup = new FormGroup({
-    gemSocketColorToAdd: new FormControl('', { validators: [Validators.required] })
+    gemSocketColorToAdd: new FormControl('')
   })
 
 
   ngOnInit(): void {
+    this.selectedGearSlot = this.data.gearSlot;
+    console.log('this.selectedGearSlot', this.selectedGearSlot)
+    console.log('GearSlots.mainHand', GearSlots.mainHand)
+    console.log('not equal', this.selectedGearSlot !== GearSlots.mainHand)
+    if (this.selectedGearSlot !== GearSlots.mainHand) {
+      const damageMinIdx = this.attributeList.findIndex(attr => attr === ItemStatsEnum.damageMin)
+      this.attributeList.splice(damageMinIdx, 1);
+      const damageMaxIdx = this.attributeList.findIndex(attr => attr === ItemStatsEnum.damageMax)
+      this.attributeList.splice(damageMaxIdx, 1);
+      const attackSpeedIdx = this.attributeList.findIndex(attr => attr === ItemStatsEnum.attackSpeed)
+      this.attributeList.splice(attackSpeedIdx, 1);
+    }
+
+    this.createItemFormGroup = new FormGroup({
+      tbcdbLink: new FormControl('', { validators: [Validators.required, this.validateTBCDBLink()] }),
+      itemName: new FormControl('', { validators: [Validators.required] }),
+      gearSlot: new FormControl({ value: this.selectedGearSlot, disabled: true }),
+      gearSet: new FormControl({ value: GearSet.none, disabled: false }, { validators: [Validators.required] })
+    })
   }
 
   onNoClick(): void {
@@ -50,10 +68,9 @@ export class NewGearComponent implements OnInit {
 
   getAttributes() {
     const keys = [];
-    for (const [key, value] of Object.entries(this.item.stats)) {
+    for (const [key] of Object.entries(this.item.stats)) {
       keys.push(key as keyof ItemStats);
     }
-    console.log('keys', keys);
     return keys;
   }
 
@@ -83,9 +100,17 @@ export class NewGearComponent implements OnInit {
     if (this.createItemFormGroup.valid) {
       this.item.set = this.createItemFormGroup.get('gearSet')?.value;
       this.item.name = this.createItemFormGroup.get('itemName')?.value;
-      this.item.validSlot = this.data.gearSlot;
-      console.log('item', this.item);
+      if (this.addGemSocketBonusFormGroup.get('attributeName')?.value &&
+        this.addGemSocketBonusFormGroup.get('attributeValue')?.value) {
+
+        const attribute = this.addGemSocketBonusFormGroup.get('attributeName')?.value;
+        const value = this.addGemSocketBonusFormGroup.get('attributeValue')?.value
+        this.item.gemSocketBonus = { [attribute as keyof ItemStats]: value }
+      }
+      this.item.validSlot = this.selectedGearSlot;
+      console.log(this.item);
       this.dialogRef.close(this.item);
+      // this.dialogRef.close();
     }
   }
 

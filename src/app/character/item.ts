@@ -8,6 +8,7 @@ export class Item {
   stats: ItemStats = {};
   validSlot: GearSlots | null;
   gemSockets: GemSocketColor[] = [];
+  gemSocketBonus: ItemStats = {};
   set: GearSet = GearSet.none;
 
   constructor(gearType: GearSlots | null = null, id: number = 0, name: string = '', stats: ItemStats = {}) {
@@ -16,7 +17,6 @@ export class Item {
     this._id = id;
     this.validSlot = gearType;
     this.stats = stats;
-
   }
 }
 

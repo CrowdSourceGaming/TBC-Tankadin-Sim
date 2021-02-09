@@ -10,7 +10,6 @@ export class SharedDataService {
 
   character: Character = new Character();
 
-  constructor(private statsDataService: StatsDataService) { }
-
+  constructor() { }
 
 }

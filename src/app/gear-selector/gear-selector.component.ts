@@ -20,19 +20,7 @@ export class GearSelectorComponent implements OnInit, AfterViewInit {
   @Input()
   gearType!: GearSlots;
 
-  displayedColumns: string[] = [
-    // stats
-    `name`, `stats.${ItemStatsEnum.stamina}`, `stats.${ItemStatsEnum.intellect}`,
-    `stats.${ItemStatsEnum.strength}`, `stats.${ItemStatsEnum.agility}`, `stats.${ItemStatsEnum.spirit}`,
-    // defense
-    `stats.${ItemStatsEnum.armor}`, `stats.${ItemStatsEnum.defenseRating}`, `stats.${ItemStatsEnum.dodgeRating}`,
-    `stats.${ItemStatsEnum.parryRating}`, `stats.${ItemStatsEnum.blockRating}`, `stats.${ItemStatsEnum.blockValue}`,
-    //spell
-    `stats.${ItemStatsEnum.spellHitRating}`, `stats.${ItemStatsEnum.spellCritRating}`, `stats.${ItemStatsEnum.spellDamage}`,
-    //melee
-    `stats.${ItemStatsEnum.meleeHitRating}`, `stats.${ItemStatsEnum.meleeCritRating}`,
-    `stats.${ItemStatsEnum.expertiseRating}`, `anchor`];
-
+  displayedColumns: string[] = [];
   @ViewChild(MatSort)
   sort!: MatSort;
 
@@ -47,8 +35,25 @@ export class GearSelectorComponent implements OnInit, AfterViewInit {
     this.character = this.sharedDataService.character;
     this.gearService.gearOptions.subscribe(newGearOptions => {
       this.gearOptions = newGearOptions.filter(gear => gear.validSlot?.includes(this.gearType))
-      console.log('this.gearOptions', this.gearOptions);
     })
+    this.displayedColumns = [
+      // stats
+      `name`, `stats.${ItemStatsEnum.stamina}`, `stats.${ItemStatsEnum.intellect}`,
+      `stats.${ItemStatsEnum.strength}`, `stats.${ItemStatsEnum.agility}`, `stats.${ItemStatsEnum.spirit}`,
+      // defense
+      `stats.${ItemStatsEnum.armor}`, `stats.${ItemStatsEnum.defenseRating}`, `stats.${ItemStatsEnum.dodgeRating}`,
+      `stats.${ItemStatsEnum.parryRating}`, `stats.${ItemStatsEnum.blockRating}`, `stats.${ItemStatsEnum.blockValue}`,
+      //spell
+      `stats.${ItemStatsEnum.spellHitRating}`, `stats.${ItemStatsEnum.spellCritRating}`, `stats.${ItemStatsEnum.spellDamage}`,
+      //melee
+      `stats.${ItemStatsEnum.meleeHitRating}`, `stats.${ItemStatsEnum.meleeCritRating}`,
+      `stats.${ItemStatsEnum.expertiseRating}`
+    ]
+    if (this.gearType === GearSlots.mainHand) {
+      this.displayedColumns.push(...[`stats.${ItemStatsEnum.attackSpeed}`, `stats.${ItemStatsEnum.damageMin}`, `stats.${ItemStatsEnum.damageMax}`])
+    }
+    this.displayedColumns.push('anchor')
+
   }
   ngAfterViewInit() {
     this.initGearSeletion();
@@ -56,7 +61,6 @@ export class GearSelectorComponent implements OnInit, AfterViewInit {
 
   assignGear(item: Item) {
     this.sharedDataService.character.gear[this.gearType] = item;
-    console.log(`assigned ${item.name} to ${this.gearType}`)
   }
 
   getValueFromGear(gear: Item, stat: ItemStatsEnum) {
@@ -87,19 +91,5 @@ export class GearSelectorComponent implements OnInit, AfterViewInit {
     }
     this.dataSourceGearOptions.sort = this.sort;
   }
-
-  // sortData(sort: Sort) {
-  //   this.gearOptions. = this.gearOptions.sort((a, b) => {
-  //     const isAsc = sort.direction === `asc`;
-  //     switch (sort.active) {
-  //       case `name`: return compare(a.name, b.name, isAsc);
-  //       case `calories`: return compare(a.calories, b.calories, isAsc);
-  //       case `fat`: return compare(a.fat, b.fat, isAsc);
-  //       case `carbs`: return compare(a.carbs, b.carbs, isAsc);
-  //       case `protein`: return compare(a.protein, b.protein, isAsc);
-  //       default: return 0;
-  //     }
-  //   });
-  // }
 
 }
