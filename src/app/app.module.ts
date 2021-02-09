@@ -21,6 +21,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { ReactiveFormsModule } from '@angular/forms';
 import { APP_BASE_HREF } from '@angular/common';
+import { NewSpecComponent } from './new-spec/new-spec.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { HumanizePipe } from './humanize.pipe';
 
 @NgModule({
   declarations: [
@@ -29,7 +32,9 @@ import { APP_BASE_HREF } from '@angular/common';
     GearSlotComponent,
     GearSelectorComponent,
     ReferencesComponent,
-    NewGearComponent
+    NewGearComponent,
+    NewSpecComponent,
+    HumanizePipe
   ],
   imports: [
     BrowserModule,
@@ -45,7 +50,8 @@ import { APP_BASE_HREF } from '@angular/common';
     MatDialogModule,
     MatInputModule,
     MatFormFieldModule,
-    MatSelectModule
+    MatSelectModule,
+    MatExpansionModule
   ],
   providers: [
     {

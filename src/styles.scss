@@ -29,3 +29,27 @@ body {
 .flex-space-between {
   justify-content: space-between;
 }
+
+a:link {
+  color: $primary;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:visited {
+  color: $accent;
+  background-color: transparent;
+  text-decoration: none;
+}
+
+a:hover {
+  color: $warn;
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+a:active {
+  color: $accent;
+  background-color: transparent;
+  text-decoration: underline;
+}

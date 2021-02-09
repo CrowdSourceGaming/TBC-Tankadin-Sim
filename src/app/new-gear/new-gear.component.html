@@ -18,7 +18,7 @@
         <mat-label>Gear Slot</mat-label>
         <mat-select formControlName="gearSlot">
           <mat-option *ngFor="let slot of GearSlots" [value]="slot">
-            {{slot}}
+            {{slot | humanize}}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -27,8 +27,8 @@
       <mat-form-field>
         <mat-label>Part of set?</mat-label>
         <mat-select formControlName="gearSet">
-          <mat-option *ngFor="let set of GearSets; let i = index;" [value]="set">
-            {{set}}
+          <mat-option *ngFor="let set of GearSets;" [value]="set">
+            {{set | humanize}}
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -46,7 +46,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let key of getAttributes()">
-            <td>{{key}}</td>
+            <td>{{key | humanize}}</td>
             <td>{{item.stats[key]}}</td>
             <td><button style="float:right;" mat-raised-button color="warn" (click)="removeStat(key)">Remove</button>
             </td>
@@ -60,7 +60,7 @@
         <mat-form-field class="small-form-field">
           <mat-label>Attribute</mat-label>
           <mat-select formControlName="attributeName">
-            <mat-option *ngFor="let key of attributeList" [value]="key">{{key}}</mat-option>
+            <mat-option *ngFor="let key of attributeList" [value]="key">{{key | humanize}}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field class="small-form-field">
@@ -91,6 +91,21 @@
         </mat-select>
       </mat-form-field>
       <button mat-raised-button color="accent">Add</button>
+    </form>
+    <h3>Socket Bonus</h3>
+    <form [formGroup]="addGemSocketBonusFormGroup">
+      <div class="flex-grid flex-space-between">
+        <mat-form-field class="small-form-field">
+          <mat-label>Attribute</mat-label>
+          <mat-select formControlName="attributeName">
+            <mat-option *ngFor="let key of attributeList" [value]="key">{{key | humanize}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="small-form-field">
+          <mat-label>Value</mat-label>
+          <input formControlName="attributeValue" matInput placeholder="0">
+        </mat-form-field>
+      </div>
     </form>
   </div>
 

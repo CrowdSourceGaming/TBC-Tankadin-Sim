@@ -3,15 +3,15 @@
 <h3>General</h3>
 <div class="flex-grid flex-space-between">
   <span>Spec</span>
-  <span>0/0/0</span>
+  <span><a href="#" (click)="createNewSpec($event); false">{{character.spec.holyProtRetCount}}</a></span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Health</span>
-  <span>{{character.totalHealth}}</span>
+  <span>{{character.totalHealth | number: '1.0-0'}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Mana</span>
-  <span>{{character.totalMana}}</span>
+  <span>{{character.totalMana | number: '1.0-0'}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>HP5</span>
@@ -21,29 +21,29 @@
 <h3>Attributes</h3>
 <div class="flex-grid flex-space-between">
   <span>Strength</span>
-  <span>{{character.calculateTotalStats(ItemStatsEnum.strength)}}</span>
+  <span>{{character.getStatTotal(ItemStatsEnum.strength) | number: '1.0-0'}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Agility</span>
-  <span>{{character.calculateTotalStats(ItemStatsEnum.agility)}}</span>
+  <span>{{character.getStatTotal(ItemStatsEnum.agility)}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Stamina</span>
-  <span>{{character.calculateTotalStats(ItemStatsEnum.stamina)}}</span>
+  <span>{{character.getStatTotal(ItemStatsEnum.stamina) | number: '1.0-0'}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Intellect</span>
-  <span>{{character.calculateTotalStats(ItemStatsEnum.intellect)}}</span>
+  <span>{{character.getStatTotal(ItemStatsEnum.intellect) | number: '1.0-0'}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Spirit</span>
-  <span>{{character.calculateTotalStats(ItemStatsEnum.spirit)}}</span>
+  <span>{{character.getStatTotal(ItemStatsEnum.spirit)}}</span>
 </div>
 
 <h3>Defense</h3>
 <div class="flex-grid flex-space-between">
   <span>Armor</span>
-  <span>{{character.armor}}</span>
+  <span>{{character.armor | number: '1.0-0'}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <div>Defense</div>
@@ -88,7 +88,7 @@
 <h3>Spell</h3>
 <div class="flex-grid flex-space-between">
   <span>Spell Damage</span>
-  <span>{{character.calculateTotalStats(ItemStatsEnum.spellDamage)}}</span>
+  <span>{{character.getStatTotal(ItemStatsEnum.spellDamage)}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Spell Crit</span>
@@ -100,21 +100,21 @@
 </div>
 <div class="flex-grid flex-space-between">
   <span>Spell Pen</span>
-  <span>{{character.calculateTotalStats(ItemStatsEnum.spellPen)}}</span>
+  <span>{{character.getStatTotal(ItemStatsEnum.spellPen)}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Healing</span>
-  <span>{{character.calculateTotalStats(ItemStatsEnum.healing)}}</span>
+  <span>{{character.getStatTotal(ItemStatsEnum.healing)}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>MP5</span>
-  <span>{{character.calculateTotalStats(ItemStatsEnum.mp5)}}</span>
+  <span>{{character.getStatTotal(ItemStatsEnum.mp5)}}</span>
 </div>
 
 <h3>Melee</h3>
 <div class="flex-grid flex-space-between">
   <span>Attack Rating</span>
-  <span>{{character.calculateTotalStats(ItemStatsEnum.attackRating)}}</span>
+  <span>{{character.getStatTotal(ItemStatsEnum.attackRating)}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Attack Power</span>
@@ -122,7 +122,11 @@
 </div>
 <div class="flex-grid flex-space-between">
   <span>Damage</span>
-  <span>{{character.calculateTotalStats(ItemStatsEnum.damage)}}</span>
+  <span>{{character.weaponDamageMin}} - {{character.weaponDamageMax}}</span>
+</div>
+<div class="flex-grid flex-space-between">
+  <span>Attack Speed</span>
+  <span>{{character.attackSpeed | number: '1.2-2'}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Melee Crit</span>

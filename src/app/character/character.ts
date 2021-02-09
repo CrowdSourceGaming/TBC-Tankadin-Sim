@@ -15,118 +15,170 @@ export class Character {
     this.baseStats = this.initStats(race);
   }
 
-  calculateTotalStats(stat: ItemStatsEnum): number {
+  getStatTotal(stat: ItemStatsEnum): number {
+    const statValues = this.getStatValue(stat);
+    const statMultipliers = this.getStatMultiplier(stat);
+    return statValues * (1 + statMultipliers);
+  }
+
+  private getStatValue(stat: ItemStatsEnum): number {
+    return this.sum([
+      this.baseStats[stat] || 0,
+      this.spec.getValues()[stat] || 0,
+      this.calculateGearStats(stat)])
+  }
+
+  private getStatMultiplier(stat: ItemStatsEnum): number {
+    return this.sum([
+      this.spec.getMultipliers()[stat] || 0
+    ]);
+  }
+
+  private calculateGearStats(stat: ItemStatsEnum): number {
     let total = 0;
-    total += this.baseStats[stat] || 0;
+    // total += this.baseStats[stat] || 0;
     Object.entries(this.gear).forEach(([slot, item]) => {
       total += item.stats[stat] || 0;
     })
     return total;
   }
 
+  private sum(stats: number[]) {
+    return stats.reduce((a, b) => a + b, 0)
+  }
+
   /* ************************** STATS *************************** */
   get totalMana(): number {
-    let total = 0;
-    total += this.calculateTotalStats(ItemStatsEnum.intellect) * 15;
-    return total;
+    return this.getStatTotal(ItemStatsEnum.intellect) * 15;
   }
   get totalHealth(): number {
-    let total = 0;
-    total += this.calculateTotalStats(ItemStatsEnum.stamina) * 10;
-    return total;
-
+    return this.getStatTotal(ItemStatsEnum.stamina) * 10;
   }
+
 
   /* ************************** MELEE *************************** */
   get expertise(): number {
-    return this.calculateTotalStats(ItemStatsEnum.expertiseRating) / 15.77;
+    let total = this.getStatTotal(ItemStatsEnum.expertiseRating) / 15.77
+    total += this.getStatTotal(ItemStatsEnum.meleeExpertise);
+    return total;
   }
 
   get hitChance(): number {
-    return this.calculateTotalStats(ItemStatsEnum.meleeHitRating) / 15.77;
+    let total = this.getStatTotal(ItemStatsEnum.meleeHitRating) / 15.77;
+    total += this.getStatTotal(ItemStatsEnum.meleeHitPercent);
+    return total
   }
 
   get attackPower(): number {
     let total = 0;
-    total += this.calculateTotalStats(ItemStatsEnum.strength) * 2;
-    total += this.calculateTotalStats(ItemStatsEnum.attackPower);
+    total += this.getStatTotal(ItemStatsEnum.strength) * 2;
+    total += this.getStatTotal(ItemStatsEnum.attackPower);
     return total;
   }
 
   get meleeCrit(): number {
     let total = 0;
-    total += this.calculateTotalStats(ItemStatsEnum.meleeCritRating) / 22.08;
-    total += this.calculateTotalStats(ItemStatsEnum.agility) / 20;
+    total += this.getStatTotal(ItemStatsEnum.meleeCritRating) / 22.08;
+    total += this.getStatTotal(ItemStatsEnum.agility) / 20;
     return total;
   }
 
   get haste(): number {
-    return this.calculateTotalStats(ItemStatsEnum.hasteRating) / 15.77
+    return this.getStatTotal(ItemStatsEnum.hasteRating) / 15.77
   }
 
   get armorPen(): number {
-    return this.calculateTotalStats(ItemStatsEnum.armorPenRating) / 5.92
+    return this.getStatTotal(ItemStatsEnum.armorPenRating) / 5.92
   }
 
   /* ************************** DEFENSE *************************** */
   get defense(): number {
-    return 350 + (this.calculateTotalStats(ItemStatsEnum.defenseRating) / 2.37);
+    let total = 350 + (this.getStatTotal(ItemStatsEnum.defenseRating) / 2.37);
+    total += this.getStatTotal(ItemStatsEnum.defenseValue)
+    return total;
   }
 
   get armor(): number {
     let total = 0;
-    total += this.calculateTotalStats(ItemStatsEnum.agility) * 2;
-    total += this.calculateTotalStats(ItemStatsEnum.armor);
-    return total;
+    total += this.getStatTotal(ItemStatsEnum.agility) * 2;
+    total += this.getStatValue(ItemStatsEnum.armor);
+    return total * (1 + this.getStatMultiplier(ItemStatsEnum.armor));
   }
 
   get missChance(): number {
-    let total = 0;
-    total += this.calculateTotalStats(ItemStatsEnum.defenseRating) / 59.25 // 14.8125 * 4
+    let total = this.getStatTotal(ItemStatsEnum.defenseRating) / 59.25 // 14.8125 * 4
+    total += this.getStatTotal(ItemStatsEnum.defenseValue) / (59.25 / 2.36); // 1 defense skill = 2.36 defense rating
     return 5 + total;
   }
 
   get dodgeChance(): number {
-    const agility = this.calculateTotalStats(ItemStatsEnum.agility);
-    const itemDodge = this.calculateTotalStats(ItemStatsEnum.dodgeRating) / 18.92;
-    const defenseDodge = this.calculateTotalStats(ItemStatsEnum.defenseRating) / 59.25;
-    return 0.7 + (agility / 19.767) + itemDodge + defenseDodge;
+    const agility = this.getStatTotal(ItemStatsEnum.agility);
+    const itemDodge = this.getStatTotal(ItemStatsEnum.dodgeRating) / 18.92;
+    const defenseDodge = this.getStatTotal(ItemStatsEnum.defenseRating) / 59.25;
+    const defenseValueDodge = this.getStatTotal(ItemStatsEnum.defenseValue) / (59.25 / 2.36);
+    return 0.7 + (agility / 19.767) + itemDodge + defenseDodge + defenseValueDodge;
   }
 
   get blockValue(): number {
     let total = 0;
-    total += this.calculateTotalStats(ItemStatsEnum.blockValue)
-    total += this.calculateTotalStats(ItemStatsEnum.strength) / 20
-    return total;
+    total += this.getStatTotal(ItemStatsEnum.strength) / 20
+    total += this.getStatValue(ItemStatsEnum.blockValue)
+    return total * (1 + this.getStatMultiplier(ItemStatsEnum.blockValue));
   }
 
   get parry(): number {
-    const parryRating = this.calculateTotalStats(ItemStatsEnum.parryRating) / 23.65;
-    const defenseDodge = this.calculateTotalStats(ItemStatsEnum.defenseRating) / 59.25;
-    return 5 + parryRating + defenseDodge;
+    const parryRating = this.getStatTotal(ItemStatsEnum.parryRating) / 23.65;
+    const parryValue = this.getStatTotal(ItemStatsEnum.parryValue);
+    const defenseParry = this.getStatTotal(ItemStatsEnum.defenseRating) / 59.25;
+    const defenseValueParry = this.getStatTotal(ItemStatsEnum.defenseValue) / (59.25 / 2.36);
+    return 5 + parryRating + defenseParry + defenseValueParry + parryValue;
   }
 
   get blockChance(): number {
-    const blockRating = this.calculateTotalStats(ItemStatsEnum.blockRating) / 7.88;
-    const defenseBlockChance = this.calculateTotalStats(ItemStatsEnum.defenseRating) / 59.25;
-    return 5 + blockRating + defenseBlockChance
+    const blockRating = this.getStatTotal(ItemStatsEnum.blockRating) / 7.88;
+    const defenseBlockChance = this.getStatTotal(ItemStatsEnum.defenseRating) / 59.25;
+    const defenseValueBlockChance = this.getStatTotal(ItemStatsEnum.defenseValue) / (59.25 / 2.36);
+    return 5 + blockRating + defenseBlockChance + defenseValueBlockChance
   }
 
   get mitigationChance(): number {
     return this.missChance + this.dodgeChance + this.parry + this.blockChance;
   }
 
+  get weaponDamageMin(): number {
+    const weapon = this.gear.mainHand
+    let damage = weapon.stats.damageMin || 0;
+    damage += this.attackPower / (14 * (weapon.stats.attackSpeed || 0))
+    return damage || 0;
+  }
+
+  get weaponDamageMax(): number {
+    const weapon = this.gear.mainHand
+    let damage = weapon.stats.damageMax || 0;
+    damage += this.attackPower / (14 * (weapon.stats.attackSpeed || 0))
+    return damage || 0;
+  }
+
+  get attackSpeed(): number {
+    return this.gear.mainHand.stats.attackSpeed || 0;
+  }
+
   /* ************************** SPELL *************************** */
   get spellCrit(): number {
     let total = 0;
-    total += this.calculateTotalStats(ItemStatsEnum.spellCritRating);
-    total += this.calculateTotalStats(ItemStatsEnum.intellect) / 54;
+    total += this.getStatTotal(ItemStatsEnum.spellCritRating);
+    total += this.getStatTotal(ItemStatsEnum.intellect) / 54;
     return total;
   }
 
   get spellHit(): number {
-    return this.calculateTotalStats(ItemStatsEnum.spellHitRating) / 12.62
+    let total = this.getStatTotal(ItemStatsEnum.spellHitRating) / 12.62
+    total += this.getStatTotal(ItemStatsEnum.spellHitPercent)
+    return total
+
   }
+
+  /* ************************** PRIVATE *************************** */
 
   private initGear() {
     return {

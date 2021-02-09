@@ -1,11 +1,48 @@
+import { ItemStats } from "./item-stats";
 
 
 export class Spec {
 
   talents!: TalentMap;
+  talentString: string;
 
-  constructor(talentAllocation: string = '0000000000000000000000000000000000000000000000000000000000000000'){
+  constructor(talentAllocation: string = '0000000000000000000000000000000000000000000000000000000000000000') {
     this.initTalents(talentAllocation);
+    this.talentString = talentAllocation;
+  }
+
+  getMultipliers(): ItemStats {
+    return {
+      strength: this.talents.divineStrength * 0.02,
+      stamina: this.stamMultiplier,
+      intellect: this.talents.divineIntellect * 0.02,
+      armor: this.talents.toughness * 0.02,
+      blockValue: this.talents.shieldSpecialization * 0.1
+    }
+  }
+
+  getValues(): ItemStats {
+    return {
+      meleeHitPercent: this.talents.precision,
+      spellHitPercent: this.talents.precision,
+      meleeExpertise: this.talents.combatExpertise,
+      defenseValue: this.talents.anticipation * 4,
+      parryValue: this.talents.defection
+    }
+  }
+
+  get holyProtRetCount(): string {
+    const specStringArray = this.talentString.split('')
+    const holyCount = specStringArray.slice(0, 20).reduce((a, b) => +a + +b, 0);
+    const protCount = specStringArray.slice(20, 42).reduce((a, b) => +a + +b, 0);
+    const retCount = specStringArray.slice(42, -1).reduce((a, b) => +a + +b, 0);
+    return `${holyCount}/${protCount}/${retCount}`
+  }
+
+  private get stamMultiplier(): number {
+    const sacredDutyBonus = 0.03;
+    const combatExpertiseBonus = 0.02
+    return (sacredDutyBonus * this.talents.sacredDuty) + (combatExpertiseBonus * this.talents.combatExpertise);
   }
 
   private initTalents(talentAllocation: string) {
@@ -83,71 +120,71 @@ export class Spec {
 }
 
 export interface TalentMap {
-    // holy
-    divineStrength: number,
-    divineIntellect: number,
-    spiritualFocus: number,
-    improvedSoR: number,
-    healingLight: number,
-    auraMastery: number,
-    improvedLoH: number,
-    unyieldingFaith: number,
-    illumination: number,
-    improvedBoW: number,
-    pureOfHeart: number,
-    divineFavor: number,
-    sanctifiedLight: number,
-    purifyingPower: number,
-    holyPower: number,
-    lightsGrace: number,
-    holyShock: number,
-    blessedLife: number,
-    holyGuidance: number,
-    divineIllumination: number,
-    // prot
-    improvedDevoAura: number,
-    redoubt: number,
-    precision: number,
-    guardiansFavor: number,
-    toughness: number,
-    blessingOfKings: number,
-    improvedRighteousFury: number,
-    shieldSpecialization: number,
-    anticipation: number,
-    stoicism: number,
-    improvedHoJ: number,
-    improvedConcAura: number,
-    spellWarding: number,
-    blessingOfSanctuary: number,
-    reckoning: number,
-    sacredDuty: number,
-    oneHandedSpec: number,
-    improvedHolyShield: number,
-    holyShield: number,
-    ardentDefender: number,
-    combatExpertise: number,
-    AvengersShield: number,
-    // ret
-    improvedBoM: number,
-    benediction: number,
-    impJudgement: number,
-    improvedSoC: number,
-    defection: number,
-    vindication: number,
-    conviction: number,
-    sealOfCommand: number,
-    pursuitOfJustice: number,
-    eyeForAnEye: number,
-    improvedRetAura: number,
-    crusade: number,
-    twoHandedSpec: number,
-    sanctityAura: number,
-    imporovedSanctityAura: number,
-    vengeance: number,
-    sanctifiedJudgement: number,
-    sanctifiedSeals: number,
-    repentance: number,
-    divinePurpose: number,
-    fanaticism: number,
-    crusaderStrike: number
+  // holy
+  divineStrength: number,
+  divineIntellect: number,
+  spiritualFocus: number,
+  improvedSoR: number,
+  healingLight: number,
+  auraMastery: number,
+  improvedLoH: number,
+  unyieldingFaith: number,
+  illumination: number,
+  improvedBoW: number,
+  pureOfHeart: number,
+  divineFavor: number,
+  sanctifiedLight: number,
+  purifyingPower: number,
+  holyPower: number,
+  lightsGrace: number,
+  holyShock: number,
+  blessedLife: number,
+  holyGuidance: number,
+  divineIllumination: number,
+  // prot
+  improvedDevoAura: number,
+  redoubt: number,
+  precision: number,
+  guardiansFavor: number,
+  toughness: number,
+  blessingOfKings: number,
+  improvedRighteousFury: number,
+  shieldSpecialization: number,
+  anticipation: number,
+  stoicism: number,
+  improvedHoJ: number,
+  improvedConcAura: number,
+  spellWarding: number,
+  blessingOfSanctuary: number,
+  reckoning: number,
+  sacredDuty: number,
+  oneHandedSpec: number,
+  improvedHolyShield: number,
+  holyShield: number,
+  ardentDefender: number,
+  combatExpertise: number,
+  AvengersShield: number,
+  // ret
+  improvedBoM: number,
+  benediction: number,
+  impJudgement: number,
+  improvedSoC: number,
+  defection: number,
+  vindication: number,
+  conviction: number,
+  sealOfCommand: number,
+  pursuitOfJustice: number,
+  eyeForAnEye: number,
+  improvedRetAura: number,
+  crusade: number,
+  twoHandedSpec: number,
+  sanctityAura: number,
+  imporovedSanctityAura: number,
+  vengeance: number,
+  sanctifiedJudgement: number,
+  sanctifiedSeals: number,
+  repentance: number,
+  divinePurpose: number,
+  fanaticism: number,
+  crusaderStrike: number
 }
