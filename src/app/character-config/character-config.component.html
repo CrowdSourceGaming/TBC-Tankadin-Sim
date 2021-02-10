@@ -1,0 +1,8 @@
+<div>
+  <mat-form-field style="margin-top: 30px;" appearence="outline">
+    <mat-label>Character Race</mat-label>
+    <mat-select #raceSelect (selectionChange)="raceChange($event)" [value]="currentRaceValue">
+      <mat-option *ngFor="let race of RaceValues" [value]="race">{{race | humanize}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>

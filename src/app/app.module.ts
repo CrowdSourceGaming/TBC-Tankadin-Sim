@@ -28,6 +28,7 @@ import { ControlsComponent } from './controls/controls.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ErrorComponent } from './error/error.component';
+import { CharacterConfigComponent } from './character-config/character-config.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { ErrorComponent } from './error/error.component';
     NewSpecComponent,
     HumanizePipe,
     ControlsComponent,
-    ErrorComponent
+    ErrorComponent,
+    CharacterConfigComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +66,14 @@ import { ErrorComponent } from './error/error.component';
   providers: [
     {
       provide: APP_BASE_HREF,
-      useValue: '/' + (window.location.pathname.split('/')[1] || '')
+      useFactory: function () {
+        const location = window.location.pathname.split('/')[1] || '';
+        if (location !== 'gear' && location !== 'character') {
+          return `/${location}`
+        } else {
+          return '/'
+        }
+      }
     }
   ],
   bootstrap: [AppComponent]

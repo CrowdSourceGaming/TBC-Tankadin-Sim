@@ -1,9 +1,13 @@
 <mat-toolbar color="accent">
+  <div class="navigation-buttons">
+    <a routerLink="/gear"><button mat-raised-button>Gear</button></a>
+    <a routerLink="/character"><button mat-raised-button>Character</button></a>
+  </div>
   <div style="width:100%">
-    <h2 style="width: 100%">Character Configuration</h2>
+    <h2 style="width: 100%">Configuration</h2>
   </div>
   <div class="character-buttons">
     <button mat-raised-button (click)="save()">Save</button>
-    <button style="margin-left: 20px" mat-raised-button (click)="load()">Load</button>
+    <button mat-raised-button (click)="load()">Load</button>
   </div>
 </mat-toolbar>
