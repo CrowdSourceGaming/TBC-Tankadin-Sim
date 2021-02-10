@@ -1,4 +1,6 @@
-<h2> Stats </h2>
+<mat-toolbar color="accent">
+  <h2> Stats </h2>
+</mat-toolbar>
 
 <h3>General</h3>
 <div class="flex-grid flex-space-between">
@@ -47,8 +49,8 @@
 </div>
 <div class="flex-grid flex-space-between">
   <div>Defense</div>
-  <div>
-    <span [ngClass]="{'warn-background': character.defense < 490}">{{character.defense | number: '1.0-0'}}</span>
+  <div [ngClass]="{'warn-background': character.defense < 490}">
+    <span>{{character.defense | number: '1.0-0'}}</span>
     <mat-icon *ngIf="character.defense < 490" style="font-size: medium;"
       matTooltip="To be uncritible, you need to have 490 defense" matTooltipPosition="after">help
     </mat-icon>
@@ -76,8 +78,8 @@
 </div>
 <div class="flex-grid flex-space-between">
   <div>Mitigation chance</div>
-  <div>
-    <span [ngClass]="{'warn-background': character.mitigationChance < 72.4}">
+  <div [ngClass]="{'warn-background': character.mitigationChance < 72.4}">
+    <span>
       {{character.mitigationChance | number: '1.2-2'}}%</span>
     <mat-icon *ngIf="character.mitigationChance < 72.4" style="font-size: medium;"
       matTooltip="To be uncrushable you must have 72.4% mitigation before holy shield" matTooltipPosition="after">help
@@ -122,7 +124,7 @@
 </div>
 <div class="flex-grid flex-space-between">
   <span>Damage</span>
-  <span>{{character.weaponDamageMin}} - {{character.weaponDamageMax}}</span>
+  <span>{{character.weaponDamageMin | number: '1.2-2'}} - {{character.weaponDamageMax | number: '1.2-2'}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Attack Speed</span>

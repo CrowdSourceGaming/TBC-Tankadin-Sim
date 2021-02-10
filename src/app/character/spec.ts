@@ -1,10 +1,12 @@
 import { ItemStats } from "./item-stats";
 
+import { JsonProperty, Serializable } from 'typescript-json-serializer';
 
+@Serializable()
 export class Spec {
 
-  talents!: TalentMap;
-  talentString: string;
+  @JsonProperty() talents!: TalentMap;
+  @JsonProperty() talentString: string;
 
   constructor(talentAllocation: string = '0000000000000000000000000000000000000000000000000000000000000000') {
     this.initTalents(talentAllocation);

@@ -1,18 +1,23 @@
 import { GearSlots } from "./gearslot";
-import { Item } from "./item";
+import { Item, WeaponType } from "./item";
 import { ItemStats, ItemStatsEnum } from "./item-stats";
-import { getRaceAttributeValues, Races } from "./races/race";
+import { Race, Races } from "./races/race";
 import { Spec } from "./spec";
 
+import { JsonProperty, Serializable } from 'typescript-json-serializer';
+
+@Serializable()
 export class Character {
-  spec: Spec;
-  gear: { [key in GearSlots]: Item }
-  baseStats: ItemStats;
+  @JsonProperty() spec: Spec;
+  @JsonProperty() gear: { [key in GearSlots]: Item }
+  @JsonProperty() baseStats: ItemStats;
+  @JsonProperty() race: Race
 
   constructor(race: Races = Races.human) {
     this.spec = new Spec();
     this.gear = this.initGear();
-    this.baseStats = this.initStats(race);
+    this.baseStats = level70PaladinStats;
+    this.race = new Race(race);
   }
 
   getStatTotal(stat: ItemStatsEnum): number {
@@ -25,6 +30,8 @@ export class Character {
     return this.sum([
       this.baseStats[stat] || 0,
       this.spec.getValues()[stat] || 0,
+      this.race.stats[stat] || 0,
+      this.raceBonuses[stat] || 0,
       this.calculateGearStats(stat)])
   }
 
@@ -36,7 +43,6 @@ export class Character {
 
   private calculateGearStats(stat: ItemStatsEnum): number {
     let total = 0;
-    // total += this.baseStats[stat] || 0;
     Object.entries(this.gear).forEach(([slot, item]) => {
       total += item.stats[stat] || 0;
     })
@@ -202,19 +208,18 @@ export class Character {
     };
   }
 
-  private initStats(race: Races): ItemStats {
-    const raceAttributes = getRaceAttributeValues(race);
-    const result: ItemStats = {};
-    [raceAttributes, level70PaladinStats].forEach(startingStat => {
-      for (let [key, value] of Object.entries(startingStat)) {
-        if (result[key as keyof ItemStats]) {
-          result[key as keyof ItemStats] += value;
-        } else {
-          result[key as keyof ItemStats] = value;
-        }
-      }
-    })
-    return result;
+  private get raceBonuses(): ItemStats {
+    const stats: ItemStats = {};
+    if (this.race.name === Races.human && (
+      (this.gear.mainHand.weaponType === WeaponType.oneHandedMace) ||
+      (this.gear.mainHand.weaponType === WeaponType.twoHandedMace) ||
+      (this.gear.mainHand.weaponType === WeaponType.oneHandedSword) ||
+      (this.gear.mainHand.weaponType === WeaponType.twoHandedSword))) {
+
+      stats.meleeExpertise = 5;
+    }
+
+    return stats;
   }
 }
 

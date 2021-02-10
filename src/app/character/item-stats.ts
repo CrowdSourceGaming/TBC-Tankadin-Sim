@@ -1,3 +1,5 @@
+import { WeaponType } from "./item";
+
 export interface ItemStats {
   //raw stats
   [ItemStatsEnum.stamina]?: number,

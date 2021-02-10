@@ -17,7 +17,7 @@
       <mat-form-field>
         <mat-label>Gear Slot</mat-label>
         <mat-select formControlName="gearSlot">
-          <mat-option *ngFor="let slot of GearSlots" [value]="slot">
+          <mat-option *ngFor="let slot of GearSlotsKeys" [value]="slot">
             {{slot | humanize}}
           </mat-option>
         </mat-select>
@@ -33,10 +33,21 @@
         </mat-select>
       </mat-form-field>
     </div>
+    <div *ngIf="this.selectedGearSlot === GearSlots.mainHand">
+      <mat-form-field>
+        <mat-label>Weapon Type</mat-label>
+        <mat-select formControlName="weaponType">
+          <mat-option *ngFor="let type of weaponTypesKeys;" [value]="type">
+            {{type | humanize}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </form>
 
   <div>
     <h3>Attributes</h3>
+    <app-error *ngIf="errors.weaponStats.active" [errorMessage]="errors.weaponStats.errorMessage"></app-error>
     <div>
       <table>
         <thead>
@@ -57,16 +68,18 @@
 
     <form [formGroup]="addAttributesFormGroup" (ngSubmit)="addAttribute($event); false">
       <div class="flex-grid flex-space-between">
-        <mat-form-field class="small-form-field">
-          <mat-label>Attribute</mat-label>
-          <mat-select formControlName="attributeName">
-            <mat-option *ngFor="let key of attributeList" [value]="key">{{key | humanize}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <mat-form-field class="small-form-field">
-          <mat-label>Value</mat-label>
-          <input formControlName="attributeValue" matInput placeholder="0">
-        </mat-form-field>
+        <div>
+          <mat-form-field class="small-form-field">
+            <mat-label>Attribute</mat-label>
+            <mat-select formControlName="attributeName">
+              <mat-option *ngFor="let key of attributeList" [value]="key">{{key | humanize}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field style="padding-left: 10px;" class="small-form-field">
+            <mat-label>Value</mat-label>
+            <input formControlName="attributeValue" matInput placeholder="0">
+          </mat-form-field>
+        </div>
         <button mat-raised-button color="accent">Add</button>
       </div>
     </form>
@@ -84,7 +97,7 @@
     </div>
     <form class="flex-grid flex-space-between" [formGroup]="addGemSocketFormGroup"
       (ngSubmit)="addGemSocket($event); false">
-      <mat-form-field class="small-form-field">
+      <mat-form-field style="margin-right: 12px">
         <mat-label>Socket Color</mat-label>
         <mat-select formControlName="gemSocketColorToAdd">
           <mat-option *ngFor="let color of GemSocketColors" [value]="color">{{color}}</mat-option>
@@ -94,14 +107,14 @@
     </form>
     <h3>Socket Bonus</h3>
     <form [formGroup]="addGemSocketBonusFormGroup">
-      <div class="flex-grid flex-space-between">
+      <div class="flex-grid">
         <mat-form-field class="small-form-field">
           <mat-label>Attribute</mat-label>
           <mat-select formControlName="attributeName">
             <mat-option *ngFor="let key of attributeList" [value]="key">{{key | humanize}}</mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="small-form-field">
+        <mat-form-field style="padding-left: 10px;" class="small-form-field">
           <mat-label>Value</mat-label>
           <input formControlName="attributeValue" matInput placeholder="0">
         </mat-form-field>
@@ -110,7 +123,7 @@
   </div>
 
 
-  <div mat-dialog-actions>
+  <div mat-dialog-actions class="flex-grid flex-space-between">
     <button mat-raised-button color="accent" (click)="onNoClick()">Cancel</button>
-    <button mat-raised-button color="primary" (click)="createItem()" cdkFocusInitial>Add</button>
+    <button mat-raised-button color="primary" (click)="createItem()" cdkFocusInitial>Add Gear</button>
   </div>

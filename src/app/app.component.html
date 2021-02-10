@@ -1,7 +1,12 @@
-<h1>Tankadin Sim (TBC)</h1>
+<mat-toolbar color="primary">
+  <h1>Tankadin Sim (TBC)</h1>
+</mat-toolbar>
 
 <div class="flex-grid">
   <app-stats-totals class="stats"></app-stats-totals>
-  <app-gear-slot class="gear"></app-gear-slot>
+  <div class="gear">
+    <app-gear-slot></app-gear-slot>
+    <app-controls></app-controls>
+  </div>
 </div>
 <router-outlet></router-outlet>

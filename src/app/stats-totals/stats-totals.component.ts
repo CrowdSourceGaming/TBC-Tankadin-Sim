@@ -19,10 +19,10 @@ export class StatsTotalsComponent implements OnInit {
   ItemStatsEnum = ItemStatsEnum;
 
   ngOnInit(): void {
-    this.character = this.SharedDataService.character;
+    this.SharedDataService.character.subscribe(character => this.character = character);
   }
 
-  createNewSpec(event: any){
+  createNewSpec(event: any) {
     this.dialog.open(NewSpecComponent, {
       width: '500px'
     });

@@ -15,6 +15,14 @@ const raceAttributeValues: { [key in Races]: ItemStats } = {
   [Races.human]: { strength: 22, agility: 20, stamina: 22, intellect: 20, spirit: 21 }
 }
 
-export const getRaceAttributeValues = (race: Races): ItemStats => {
-  return raceAttributeValues[race];
+export class Race {
+
+  stats: ItemStats;
+  name: Races
+
+  constructor(race: Races) {
+    this.stats = raceAttributeValues[race];
+    this.name = race;
+  }
 }
+

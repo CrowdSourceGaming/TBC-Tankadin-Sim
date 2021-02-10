@@ -1,15 +1,18 @@
+import { JsonProperty, Serializable } from "typescript-json-serializer";
 import { GearSlots } from "./gearslot";
-import { ItemStats, ItemType } from "./item-stats";
+import { ItemStats } from "./item-stats";
 
+@Serializable()
 export class Item {
-  name: string = '';
-  id: number = 0;
-  _id: number;
-  stats: ItemStats = {};
-  validSlot: GearSlots | null;
-  gemSockets: GemSocketColor[] = [];
-  gemSocketBonus: ItemStats = {};
-  set: GearSet = GearSet.none;
+  @JsonProperty() name: string = '';
+  @JsonProperty() id: number = 0;
+  @JsonProperty() _id: number;
+  @JsonProperty() stats: ItemStats = {};
+  @JsonProperty() validSlot: GearSlots | null;
+  @JsonProperty() gemSockets: GemSocketColor[] = [];
+  @JsonProperty() gemSocketBonus: ItemStats = {};
+  @JsonProperty() set: GearSet = GearSet.none;
+  @JsonProperty() weaponType?: WeaponType
 
   constructor(gearType: GearSlots | null = null, id: number = 0, name: string = '', stats: ItemStats = {}) {
     this.name = name;
@@ -40,4 +43,14 @@ export enum GearSet {
   grandMarshalsRedemption = 'Grand Marshal\'s Redemption',
   grandMarshalsVindication = 'Grand Marshal\'s Vindication',
   warlordsAegis = 'Warlord\'s Aegis'
+}
+
+export enum WeaponType {
+  oneHandedMace = 'oneHandedMace',
+  twoHandedMace = 'twoHandedMace',
+  oneHandedSword = 'oneHandedSword',
+  twoHandedSword = 'twoHandedSword',
+  oneHandedAxe = 'oneHandedAxe',
+  twoHandedAxe = 'twoHandedAxe',
+  polearm = 'polearm'
 }

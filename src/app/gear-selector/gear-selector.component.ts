@@ -32,7 +32,7 @@ export class GearSelectorComponent implements OnInit, AfterViewInit {
   constructor(private sharedDataService: SharedDataService, private gearService: GearService, public dialog: MatDialog) { }
 
   ngOnInit(): void {
-    this.character = this.sharedDataService.character;
+    this.sharedDataService.character.subscribe(character => this.character = character);
     this.gearService.gearOptions.subscribe(newGearOptions => {
       this.gearOptions = newGearOptions.filter(gear => gear.validSlot?.includes(this.gearType))
     })
@@ -60,7 +60,7 @@ export class GearSelectorComponent implements OnInit, AfterViewInit {
   }
 
   assignGear(item: Item) {
-    this.sharedDataService.character.gear[this.gearType] = item;
+    this.character.gear[this.gearType] = item;
   }
 
   getValueFromGear(gear: Item, stat: ItemStatsEnum) {

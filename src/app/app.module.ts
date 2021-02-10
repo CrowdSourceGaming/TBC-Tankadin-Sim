@@ -24,6 +24,10 @@ import { APP_BASE_HREF } from '@angular/common';
 import { NewSpecComponent } from './new-spec/new-spec.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { HumanizePipe } from './humanize.pipe';
+import { ControlsComponent } from './controls/controls.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +38,9 @@ import { HumanizePipe } from './humanize.pipe';
     ReferencesComponent,
     NewGearComponent,
     NewSpecComponent,
-    HumanizePipe
+    HumanizePipe,
+    ControlsComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +57,9 @@ import { HumanizePipe } from './humanize.pipe';
     MatInputModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatToolbarModule,
+    MatSnackBarModule
   ],
   providers: [
     {

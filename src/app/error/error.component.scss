@@ -1,0 +1,23 @@
+@import "src/styles_variables.scss";
+
+
+
+.error-box {
+  border: 1px solid $warn;
+}
+
+.icon {
+  color: white;
+  text-align: center;
+}
+
+.icon-space {
+  background-color: $warn;
+  width: 40px;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

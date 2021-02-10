@@ -33,8 +33,9 @@ export class NewSpecComponent implements OnInit, AfterViewInit {
   apply(): void {
     if (this.newSpecFormGroup.valid) {
       const specDef = this.newSpecFormGroup.get('newSpecURL')?.value.match(this.talentUrlRegex)[1];
-      this.sharedDataService.character.spec = new Spec(specDef);
-      this.cdr.detectChanges();
+      const character = this.sharedDataService.character.value;
+      character.spec = new Spec(specDef);
+      this.sharedDataService.character.next(character);
       this.dialogRef.close();
     }
   }

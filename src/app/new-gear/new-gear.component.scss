@@ -1,5 +1,8 @@
-th {
+thead th:first-child {
   width: 200px;
+}
+
+th {
   text-align: left;
 }
 
