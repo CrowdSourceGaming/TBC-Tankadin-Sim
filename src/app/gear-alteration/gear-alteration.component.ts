@@ -5,7 +5,7 @@ import { GearSlotComponent } from '../gear-slot/gear-slot.component';
 import { SharedDataService } from '../shared/shared-data.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { GemService } from '../item/gem.service';
-import { Gem, GemQuality } from '../item/gem';
+import { Gem, GemColor, GemQuality } from '../item/gem';
 import { ItemStats, ItemStatsEnum } from '../item/item-stats';
 
 @Component({
@@ -19,7 +19,9 @@ export class GearAlterationComponent implements OnInit {
 
   @Input()
   gearSlot!: GearSlots;
-  GemSocketColor = Object.values(GemSocketColor)
+  GemSocketColor = GemSocketColor
+
+  possibleGems!: Gem[]
 
 
 
@@ -29,14 +31,13 @@ export class GearAlterationComponent implements OnInit {
     this.sharedDataService.character.subscribe(character => {
       this.item = character.gear[this.gearSlot as keyof typeof GearSlots]
     })
+    this.initGems()
   }
 
-  getGemsForSocket(color: GemSocketColor) {
+  async initGems() {
+    this.possibleGems = await this.gemService.getGems();
 
   }
-
-
-
 
   ////  Remove after gems are added
 
@@ -50,8 +51,9 @@ export class GearAlterationComponent implements OnInit {
     valueTwo: new FormControl('')
   })
 
-  attributes = Object.values(ItemStatsEnum)
+  attributes = Object.values(ItemStatsEnum).sort()
   quality = Object.values(GemQuality)
+  gemColor = Object.values(GemColor);
 
   async addGem() {
     const name = this.addForm.get('name')?.value
@@ -66,7 +68,9 @@ export class GearAlterationComponent implements OnInit {
       gem.stats[statTwo as keyof ItemStats] = valueTwo;
     }
     await this.gemService.putGem(gem);
-    this.addForm.reset();
+    this.addForm.controls.name.reset();
+    this.addForm.controls.valueOne.reset();
+    this.addForm.controls.valueTwo.reset();
   }
 
 

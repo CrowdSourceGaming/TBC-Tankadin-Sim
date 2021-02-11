@@ -13,7 +13,10 @@ export class GemService {
 
   constructor(private databaseService: DatabaseService) { }
 
-  getGem() { }
+  async getGems(): Promise<Gem[]> {
+    const collection = await this.databaseService.gemCollection
+    return await collection.find();
+  }
 
   async putGem(gem: Gem) {
     const collection = await this.databaseService.gemCollection

@@ -17,6 +17,7 @@ export interface ItemStats {
   [ItemStatsEnum.parryValue]?: number,
   [ItemStatsEnum.blockRating]?: number,
   [ItemStatsEnum.blockValue]?: number,
+  [ItemStatsEnum.resilience]?: number,
   //melee
   [ItemStatsEnum.meleeHitRating]?: number,
   [ItemStatsEnum.meleeHitPercent]?: number,
@@ -68,6 +69,7 @@ export enum ItemStatsEnum {
   blockRating = 'blockRating',
   blockValue = 'blockValue',
   defenseValue = 'defenseValue',
+  resilience = 'resilience',
   //melee
   meleeHitRating = 'meleeHitRating',
   meleeHitPercent = 'meleeHitPercent',
