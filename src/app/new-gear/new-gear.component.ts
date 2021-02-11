@@ -1,9 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GearSlots } from '../character/gearslot';
-import { GearSet, GemSocketColor, Item, WeaponType } from '../character/item';
-import { ItemStats, ItemStatsEnum } from '../character/item-stats';
+import { GearSet, GemSocketColor, Item, WeaponType } from '../item/item';
+import { ItemStats, ItemStatsEnum } from '../item/item-stats';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { GemSocket } from '../gem-socket';
 
 @Component({
   selector: 'app-new-gear',
@@ -91,7 +92,8 @@ export class NewGearComponent implements OnInit {
   }
 
   addGemSocket(event: any) {
-    this.item.gemSockets.push(this.addGemSocketFormGroup.get('gemSocketColorToAdd')?.value)
+    const color = this.addGemSocketFormGroup.get('gemSocketColorToAdd')?.value;
+    this.item.gemSockets.push(new GemSocket(color))
     event.stopPropagation();
   }
 
@@ -105,6 +107,13 @@ export class NewGearComponent implements OnInit {
       this.item.name = this.createItemFormGroup.get('itemName')?.value;
       const attribute = this.addGemSocketBonusFormGroup.get('attributeName')?.value;
       const value = this.addGemSocketBonusFormGroup.get('attributeValue')?.value
+      this.item.gemSockets.sort((a, b) => {
+        if (a.color === GemSocketColor.meta) { // always list meta first
+          return -1
+        } else {
+          return 0
+        }
+      })
       if (attribute && value) {
         this.item.gemSocketBonus = { [attribute as keyof ItemStats]: value }
       }

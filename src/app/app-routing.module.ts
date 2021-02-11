@@ -6,7 +6,7 @@ import { GearSlotComponent } from './gear-slot/gear-slot.component';
 const routes: Routes = [
   { path: 'gear', component: GearSlotComponent },
   { path: 'character', component: CharacterConfigComponent },
-  // { path: '', redirectTo: 'gear', pathMatch: 'prefix' }
+  { path: '', redirectTo: 'gear', pathMatch: 'prefix' }
 ];
 
 @NgModule({

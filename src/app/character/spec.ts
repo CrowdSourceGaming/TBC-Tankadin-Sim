@@ -1,4 +1,4 @@
-import { ItemStats } from "./item-stats";
+import { ItemStats } from "../item/item-stats";
 
 import { JsonProperty, Serializable } from 'typescript-json-serializer';
 

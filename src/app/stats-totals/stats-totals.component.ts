@@ -2,7 +2,7 @@ import { stringify } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Character } from '../character/character';
-import { ItemStats, ItemStatsEnum } from '../character/item-stats';
+import { ItemStats, ItemStatsEnum } from '../item/item-stats';
 import { NewSpecComponent } from '../new-spec/new-spec.component';
 import { SharedDataService } from '../shared/shared-data.service';
 

@@ -1,5 +1,6 @@
 import { JsonProperty, Serializable } from "typescript-json-serializer";
-import { GearSlots } from "./gearslot";
+import { GemSocket } from "../gem-socket";
+import { GearSlots } from "../character/gearslot";
 import { ItemStats } from "./item-stats";
 
 @Serializable()
@@ -9,7 +10,7 @@ export class Item {
   @JsonProperty() _id: number;
   @JsonProperty() stats: ItemStats = {};
   @JsonProperty() validSlot: GearSlots | null;
-  @JsonProperty() gemSockets: GemSocketColor[] = [];
+  @JsonProperty() gemSockets: GemSocket[] = [];
   @JsonProperty() gemSocketBonus: ItemStats = {};
   @JsonProperty() set: GearSet = GearSet.none;
   @JsonProperty() weaponType?: WeaponType

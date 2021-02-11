@@ -1,10 +1,9 @@
-import { ApplicationRef, ChangeDetectorRef, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Character } from '../character/character';
-import { StatsDataService } from './stats-data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { JsonProperty, Serializable, deserialize, serialize } from 'typescript-json-serializer';
+import { deserialize, serialize } from 'typescript-json-serializer';
 
 @Injectable({
   providedIn: 'root'

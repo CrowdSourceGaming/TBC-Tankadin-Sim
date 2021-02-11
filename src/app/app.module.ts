@@ -29,6 +29,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ErrorComponent } from './error/error.component';
 import { CharacterConfigComponent } from './character-config/character-config.component';
+import { GearAlterationComponent } from './gear-alteration/gear-alteration.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { CharacterConfigComponent } from './character-config/character-config.co
     HumanizePipe,
     ControlsComponent,
     ErrorComponent,
-    CharacterConfigComponent
+    CharacterConfigComponent,
+    GearAlterationComponent,
   ],
   imports: [
     BrowserModule,

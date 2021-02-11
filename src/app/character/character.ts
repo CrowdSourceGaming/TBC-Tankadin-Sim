@@ -1,6 +1,6 @@
 import { GearSlots } from "./gearslot";
-import { Item, WeaponType } from "./item";
-import { ItemStats, ItemStatsEnum } from "./item-stats";
+import { Item, WeaponType } from "../item/item";
+import { ItemStats, ItemStatsEnum } from "../item/item-stats";
 import { Race, Races } from "./races/race";
 import { Spec } from "./spec";
 

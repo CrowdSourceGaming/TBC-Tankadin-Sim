@@ -2,6 +2,7 @@
   <mat-tab-group animationDuration="0ms">
     <mat-tab *ngFor="let slot of slots" label="{{slot | humanize}}">
       <app-gear-selector [gearType]="getGearType(slot)"></app-gear-selector>
+      <app-gear-alteration [slot]="getGearType(slot)"></app-gear-alteration>
     </mat-tab>
   </mat-tab-group>
 </div>

@@ -1,42 +1,33 @@
 import { Injectable } from '@angular/core';
 import { GearSlots } from '../character/gearslot';
-import { Item } from '../character/item';
-import { head } from './head'
+import { Item } from '../item/item';
 
-import * as Realm from "realm-web";
-import { ItemType } from '../character/item-stats';
+
 import { BehaviorSubject } from 'rxjs';
+import { DatabaseService } from '../database.service';
 
-const DBName = 'tbc-gear';
-const collectionName = 'gear';
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class GearService {
-  realmApp!: Realm.App;
-  mongoDB!: globalThis.Realm.Services.MongoDB
-  user!: Realm.User;
+
 
   gearOptions: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>([]);
 
-  constructor() {
+  constructor(private databaseService: DatabaseService) {
     this.initGearList();
   }
 
   async addGearForSlot(gear: Item, gearSlot: GearSlots) {
-    const collection = this.mongoDB.db(DBName).collection(collectionName);
-    return await collection.updateOne({ id: gear._id }, gear, { upsert: true });
+    const collection = await this.databaseService.gearCollection
+    return collection.updateOne({ id: gear._id }, gear, { upsert: true });
   }
 
   private async initGearList() {
-    this.realmApp = new Realm.App({ id: "tankadin_sim_tbc-gyyrn" });
-    const credentials = Realm.Credentials.anonymous();
     try {
-      const user: Realm.User = await this.realmApp.logIn(credentials);
-      this.mongoDB = user.mongoClient(
-        "mongodb-atlas"
-      );
       await this.GetItemsFromDB();
       await this.watchDBForChanges();
     } catch (err) {
@@ -46,12 +37,13 @@ export class GearService {
   }
 
   private async GetItemsFromDB(): Promise<void> {
-    const collection: globalThis.Realm.Services.MongoDB.MongoDBCollection<Item> = this.mongoDB.db(DBName).collection(collectionName);
+    const collection = await this.databaseService.gearCollection
     this.gearOptions.next(await collection.find());
+    console.log('gearOptions', this.gearOptions.value);
   }
 
   private async watchDBForChanges() {
-    const collection = this.mongoDB.db(DBName).collection(collectionName);
+    const collection = await this.databaseService.gearCollection;
     for await (const change of collection.watch()) {
       const currentGearOptions = this.gearOptions.value;
       const { operationType } = change;
