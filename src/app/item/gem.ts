@@ -5,12 +5,14 @@ import { ItemStats } from "./item-stats";
 @Serializable()
 export class Gem {
   _id: string;
+  id: string;
   name: string;
   color: GemColor;
   stats: ItemStats
   quality: GemQuality
 
-  constructor(name: string, color: GemColor, quality: GemQuality, stats: ItemStats) {
+  constructor(id: string, name: string, color: GemColor, quality: GemQuality, stats: ItemStats) {
+    this.id = id;
     this._id = name;
     this.name = name;
     this.color = color;

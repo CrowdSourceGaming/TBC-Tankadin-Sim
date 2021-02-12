@@ -54,9 +54,10 @@ a:active {
   text-decoration: underline;
 }
 
-h2, h1 {
+h2,
+h1 {
   text-align: center;
-  width: 100%
+  width: 100%;
 }
 
 .mat-tab-label {
@@ -69,4 +70,32 @@ h2, h1 {
 
 .padding-left-sm {
   padding-left: 10px;
+}
+
+.poor-text {
+  color: #9d9d9d
+}
+.common-text {
+  color: #ffffff
+}
+.uncommon-text {
+  color: #1eff00
+}
+.rare-text {
+  color: #0070dd
+}
+.epic-text {
+  color: #a335ee
+}
+.legendary-text {
+  color: #ff8000
+}
+.artifact-text {
+  color: #e6cc80
+}
+.heirloom-text {
+  color: #00ccff
+}
+.wow-token-text {
+  color: #00ccff
 }

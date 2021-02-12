@@ -1,5 +1,5 @@
 <div class="item-selection-table">
-  <mat-table [dataSource]="gearOptions" matSort class="mat-elevation-z8">
+  <mat-table [dataSource]="dataSourceGearOptions" matSort class="mat-elevation-z8">
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
       <mat-cell *matCellDef="let armor"> {{armor.name}} </mat-cell>

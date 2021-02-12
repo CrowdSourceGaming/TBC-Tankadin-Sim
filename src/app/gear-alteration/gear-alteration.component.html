@@ -2,12 +2,85 @@
   <h2> Modify Gear </h2>
 </mat-toolbar>
 
-<!-- <mat-table [dataSource]="possibleGems" matSort class="mat-elevation-z8">
-  <ng-container matColumnDef="name">
-    <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
-    <mat-cell *matCellDef="let armor"> {{armor.name}} </mat-cell>
-  </ng-container>
-</mat-table> -->
+<div class="flex-grid">
+  <div class="flex-fill">
+    <!-- Enchants -->
+  </div>
+  <div class="flex-fill">
+    <form [formGroup]="gemFilterForm">
+      <div class="flex-grid" style="align-items: center; margin-top: 10px;">
+        <div style="flex: 0.5;"> Filter: </div>
+        <div style="flex: 1.5;">
+          <mat-form-field>
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="name" />
+          </mat-form-field>
+        </div>
+        <div class="flex-fill">
+          <mat-form-field>
+            <mat-label>Color</mat-label>
+            <mat-select formControlName="color">
+              <mat-option value="">None</mat-option>
+              <mat-option *ngFor="let color of gemColor" [value]="color">{{color | humanize | titlecase}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="flex-fill">
+          <mat-form-field>
+            <mat-label>Rarity</mat-label>
+            <mat-select formControlName="rarity">
+              <mat-option value="">None</mat-option>
+              <mat-option *ngFor="let rarity of GemQuality" [value]="rarity">{{rarity | humanize | titlecase}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="flex-fill">
+          <mat-form-field>
+            <mat-label>Stat</mat-label>
+            <mat-select formControlName="stat">
+              <mat-option value="">None</mat-option>
+              <mat-option *ngFor="let stat of allStats" [value]="stat">{{stat | humanize | titlecase}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+    <mat-table [dataSource]="gems" matSort class="max-table-height mat-elevation-z8">
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+        <mat-cell *matCellDef="let gem"> <span [ngClass]="getRarityClass(gem)">{{gem.name}}</span> </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="color">
+        <mat-header-cell *matHeaderCellDef>Color</mat-header-cell>
+        <mat-cell *matCellDef="let gem"> {{gem.color}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="statOne">
+        <mat-header-cell *matHeaderCellDef>Stat 1</mat-header-cell>
+        <mat-cell *matCellDef="let gem"> {{getStat(gem, 0)[0] | humanize | titlecase}} <br /> {{getStat(gem, 0)[1] |
+          humanize | titlecase}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="statTwo">
+        <mat-header-cell *matHeaderCellDef>Stat 2</mat-header-cell>
+        <mat-cell *matCellDef="let gem"> {{getStat(gem, 1)[0] | humanize | titlecase}} </mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="anchor">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let gem"> <a href="#" attr.data-wowhead="item={{gem.id}}"></a> </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="header-title-row">
+        <mat-header-cell *matHeaderCellDef style="justify-content: center !important" attr.colspan="4">Gems
+        </mat-header-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="['header-title-row']; sticky: true"></mat-header-row>
+      <mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+    </mat-table>
+  </div>
+</div>
+
 
 <!-- <div>
   <h3>Gems</h3>

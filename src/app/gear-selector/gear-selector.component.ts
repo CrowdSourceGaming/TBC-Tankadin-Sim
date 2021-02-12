@@ -35,6 +35,7 @@ export class GearSelectorComponent implements OnInit, AfterViewInit {
     this.sharedDataService.character.subscribe(character => this.character = character);
     this.gearService.gearOptions.subscribe(newGearOptions => {
       this.gearOptions = newGearOptions.filter(gear => gear.validSlot?.includes(this.gearType))
+      this.initGearSeletion();
     })
     this.displayedColumns = [
       // stats
@@ -56,7 +57,7 @@ export class GearSelectorComponent implements OnInit, AfterViewInit {
 
   }
   ngAfterViewInit() {
-    this.initGearSeletion();
+
   }
 
   assignGear(item: Item) {

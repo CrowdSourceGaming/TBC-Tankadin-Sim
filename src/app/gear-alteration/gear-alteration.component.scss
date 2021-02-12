@@ -1,0 +1,73 @@
+@import "../../styles_variables.scss";
+
+.mat-table {
+  overflow: auto;
+  max-height: 500px;
+}
+
+.mat-cell,
+.mat-header-cell {
+  border-right: 1px solid black !important;
+  padding-left: 5px;
+}
+
+.mat-column-name {
+  flex: 2 !important;
+  justify-content: space-between !important;
+}
+
+.mat-column-color {
+  flex: 0.5 !important;
+  justify-content: space-between !important;
+}
+
+.mat-column-statOne {
+  flex: 1 !important;
+  justify-content: space-between !important;
+}
+
+.mat-column-statTwo {
+  flex: 1 !important;
+  justify-content: space-between !important;
+}
+
+
+.mat-row {
+  min-height: 40px;
+}
+
+td tr {
+  position: relative !important;
+}
+
+.mat-row,
+.cdk-row,
+.mat-header-row {
+  position: relative;
+}
+
+.mat-column-anchor {
+  opacity: 0.1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+}
+
+.mat-form-field{
+  width: 90%;
+}
+
+a {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+a:hover {
+  background-color: $warn;
+}

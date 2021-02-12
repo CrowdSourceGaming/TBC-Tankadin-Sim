@@ -8,7 +8,9 @@ export class HumanizePipe implements PipeTransform {
       return value;
     }
     value = value.replace(/([^A-Z])([A-Z])/g, '$1 $2').replace(/([A-Z])([A-Z][^A-Z])/g, '$1 $2');
-    value = value[0].toUpperCase() + value.slice(1);
+    if (value[0]) {
+      value = value[0].toUpperCase() + value.slice(1);
+    }
     return value;
   }
 }
