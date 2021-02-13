@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import * as Realm from "realm-web";
 import { BehaviorSubject } from 'rxjs';
+import { Enchant } from './item/enchant';
 import { Gem } from './item/gem';
 import { Item } from './item/item';
 
@@ -30,6 +31,13 @@ export class DatabaseService {
       "mongodb-atlas"
     );
     this.isConnected = true;
+  }
+
+  get enchantCollection(): Promise<globalThis.Realm.Services.MongoDB.MongoDBCollection<Enchant>> {
+    return new Promise(async (resolve) => {
+      await this.waitForConnection();
+      return resolve(this.mongoDB.db(DBName).collection<Enchant>('enchants'))
+    });
   }
 
   get gearCollection(): Promise<globalThis.Realm.Services.MongoDB.MongoDBCollection<Item>> {

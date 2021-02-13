@@ -39,7 +39,6 @@ export class CharacterConfigComponent implements OnInit {
   }
 
   getGearIdForSlot(gear: string) {
-    console.log(this.character.gear[gear as keyof typeof GearSlots].id)
     return this.character.gear[gear as keyof typeof GearSlots].id
   }
 

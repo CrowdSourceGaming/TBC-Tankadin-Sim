@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { GearSlots } from '../character/gearslot';
-import { Item } from '../item/item';
+import { GemSocketColor, Item } from '../item/item';
 
 
 import { BehaviorSubject } from 'rxjs';
 import { DatabaseService } from '../database.service';
+import { ItemStatsEnum } from '../item/item-stats';
+import { Gem } from '../item/gem';
+import { deserialize } from 'typescript-json-serializer';
 
 
 
@@ -26,6 +29,36 @@ export class GearService {
     return collection.updateOne({ id: gear._id }, gear, { upsert: true });
   }
 
+  applyGemsToGear(gemLogic: GemAlterationInterface) {
+    const gearOptions = this.gearOptions.value
+    gearOptions.forEach((item: Item) => {
+      item.gemSockets.forEach(socket => {
+        gemLogic.logic.forEach(logicalInsertion => {
+          if (logicalInsertion.gem && logicalInsertion.setBonusAttribute && logicalInsertion.socketColor) {
+            if (item.gemSocketBonus[logicalInsertion.setBonusAttribute as keyof typeof ItemStatsEnum] && socket.color === logicalInsertion.socketColor) {
+              socket.gem = logicalInsertion.gem
+            } else if (socket.color === GemSocketColor.meta) {
+              socket.gem = gemLogic.defaultMeta
+            } else {
+              socket.gem = gemLogic.default
+            }
+          } else if (socket.color === GemSocketColor.meta) {
+            socket.gem = gemLogic.defaultMeta
+          } else {
+            socket.gem = gemLogic.default
+          }
+        });
+      });
+    });
+    this.gearOptions.next(gearOptions);
+  }
+
+
+
+  /* PRIVATE */
+
+
+
   private async initGearList() {
     try {
       await this.GetItemsFromDB();
@@ -37,8 +70,13 @@ export class GearService {
   }
 
   private async GetItemsFromDB(): Promise<void> {
+    const items: Item[] = [];
     const collection = await this.databaseService.gearCollection
-    this.gearOptions.next(await collection.find());
+    const dbJSONItems = await collection.find();
+    dbJSONItems.forEach(jsonItem => {
+      items.push(deserialize(jsonItem, Item));
+    });
+    this.gearOptions.next(items);
   }
 
   private async watchDBForChanges() {
@@ -70,3 +108,16 @@ export class GearService {
     }
   }
 }
+
+export interface GemInsertionLogic {
+  setBonusAttribute: ItemStatsEnum | null,
+  socketColor: GemSocketColor | null,
+  gem: Gem | null
+}
+
+export interface GemAlterationInterface {
+  default: Gem | null,
+  defaultMeta: Gem | null,
+  logic: GemInsertionLogic[]
+}
+

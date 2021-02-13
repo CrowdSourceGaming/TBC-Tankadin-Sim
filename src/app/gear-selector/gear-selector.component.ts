@@ -24,7 +24,7 @@ export class GearSelectorComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort)
   sort!: MatSort;
 
-  dataSourceGearOptions!: MatTableDataSource<Item>;
+  dataSourceGearOptions: MatTableDataSource<Item> = new MatTableDataSource<Item>();
   character!: Character;
   ItemStatsEnum = ItemStatsEnum;
   gearOptions: Item[] = [];
@@ -43,7 +43,7 @@ export class GearSelectorComponent implements OnInit, AfterViewInit {
           return gear.validSlot?.includes(this.gearType)
         }
       })
-      this.initGearSeletion();
+      this.dataSourceGearOptions.data = this.gearOptions;
     })
     this.displayedColumns = [
       // stats
@@ -65,11 +65,14 @@ export class GearSelectorComponent implements OnInit, AfterViewInit {
 
   }
   ngAfterViewInit() {
-
+    this.initGearSeletion();
   }
 
-  assignGear(item: Item) {
-    this.character.gear[this.gearType] = item;
+  assignGear(armor: Item) {
+    if (armor) {
+      this.character.gear[this.gearType] = armor;
+      this.sharedDataService.character.next(this.character);
+    }
   }
 
   getValueFromGear(gear: Item, stat: ItemStatsEnum) {
@@ -90,8 +93,6 @@ export class GearSelectorComponent implements OnInit, AfterViewInit {
   }
 
   private initGearSeletion() {
-
-    this.dataSourceGearOptions = new MatTableDataSource(this.gearOptions);
     this.dataSourceGearOptions.sortingDataAccessor = (item: any, path: string): any => {
       return path.split(`.`)
         .reduce((accumulator: any, key: string) => {

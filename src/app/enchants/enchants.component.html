@@ -1,0 +1,23 @@
+<mat-toolbar color="accent">
+  <h2> Enchants </h2>
+</mat-toolbar>
+
+
+<div>
+  <mat-table [dataSource]="dataSourceEnchantOptions" matSort>
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+      <mat-cell *matCellDef="let enchant">{{enchant.name}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="stat">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Stat Boost</mat-header-cell>
+      <mat-cell *matCellDef="let enchant">{{statBoostString(enchant)|humanize}}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+  <div style="margin-top: 20px; float: right;">
+    <button mat-raised-button color="accent">Add enchant to list</button>
+  </div>
+</div>

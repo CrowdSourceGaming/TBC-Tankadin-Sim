@@ -48,8 +48,4 @@ export class GearSlotComponent implements AfterViewInit {
   getGearType(slot: string) {
     return GearSlots[slot as keyof typeof GearSlots];
   }
-
-  tabChanged(event: any) {
-    console.log(event);
-  }
 }

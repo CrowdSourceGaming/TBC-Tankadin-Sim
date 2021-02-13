@@ -1,7 +1,12 @@
 <div>
-  <mat-tab-group #tabsGroup animationDuration="0ms" (selectedTabChange)="tabChanged($event)">
+  <mat-tab-group #tabsGroup animationDuration="0ms">
     <mat-tab *ngFor="let slot of slots; let i = index;" label="{{slot | humanize}}">
       <app-gear-selector [gearType]="getGearType(slot)"></app-gear-selector>
+      <div style="margin-bottom: 20px;" class="flex-grid">
+        <app-enchants class="flex-fill" style="margin-right: 10px;" [gearType]="getGearType(slot)"></app-enchants>
+        <app-current-gems class="flex-fill" style="margin-left: 10px;" [gearType]="getGearType(slot)">
+        </app-current-gems>
+      </div>
     </mat-tab>
   </mat-tab-group>
   <app-gear-alteration></app-gear-alteration>

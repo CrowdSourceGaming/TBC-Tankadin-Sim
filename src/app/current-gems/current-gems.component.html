@@ -1,0 +1,35 @@
+<mat-toolbar color="accent">
+  <h2> Current Gems </h2>
+</mat-toolbar>
+
+<div *ngIf="gear && gear.id !== 0; else chooseGear">
+  <div *ngIf="gear.gemSockets.length > 0; else noGemSlots">
+    <ul>
+      <li *ngFor="let socket of gear.gemSockets">
+        {{socket.color}} socket:
+        <span *ngIf="socket.gem; else none">
+          <a [ngClass]="getRarityClass(socket.gem)" attr.data-wowhead="item={{socket.gem.id}}">{{socket.gem?.name}}</a>
+        </span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+<ng-template #chooseGear>
+  <div>
+    Please choose a gear piece from above to add to your character
+  </div>
+</ng-template>
+
+<ng-template #noGemSlots>
+  <div>
+    No gem slots on {{gear.name}}
+  </div>
+</ng-template>
+
+<ng-template #none>
+  <span>
+    None
+  </span>
+</ng-template>

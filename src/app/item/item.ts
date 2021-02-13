@@ -1,7 +1,9 @@
 import { JsonProperty, Serializable } from "typescript-json-serializer";
 import { GemSocket } from "../gem-socket";
 import { GearSlots } from "../character/gearslot";
-import { ItemStats } from "./item-stats";
+import { ItemStats, ItemStatsEnum } from "./item-stats";
+import { GemColor } from "./gem";
+import { Enchant } from "./enchant";
 
 @Serializable()
 export class Item {
@@ -14,6 +16,7 @@ export class Item {
   @JsonProperty() gemSocketBonus: ItemStats = {};
   @JsonProperty() set: GearSet = GearSet.none;
   @JsonProperty() weaponType?: WeaponType
+  @JsonProperty() enchant: Enchant | null = null;
 
   constructor(gearType: GearSlots | null = null, id: number = 0, name: string = '', stats: ItemStats = {}) {
     this.name = name;
@@ -21,6 +24,35 @@ export class Item {
     this._id = id;
     this.validSlot = gearType;
     this.stats = stats;
+  }
+
+  getTotalConfiguredStats(): ItemStats {
+    const totals: ItemStats = JSON.parse(JSON.stringify(this.stats));
+    let applySocketBonus: boolean = true;
+    this.gemSockets.forEach(socket => {
+      if (socket.gem) {
+        const stats = socket.gem.stats;
+        Object.keys(stats).forEach(stat => {
+          if (!totals[stat as keyof typeof ItemStatsEnum]) {
+            totals[stat as keyof typeof ItemStatsEnum] = 0;
+          }
+          totals[stat as keyof typeof ItemStatsEnum]! += +(socket.gem?.stats[stat as keyof typeof ItemStatsEnum] || 0);
+        });
+        if (!matchingGemColors[socket.color as keyof typeof GemSocketColor].includes(socket.gem.color)) {
+          applySocketBonus = false;
+        }
+      } else {
+        applySocketBonus = false;
+      }
+    });
+    if (applySocketBonus && Object.keys(this.gemSocketBonus).length > 0) {
+      const socketBonusAttribute = Object.keys(this.gemSocketBonus)[0];
+      if (!totals[socketBonusAttribute as keyof typeof ItemStatsEnum]) {
+        totals[socketBonusAttribute as keyof typeof ItemStatsEnum] = 0;
+      }
+      totals[socketBonusAttribute as keyof typeof ItemStatsEnum]! += +(this.gemSocketBonus[socketBonusAttribute as keyof typeof ItemStatsEnum] || 0);
+    }
+    return totals;
   }
 }
 
@@ -54,4 +86,11 @@ export enum WeaponType {
   oneHandedAxe = 'oneHandedAxe',
   twoHandedAxe = 'twoHandedAxe',
   polearm = 'polearm'
+}
+
+const matchingGemColors = {
+  [GemSocketColor.blue]: [GemColor.blue, GemColor.purple, GemColor.green],
+  [GemSocketColor.red]: [GemColor.red, GemColor.purple, GemColor.orange],
+  [GemSocketColor.yellow]: [GemColor.yellow, GemColor.green, GemColor.orange],
+  [GemSocketColor.meta]: [GemColor.meta]
 }

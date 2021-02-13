@@ -1,19 +1,19 @@
 <mat-toolbar color="accent">
-  <h2> Modify Gear </h2>
+  <h2> Gem All Gear </h2>
 </mat-toolbar>
 
-<div class="flex-grid">
+<div class="flex-grid" *ngIf="gems.data">
   <div class="flex-fill" style="max-width: 780px;">
     <div>
       Default all gem sockets to
       <mat-form-field class="small-form-field">
-        <mat-select [(ngModel)]="gemAlterations.default">
+        <mat-select [typeaheadDebounceInterval]="1000" [(ngModel)]="gemAlterations.default">
           <mat-option *ngFor="let gem of gems.data" [value]="gem">{{gem.name}}</mat-option>
         </mat-select>
       </mat-form-field>
       and meta socket to
       <mat-form-field class="small-form-field">
-        <mat-select [(ngModel)]="gemAlterations.default">
+        <mat-select [typeaheadDebounceInterval]="1000" [(ngModel)]="gemAlterations.defaultMeta">
           <mat-option *ngFor="let gem of gems.data" [value]="gem">{{gem.name}}</mat-option>
         </mat-select>
       </mat-form-field>
@@ -22,36 +22,71 @@
     <div>
       If armor socket bonus is
       <mat-form-field class="small-form-field">
-        <mat-select>
+        <mat-select [typeaheadDebounceInterval]="1000" [(ngModel)]="gemAlterationSetBonusOne">
           <mat-option *ngFor="let stat of allStats" [value]="stat">{{stat | humanize}}</mat-option>
         </mat-select>
       </mat-form-field>
       Then use
       <mat-form-field class="small-form-field">
-        <mat-select>
+        <mat-select [typeaheadDebounceInterval]="1000" [(ngModel)]="gemAlterations.logic[0].gem">
           <mat-option *ngFor="let gem of gems.data" [value]="gem">{{gem.name}}</mat-option>
         </mat-select>
       </mat-form-field>
       for
       <mat-form-field class="small-form-field">
-        <mat-select>
+        <mat-select [typeaheadDebounceInterval]="1000" [(ngModel)]="gemAlterations.logic[0].socketColor">
           <mat-option *ngFor="let color of GemSocketColors" [value]="color">{{color}}</mat-option>
         </mat-select>
       </mat-form-field>
       or
       <mat-form-field class="small-form-field">
-        <mat-select>
+        <mat-select [typeaheadDebounceInterval]="1000" [(ngModel)]="gemAlterations.logic[1].gem">
           <mat-option *ngFor="let gem of gems.data" [value]="gem">{{gem.name}}</mat-option>
         </mat-select>
       </mat-form-field>
       for
       <mat-form-field class="small-form-field">
-        <mat-select>
+        <mat-select [typeaheadDebounceInterval]="1000" [(ngModel)]="gemAlterations.logic[1].gem">
           <mat-option *ngFor="let color of GemSocketColors" [value]="color">{{color}}</mat-option>
         </mat-select>
       </mat-form-field>
       sockets.
     </div>
+    <div>
+      If armor socket bonus is
+      <mat-form-field class="small-form-field">
+        <mat-select [typeaheadDebounceInterval]="1000" [(ngModel)]="gemAlterationSetBonusTwo">
+          <mat-option *ngFor="let stat of allStats" [value]="stat">{{stat | humanize}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      Then use
+      <mat-form-field class="small-form-field">
+        <mat-select [typeaheadDebounceInterval]="1000" [(ngModel)]="gemAlterations.logic[2].gem">
+          <mat-option *ngFor="let gem of gems.data" [value]="gem">{{gem.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      for
+      <mat-form-field class="small-form-field">
+        <mat-select [typeaheadDebounceInterval]="1000" [(ngModel)]="gemAlterations.logic[2].socketColor">
+          <mat-option *ngFor="let color of GemSocketColors" [value]="color">{{color}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      or
+      <mat-form-field class="small-form-field">
+        <mat-select [typeaheadDebounceInterval]="1000" [(ngModel)]="gemAlterations.logic[3].gem">
+          <mat-option *ngFor="let gem of gems.data" [value]="gem">{{gem.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      for
+      <mat-form-field class="small-form-field">
+        <mat-select [typeaheadDebounceInterval]="1000" [(ngModel)]="gemAlterations.logic[3].socketColor">
+          <mat-option *ngFor="let color of GemSocketColors" [value]="color">{{color}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      sockets.
+    </div>
+
+    <button style="width: 90%" (click)="applyGemsToGear()" mat-raised-button color="primary">Apply</button>
   </div>
   <div class="flex-fill">
     <form [formGroup]="gemFilterForm">
@@ -66,7 +101,7 @@
         <div class="flex-fill">
           <mat-form-field>
             <mat-label>Color</mat-label>
-            <mat-select formControlName="color">
+            <mat-select [typeaheadDebounceInterval]="1000" formControlName="color">
               <mat-option value="">None</mat-option>
               <mat-option *ngFor="let color of gemColor" [value]="color">{{color | humanize | titlecase}}</mat-option>
             </mat-select>
@@ -75,7 +110,7 @@
         <div class="flex-fill">
           <mat-form-field>
             <mat-label>Rarity</mat-label>
-            <mat-select formControlName="rarity">
+            <mat-select [typeaheadDebounceInterval]="1000" formControlName="rarity">
               <mat-option value="">None</mat-option>
               <mat-option *ngFor="let rarity of GemQuality" [value]="rarity">{{rarity | humanize | titlecase}}
               </mat-option>
@@ -85,7 +120,7 @@
         <div class="flex-fill">
           <mat-form-field>
             <mat-label>Stat</mat-label>
-            <mat-select formControlName="stat">
+            <mat-select [typeaheadDebounceInterval]="1000" formControlName="stat">
               <mat-option value="">None</mat-option>
               <mat-option *ngFor="let stat of allStats" [value]="stat">{{stat | humanize | titlecase}}</mat-option>
             </mat-select>

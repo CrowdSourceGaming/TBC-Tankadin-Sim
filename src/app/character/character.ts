@@ -43,8 +43,11 @@ export class Character {
 
   private calculateGearStats(stat: ItemStatsEnum): number {
     let total = 0;
-    Object.entries(this.gear).forEach(([slot, item]) => {
-      total += item.stats[stat] || 0;
+    Object.keys(this.gear).forEach((slot) => {
+      const item: Item = this.gear[slot as keyof typeof GearSlots]
+      if (item) {
+        total += item.getTotalConfiguredStats()[stat] || 0;
+      }
     })
     return total;
   }

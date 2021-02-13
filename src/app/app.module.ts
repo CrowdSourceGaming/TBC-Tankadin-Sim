@@ -32,6 +32,9 @@ import { CharacterConfigComponent } from './character-config/character-config.co
 import { GearAlterationComponent } from './gear-alteration/gear-alteration.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CharacterItemDisplayComponent } from './character-item-display/character-item-display.component';
+import { EnchantsComponent } from './enchants/enchants.component';
+import { CurrentGemsComponent } from './current-gems/current-gems.component';
+import { NewEnchantComponent } from './new-enchant/new-enchant.component';
 
 @NgModule({
   declarations: [
@@ -48,6 +51,9 @@ import { CharacterItemDisplayComponent } from './character-item-display/characte
     CharacterConfigComponent,
     GearAlterationComponent,
     CharacterItemDisplayComponent,
+    EnchantsComponent,
+    CurrentGemsComponent,
+    NewEnchantComponent,
   ],
   imports: [
     HttpClientModule,

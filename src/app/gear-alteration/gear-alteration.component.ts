@@ -1,14 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { GearSlots } from '../character/gearslot';
+import { Component, OnInit } from '@angular/core';
 import { GemSocketColor, Item } from '../item/item';
-import { GearSlotComponent } from '../gear-slot/gear-slot.component';
-import { SharedDataService } from '../shared/shared-data.service';
-import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { GemService } from '../item/gem.service';
 import { Gem, GemColor, GemQuality } from '../item/gem';
 import { ItemStats, ItemStatsEnum } from '../item/item-stats';
 import { MatTableDataSource } from '@angular/material/table';
-import { BehaviorSubject } from 'rxjs';
+import { GearService, GemAlterationInterface } from '../gear/gear.service';
 
 @Component({
   selector: 'app-gear-alteration',
@@ -17,17 +14,26 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class GearAlterationComponent implements OnInit {
 
-  constructor(private gemService: GemService) { }
+  constructor(private gemService: GemService, private gearService: GearService) { }
 
   GemSocketColor = GemSocketColor
   GemSocketColors = Object.values(GemSocketColor)
   GemQuality = Object.values(GemQuality)
   allStats = Object.values(ItemStatsEnum).sort();
 
+  gemAlterationSetBonusOne!: ItemStatsEnum;
+  gemAlterationSetBonusTwo!: ItemStatsEnum;
+
+
   gemAlterations: GemAlterationInterface = {
     default: null,
     defaultMeta: null,
-    logic: []
+    logic: [
+      { gem: null, setBonusAttribute: null, socketColor: null },
+      { gem: null, setBonusAttribute: null, socketColor: null },
+      { gem: null, setBonusAttribute: null, socketColor: null },
+      { gem: null, setBonusAttribute: null, socketColor: null }
+    ]
   }
 
   gemFilterForm: FormGroup = new FormGroup({
@@ -35,17 +41,6 @@ export class GearAlterationComponent implements OnInit {
     color: new FormControl(''),
     rarity: new FormControl(''),
     stat: new FormControl('')
-  })
-
-  ruleFormGroup: FormGroup = new FormGroup({
-    setBonusAttribute: new FormControl('', [Validators.required]),
-    gemSocketColor: new FormControl('', [Validators.required]),
-    gem: new FormControl(null, [Validators.required])
-  })
-
-  defaultRuleFormGroup: FormGroup = new FormGroup({
-    defaultGem: new FormControl('', [Validators.required]),
-    defaultMetaGem: new FormControl('', [Validators.required])
   })
 
   attributes = Object.values(ItemStatsEnum).sort()
@@ -91,24 +86,21 @@ export class GearAlterationComponent implements OnInit {
     return `${gem.quality}-text`
   }
 
+  applyGemsToGear() {
+    this.gemAlterations.logic[0].setBonusAttribute = this.gemAlterationSetBonusOne
+    this.gemAlterations.logic[1].setBonusAttribute = this.gemAlterationSetBonusOne
+    this.gemAlterations.logic[2].setBonusAttribute = this.gemAlterationSetBonusTwo
+    this.gemAlterations.logic[3].setBonusAttribute = this.gemAlterationSetBonusTwo
+
+    this.gearService.applyGemsToGear(this.gemAlterations)
+  }
+
   private gemFilter(data: Gem, filter: any) {
     return (
-      (filter.name !== '' ? data.name.includes(filter.name) : true) &&
+      (filter.name !== '' ? data.name.toLowerCase().includes(filter.name.toLowerCase()) : true) &&
       (filter.color !== '' ? data.color === filter.color : true) &&
       (filter.rarity !== '' ? data.quality === filter.rarity : true) &&
       (filter.stat !== '' ? Object.keys(data.stats).includes(filter.stat) : true)
     )
   }
-}
-
-export interface GemInsertionLogic {
-  setBonusAttribute: ItemStatsEnum,
-  socketColor: GemSocketColor,
-  gem: Gem
-}
-
-export interface GemAlterationInterface {
-  default: Gem | null,
-  defaultMeta: Gem | null,
-  logic: GemInsertionLogic[]
 }
