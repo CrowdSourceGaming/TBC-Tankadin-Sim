@@ -3,11 +3,12 @@ import { GearSlots } from '../character/gearslot';
 import { GemSocketColor, Item } from '../item/item';
 import { GearSlotComponent } from '../gear-slot/gear-slot.component';
 import { SharedDataService } from '../shared/shared-data.service';
-import { FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { GemService } from '../item/gem.service';
 import { Gem, GemColor, GemQuality } from '../item/gem';
 import { ItemStats, ItemStatsEnum } from '../item/item-stats';
 import { MatTableDataSource } from '@angular/material/table';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-gear-alteration',
@@ -16,19 +17,35 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class GearAlterationComponent implements OnInit {
 
-  constructor(private sharedDataService: SharedDataService, private gemService: GemService) { }
+  constructor(private gemService: GemService) { }
 
-  @Input()
-  gearSlot!: GearSlots;
   GemSocketColor = GemSocketColor
+  GemSocketColors = Object.values(GemSocketColor)
   GemQuality = Object.values(GemQuality)
   allStats = Object.values(ItemStatsEnum).sort();
+
+  gemAlterations: GemAlterationInterface = {
+    default: null,
+    defaultMeta: null,
+    logic: []
+  }
 
   gemFilterForm: FormGroup = new FormGroup({
     name: new FormControl(''),
     color: new FormControl(''),
     rarity: new FormControl(''),
     stat: new FormControl('')
+  })
+
+  ruleFormGroup: FormGroup = new FormGroup({
+    setBonusAttribute: new FormControl('', [Validators.required]),
+    gemSocketColor: new FormControl('', [Validators.required]),
+    gem: new FormControl(null, [Validators.required])
+  })
+
+  defaultRuleFormGroup: FormGroup = new FormGroup({
+    defaultGem: new FormControl('', [Validators.required]),
+    defaultMetaGem: new FormControl('', [Validators.required])
   })
 
   attributes = Object.values(ItemStatsEnum).sort()
@@ -42,20 +59,16 @@ export class GearAlterationComponent implements OnInit {
   item!: Item;
 
   ngOnInit(): void {
-    this.sharedDataService.character.subscribe(character => {
-      this.item = character.gear[this.gearSlot as keyof typeof GearSlots]
+    this.gems = new MatTableDataSource();
+    this.gemService.gems.subscribe(gems => {
+      gems.sort((a, b) => a.name < b.name ? -1 : 1)
+      this.gems.filterPredicate = this.gemFilter
+      this.gems.data = gems;
     })
-    this.initGems()
 
     this.gemFilterForm.valueChanges.subscribe((value) => {
       this.gems.filter = value;
     })
-  }
-
-  async initGems() {
-    const gems = await this.gemService.getGems();
-    this.gems = new MatTableDataSource(gems.sort((a, b) => a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1));
-    this.gems.filterPredicate = this.gemFilter
   }
 
   getStat(gem: Gem, index: number) {
@@ -78,10 +91,6 @@ export class GearAlterationComponent implements OnInit {
     return `${gem.quality}-text`
   }
 
-  insertGem(gem: Gem) {
-
-  }
-
   private gemFilter(data: Gem, filter: any) {
     return (
       (filter.name !== '' ? data.name.includes(filter.name) : true) &&
@@ -90,40 +99,16 @@ export class GearAlterationComponent implements OnInit {
       (filter.stat !== '' ? Object.keys(data.stats).includes(filter.stat) : true)
     )
   }
+}
 
-  //////////  Remove after gems are added  ////////////////
+export interface GemInsertionLogic {
+  setBonusAttribute: ItemStatsEnum,
+  socketColor: GemSocketColor,
+  gem: Gem
+}
 
-  /*   addForm: FormGroup = new FormGroup({
-      name: new FormControl(''),
-      color: new FormControl(''),
-      quality: new FormControl(''),
-      statOne: new FormControl(''),
-      valueOne: new FormControl(''),
-      statTwo: new FormControl(''),
-      valueTwo: new FormControl('')
-    })
-
-
-
-    async addGem() {
-      const name = this.addForm.get('name')?.value
-      const color = this.addForm.get('color')?.value
-      const quality = this.addForm.get('quality')?.value
-      const statOne = this.addForm.get('statOne')?.value
-      const valueOne = this.addForm.get('valueOne')?.value
-      const statTwo = this.addForm.get('statTwo')?.value
-      const valueTwo = this.addForm.get('valueTwo')?.value
-      const gem = new Gem(name, color, quality, { [statOne as keyof ItemStats]: valueOne })
-      if (statTwo) {
-        gem.stats[statTwo as keyof ItemStats] = valueTwo;
-      }
-      await this.gemService.putGem(gem);
-      this.addForm.controls.name.reset();
-      this.addForm.controls.valueOne.reset();
-      this.addForm.controls.valueTwo.reset();
-    } */
-
-
-
-
+export interface GemAlterationInterface {
+  default: Gem | null,
+  defaultMeta: Gem | null,
+  logic: GemInsertionLogic[]
 }

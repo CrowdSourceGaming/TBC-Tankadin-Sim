@@ -1,5 +1,7 @@
 <h1>Apply New Spec</h1>
-
+<div class="current-spec-link">
+  <a target="_blank" href="{{currentSpecUrl}}">Current Spec: {{spec.holyProtRetCount}}</a>
+</div>
 <div>
   <mat-accordion>
     <mat-expansion-panel>
@@ -26,6 +28,9 @@
       <input matInput formControlName="newSpecURL"
         placeholder="https://tbcdb.com/talents/index.html?en&paladin&0000000000000000000000000000000000000000000000000000000000000000">
     </mat-form-field>
-    <button mat-raised-button color="primary">Apply Spec</button>
+    <div class="flex-grid flex-space-between">
+      <button mat-raised-button color="accent" (click)="cancel(); false;">Cancel</button>
+      <button mat-raised-button color="primary">Apply Spec</button>
+    </div>
   </form>
 </div>

@@ -1,0 +1,84 @@
+.character-panel {
+  background-image: url("/assets/character-panel.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 650px;
+  width: 500px;
+}
+
+.icon {
+  position: relative;
+  width: 50px;
+  height: 50px;
+}
+
+.head {
+left: 26px;
+  top: 118px;
+}
+.neck {
+left: 26px;
+  top: 176px;
+}
+.shoulder {
+left: 26px;
+  top: 234px;
+}
+.back {
+left: 26px;
+  top: 292px;
+}
+.chest {
+left: 26px;
+  top: 349px;
+}
+.wrist {
+left: 26px;
+  top: 522px;
+}
+
+.hands {
+  left: 426px;
+  top: 118px;
+}
+.waist {
+  left: 426px;
+  top: 176px;
+}
+.legs {
+  left: 426px;
+  top: 234px;
+}
+.feet {
+  left: 426px;
+  top: 292px;
+}
+.fingerOne {
+  left: 426px;
+  top: 349px;
+}
+.fingerTwo {
+  left: 426px;
+  top: 407px;
+}
+.trinketOne {
+  left: 426px;
+  top: 465px;
+}
+.trinketTwo {
+  left: 426px;
+  top: 522px;
+}
+
+.mainHand {
+  left: 167px;
+  top: 557px;
+}
+.offHand {
+  left: 226px;
+  top: 557px;
+}
+.relic {
+  left: 285px;
+  top: 557px;
+}

@@ -39,7 +39,6 @@ export class GearService {
   private async GetItemsFromDB(): Promise<void> {
     const collection = await this.databaseService.gearCollection
     this.gearOptions.next(await collection.find());
-    console.log('gearOptions', this.gearOptions.value);
   }
 
   private async watchDBForChanges() {

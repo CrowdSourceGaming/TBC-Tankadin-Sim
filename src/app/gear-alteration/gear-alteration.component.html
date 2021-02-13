@@ -3,8 +3,55 @@
 </mat-toolbar>
 
 <div class="flex-grid">
-  <div class="flex-fill">
-    <!-- Enchants -->
+  <div class="flex-fill" style="max-width: 780px;">
+    <div>
+      Default all gem sockets to
+      <mat-form-field class="small-form-field">
+        <mat-select [(ngModel)]="gemAlterations.default">
+          <mat-option *ngFor="let gem of gems.data" [value]="gem">{{gem.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      and meta socket to
+      <mat-form-field class="small-form-field">
+        <mat-select [(ngModel)]="gemAlterations.default">
+          <mat-option *ngFor="let gem of gems.data" [value]="gem">{{gem.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      .
+    </div>
+    <div>
+      If armor socket bonus is
+      <mat-form-field class="small-form-field">
+        <mat-select>
+          <mat-option *ngFor="let stat of allStats" [value]="stat">{{stat | humanize}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      Then use
+      <mat-form-field class="small-form-field">
+        <mat-select>
+          <mat-option *ngFor="let gem of gems.data" [value]="gem">{{gem.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      for
+      <mat-form-field class="small-form-field">
+        <mat-select>
+          <mat-option *ngFor="let color of GemSocketColors" [value]="color">{{color}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      or
+      <mat-form-field class="small-form-field">
+        <mat-select>
+          <mat-option *ngFor="let gem of gems.data" [value]="gem">{{gem.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      for
+      <mat-form-field class="small-form-field">
+        <mat-select>
+          <mat-option *ngFor="let color of GemSocketColors" [value]="color">{{color}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      sockets.
+    </div>
   </div>
   <div class="flex-fill">
     <form [formGroup]="gemFilterForm">
@@ -66,7 +113,7 @@
       </ng-container>
       <ng-container matColumnDef="anchor">
         <mat-header-cell *matHeaderCellDef></mat-header-cell>
-        <mat-cell *matCellDef="let gem"> <a href="#" attr.data-wowhead="item={{gem.id}}"></a> </mat-cell>
+        <mat-cell *matCellDef="let gem"> <a attr.data-wowhead="item={{gem.id}}"></a> </mat-cell>
       </ng-container>
 
       <ng-container matColumnDef="header-title-row">

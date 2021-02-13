@@ -19,7 +19,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { APP_BASE_HREF } from '@angular/common';
 import { NewSpecComponent } from './new-spec/new-spec.component';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -30,6 +30,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ErrorComponent } from './error/error.component';
 import { CharacterConfigComponent } from './character-config/character-config.component';
 import { GearAlterationComponent } from './gear-alteration/gear-alteration.component';
+import { HttpClientModule } from '@angular/common/http';
+import { CharacterItemDisplayComponent } from './character-item-display/character-item-display.component';
 
 @NgModule({
   declarations: [
@@ -45,8 +47,11 @@ import { GearAlterationComponent } from './gear-alteration/gear-alteration.compo
     ErrorComponent,
     CharacterConfigComponent,
     GearAlterationComponent,
+    CharacterItemDisplayComponent,
   ],
   imports: [
+    HttpClientModule,
+    FormsModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -65,19 +70,20 @@ import { GearAlterationComponent } from './gear-alteration/gear-alteration.compo
     MatToolbarModule,
     MatSnackBarModule
   ],
-  providers: [
+/*   providers: [
     {
       provide: APP_BASE_HREF,
       useFactory: function () {
         const location = window.location.pathname.split('/')[1] || '';
+        console.log('location',)
         if (location !== 'gear' && location !== 'character') {
-          return `/${location}`
+          return `/${location}/`
         } else {
           return '/'
         }
       }
     }
-  ],
+  ], */
   bootstrap: [AppComponent]
 })
 export class AppModule { }

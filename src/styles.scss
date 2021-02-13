@@ -30,7 +30,9 @@ body {
   justify-content: space-between;
 }
 
-a:link {
+
+
+a {
   color: $primary;
   background-color: transparent;
   text-decoration: none;
@@ -98,4 +100,12 @@ h1 {
 }
 .wow-token-text {
   color: #00ccff
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.small-form-field {
+  width: 200px !important;
 }

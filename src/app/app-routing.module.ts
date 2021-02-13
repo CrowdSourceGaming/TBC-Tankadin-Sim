@@ -4,6 +4,7 @@ import { CharacterConfigComponent } from './character-config/character-config.co
 import { GearSlotComponent } from './gear-slot/gear-slot.component';
 
 const routes: Routes = [
+  { path: 'gear/:slot', component: GearSlotComponent },
   { path: 'gear', component: GearSlotComponent },
   { path: 'character', component: CharacterConfigComponent },
   { path: '', redirectTo: 'gear', pathMatch: 'prefix' }

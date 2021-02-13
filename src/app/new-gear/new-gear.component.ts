@@ -31,7 +31,9 @@ export class NewGearComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<NewGearComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    @Inject(MAT_DIALOG_DATA) public data: any) {
+    dialogRef.disableClose = true;
+  }
 
   addAttributesFormGroup = new FormGroup({
     attributeName: new FormControl(''),

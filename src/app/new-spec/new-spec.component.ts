@@ -1,7 +1,6 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatFormField, MatFormFieldControl } from '@angular/material/form-field';
 import { Spec } from '../character/spec';
 import { SharedDataService } from '../shared/shared-data.service';
 
@@ -10,9 +9,15 @@ import { SharedDataService } from '../shared/shared-data.service';
   templateUrl: './new-spec.component.html',
   styleUrls: ['./new-spec.component.scss']
 })
-export class NewSpecComponent implements OnInit, AfterViewInit {
+export class NewSpecComponent implements OnInit {
 
-  constructor(public dialogRef: MatDialogRef<NewSpecComponent>, private sharedDataService: SharedDataService, private cdr: ChangeDetectorRef) { }
+  currentSpecUrl!: string;
+  spec!: Spec
+
+  constructor(public dialogRef: MatDialogRef<NewSpecComponent>,
+    private sharedDataService: SharedDataService) {
+    dialogRef.disableClose = true;
+  }
 
   newSpecFormGroup = new FormGroup({
     newSpecURL: new FormControl('', [Validators.required, this.validateTBCDBLink()])
@@ -21,9 +26,8 @@ export class NewSpecComponent implements OnInit, AfterViewInit {
   talentUrlRegex = new RegExp(/^https:\/\/tbcdb.com\/talents\/index.html\?en\&paladin\&(\d{64})$/);
 
   ngOnInit(): void {
-  }
-
-  ngAfterViewInit() {
+    this.spec = this.sharedDataService.character.value.spec;
+    this.currentSpecUrl = `https://tbcdb.com/talents/index.html?en&paladin&${this.spec.talentString}`
   }
 
   cancel(): void {

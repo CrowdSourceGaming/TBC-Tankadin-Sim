@@ -6,3 +6,10 @@
     </mat-select>
   </mat-form-field>
 </div>
+
+
+<div class="character-panel">
+  <app-character-item-display *ngFor="let slot of GearSlotKeys" class="icon" [ngClass]="slot" [item]="character.gear[slot]"
+    [backgroundUrl]="getItemIcon(character.gear[slot].id)">
+  </app-character-item-display>
+</div>

@@ -4,18 +4,24 @@ import { Gem, GemColor } from './gem';
 import * as Realm from "realm-web";
 import { DatabaseService } from '../database.service';
 import { GearSlotComponent } from '../gear-slot/gear-slot.component';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GemService {
 
+  gems: BehaviorSubject<Gem[]> = new BehaviorSubject<Gem[]>([]);
 
-  constructor(private databaseService: DatabaseService) { }
 
-  async getGems(): Promise<Gem[]> {
+  constructor(private databaseService: DatabaseService) {
+    this.getGems();
+  }
+
+  async getGems(): Promise<void> {
     const collection = await this.databaseService.gemCollection
-    return await collection.find();
+    const gems = await collection.find();
+    this.gems.next(gems);
   }
 
   async putGem(gem: Gem) {

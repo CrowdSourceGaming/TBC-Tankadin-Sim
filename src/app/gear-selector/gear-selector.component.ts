@@ -34,7 +34,15 @@ export class GearSelectorComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.sharedDataService.character.subscribe(character => this.character = character);
     this.gearService.gearOptions.subscribe(newGearOptions => {
-      this.gearOptions = newGearOptions.filter(gear => gear.validSlot?.includes(this.gearType))
+      this.gearOptions = newGearOptions.filter(gear => {
+        if (this.gearType === GearSlots.fingerOne || this.gearType === GearSlots.fingerTwo) {
+          return gear.validSlot?.includes(GearSlots.fingerOne) || gear.validSlot?.includes(GearSlots.fingerTwo)
+        } else if (this.gearType === GearSlots.trinketOne || this.gearType === GearSlots.trinketTwo) {
+          return gear.validSlot?.includes(GearSlots.trinketOne) || gear.validSlot?.includes(GearSlots.trinketTwo)
+        } else {
+          return gear.validSlot?.includes(this.gearType)
+        }
+      })
       this.initGearSeletion();
     })
     this.displayedColumns = [

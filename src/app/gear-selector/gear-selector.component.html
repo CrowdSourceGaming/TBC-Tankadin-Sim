@@ -92,7 +92,7 @@
     <ng-container matColumnDef="anchor">
       <mat-header-cell style="width: 0px;" *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let armor">
-        <a [ngClass]="{'selected-item': character.gear[gearType]['_id'] === armor['_id']}" (click)="assignGear(armor)"
+        <a class="clickable" [ngClass]="{'selected-item': character.gear[gearType]['_id'] === armor['_id']}" (click)="assignGear(armor)"
           attr.data-wowhead="item={{armor.id}}"></a>
       </mat-cell>
     </ng-container>

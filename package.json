@@ -21,6 +21,7 @@
     "@angular/platform-browser": "~11.1.0",
     "@angular/platform-browser-dynamic": "~11.1.0",
     "@angular/router": "~11.1.0",
+    "blizzard.js": "^4.0.1",
     "realm-web": "^1.2.0",
     "routes": "^2.1.0",
     "routing": "0.0.2",
