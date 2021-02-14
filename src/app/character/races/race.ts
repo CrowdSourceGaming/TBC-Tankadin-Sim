@@ -1,3 +1,4 @@
+import { JsonProperty, Serializable } from "typescript-json-serializer";
 import { ItemStats } from "../../item/item-stats"
 
 export enum Races {
@@ -15,10 +16,11 @@ const raceAttributeValues: { [key in Races]: ItemStats } = {
   [Races.human]: { strength: 22, agility: 20, stamina: 22, intellect: 20, spirit: 21 }
 }
 
+@Serializable()
 export class Race {
 
-  stats: ItemStats;
-  name: Races
+  @JsonProperty() stats: ItemStats;
+  @JsonProperty() name: Races
 
   constructor(race: Races) {
     this.stats = raceAttributeValues[race];
