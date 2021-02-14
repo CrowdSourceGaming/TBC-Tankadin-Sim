@@ -1,15 +1,15 @@
-import { Serializable } from "typescript-json-serializer";
+import { JsonProperty, Serializable } from "typescript-json-serializer";
 import { GemSocketColor } from "./item";
 import { ItemStats } from "./item-stats";
 
 @Serializable()
 export class Gem {
-  _id: string;
-  id: number;
-  name: string;
-  color: GemColor;
-  stats: ItemStats
-  quality: GemQuality
+  @JsonProperty() _id: string;
+  @JsonProperty() id: number;
+  @JsonProperty() name: string;
+  @JsonProperty() color: GemColor;
+  @JsonProperty() stats: ItemStats
+  @JsonProperty() quality: GemQuality
 
   constructor(id: number, name: string, color: GemColor, quality: GemQuality, stats: ItemStats) {
     this.id = id;

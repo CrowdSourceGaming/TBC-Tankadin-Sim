@@ -1,5 +1,5 @@
 <mat-toolbar color="accent">
-  <h2> Enchants </h2>
+  <h2> Enchant all listed gear </h2>
 </mat-toolbar>
 
 
@@ -16,7 +16,7 @@
     <ng-container matColumnDef="anchor">
       <mat-header-cell style="width: 0px;" *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let enchant">
-        <a class="clickable" [ngClass]="{'selected-item': gear[0].enchant?.id === enchant.id}"
+        <a class="clickable" [ngClass]="{'selected-item': gear[0]?.enchant?.id === enchant.id}"
           (click)="assignGear(enchant)" attr.data-wowhead="item={{enchant.id}}"></a>
       </mat-cell>
     </ng-container>

@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
 import { Race, Races } from '../character/races/race';
+import { SaveService } from '../save.service';
 import { SharedDataService } from '../shared/shared-data.service';
 
 @Component({
@@ -10,16 +11,16 @@ import { SharedDataService } from '../shared/shared-data.service';
 })
 export class ControlsComponent implements OnInit {
 
-  constructor(private sharedDataService: SharedDataService) { }
+  constructor(private sharedDataService: SharedDataService, private saveService: SaveService) { }
 
 
   ngOnInit(): void {
   }
 
   save() {
-    this.sharedDataService.saveCharacter();
+    this.saveService.save();
   }
   load() {
-    this.sharedDataService.loadCharacter();
+    this.saveService.load();
   }
 }

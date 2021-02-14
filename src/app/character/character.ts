@@ -9,7 +9,7 @@ import { JsonProperty, Serializable } from 'typescript-json-serializer';
 @Serializable()
 export class Character {
   @JsonProperty() spec: Spec;
-  @JsonProperty() gear: { [key in GearSlots]: Item }
+  gear: { [key in GearSlots]: Item }
   @JsonProperty() baseStats: ItemStats;
   @JsonProperty() race: Race
 

@@ -8,6 +8,7 @@ import { DatabaseService } from '../database.service';
 import { ItemStatsEnum } from '../item/item-stats';
 import { Gem } from '../item/gem';
 import { deserialize } from 'typescript-json-serializer';
+import { SharedDataService } from '../shared/shared-data.service';
 
 
 
@@ -20,7 +21,7 @@ export class GearService {
 
   gearOptions: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>([]);
 
-  constructor(private databaseService: DatabaseService) {
+  constructor(private databaseService: DatabaseService, private sharedDataService: SharedDataService) {
     this.initGearList();
   }
 
@@ -51,6 +52,7 @@ export class GearService {
       });
     });
     this.gearOptions.next(gearOptions);
+    this.sharedDataService.gemLogic = gemLogic;
   }
 
 
