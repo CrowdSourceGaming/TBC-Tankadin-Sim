@@ -14,10 +14,15 @@ export class EnchantService {
     this.init();
   }
 
-  async init(){
+  async init() {
     const collection = await this.databaseService.enchantCollection
     this.enchants.next(await collection.find());
     this.watchDBForChanges()
+  }
+
+  async addEnchant(enchant: Enchant) {
+    const collection = await this.databaseService.enchantCollection
+    collection.updateOne({ _id: enchant._id }, enchant, { upsert: true })
   }
 
 

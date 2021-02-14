@@ -13,11 +13,18 @@
       <mat-header-cell *matHeaderCellDef mat-sort-header>Stat Boost</mat-header-cell>
       <mat-cell *matCellDef="let enchant">{{statBoostString(enchant)|humanize}}</mat-cell>
     </ng-container>
+    <ng-container matColumnDef="anchor">
+      <mat-header-cell style="width: 0px;" *matHeaderCellDef></mat-header-cell>
+      <mat-cell *matCellDef="let enchant">
+        <a class="clickable" [ngClass]="{'selected-item': gear[0].enchant?.id === enchant.id}"
+          (click)="assignGear(enchant)" attr.data-wowhead="item={{enchant.id}}"></a>
+      </mat-cell>
+    </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
   </mat-table>
   <div style="margin-top: 20px; float: right;">
-    <button mat-raised-button color="accent">Add enchant to list</button>
+    <button (click)="addEnchant()" mat-raised-button color="accent">Add enchant to list</button>
   </div>
 </div>

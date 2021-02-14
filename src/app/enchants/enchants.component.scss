@@ -1,0 +1,41 @@
+@import "../../styles_variables.scss";
+
+.mat-row {
+  min-height: 0px;
+}
+
+.mat-column-anchor {
+  opacity: 0.1;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+}
+
+a {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.mat-row,
+.cdk-row,
+.mat-header-row {
+  position: relative;
+}
+
+td tr {
+  position: relative !important;
+}
+
+a:hover {
+  background-color: $warn;
+}
+
+.selected-item {
+  background-color: $primary;
+}

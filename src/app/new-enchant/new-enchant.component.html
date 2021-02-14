@@ -1,1 +1,69 @@
-<p>new-enchant works!</p>
+<h1 mat-dialog-title>New Enchant</h1>
+<div mat-dialog-content>
+  <form [formGroup]="newEnchantFG">
+    <div>
+      <mat-form-field>
+        <mat-label>tbcdb link</mat-label>
+        <input formControlName="tbcdbLink" matInput placeholder="https://tbcdb.com/?item=29068">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label>Enchant Name</mat-label>
+        <input formControlName="enchantName" matInput placeholder="Justicar Faceguard">
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field>
+        <mat-label>For Gear Slot</mat-label>
+        <mat-select formControlName="gearSlot">
+          <mat-option *ngFor="let slot of GearSlotsKeys" [value]="slot">
+            {{slot | humanize}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div>
+      <h3>Attributes</h3>
+      <div>
+        <table>
+          <thead>
+            <th>Attribute</th>
+            <th>Value</th>
+            <th></th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let key of getAttributes()">
+              <td>{{key | humanize}}</td>
+              <td>{{enchant.stats[key]}}</td>
+              <td><button style="float:right;" mat-raised-button color="warn" (click)="removeStat(key)">Remove</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </form>
+
+  <form [formGroup]="addAttributesFormGroup" (ngSubmit)="addAttribute($event); false">
+    <div class="flex-grid flex-space-between">
+      <div>
+        <mat-form-field class="small-form-field">
+          <mat-label>Attribute</mat-label>
+          <mat-select formControlName="attributeName">
+            <mat-option *ngFor="let key of attributes" [value]="key">{{key | humanize}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field style="padding-left: 10px;" class="small-form-field">
+          <mat-label>Value</mat-label>
+          <input formControlName="attributeValue" matInput placeholder="0">
+        </mat-form-field>
+      </div>
+      <button mat-raised-button color="accent">Add</button>
+    </div>
+  </form>
+  <div mat-dialog-actions class="flex-grid flex-space-between">
+    <button mat-raised-button color="accent" (click)="onNoClick()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="createItem()" cdkFocusInitial>Add Gear</button>
+  </div>
+</div>
