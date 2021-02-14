@@ -8,13 +8,13 @@
       Default all gem sockets to
       <mat-form-field class="small-form-field">
         <mat-select [typeaheadDebounceInterval]="1000" [(ngModel)]="gemAlterations.default">
-          <mat-option *ngFor="let gem of gems.data" [value]="gem">{{gem.name}}</mat-option>
+          <mat-option *ngFor="let gem of noMetaGems()" [value]="gem">{{gem.name}}</mat-option>
         </mat-select>
       </mat-form-field>
       and meta socket to
       <mat-form-field class="small-form-field">
         <mat-select [typeaheadDebounceInterval]="1000" [(ngModel)]="gemAlterations.defaultMeta">
-          <mat-option *ngFor="let gem of gems.data" [value]="gem">{{gem.name}}</mat-option>
+          <mat-option *ngFor="let gem of metaGems()" [value]="gem">{{gem.name}}</mat-option>
         </mat-select>
       </mat-form-field>
       .
@@ -29,7 +29,7 @@
       Then use
       <mat-form-field class="small-form-field">
         <mat-select [typeaheadDebounceInterval]="1000" [(ngModel)]="gemAlterations.logic[0].gem">
-          <mat-option *ngFor="let gem of gems.data" [value]="gem">{{gem.name}}</mat-option>
+          <mat-option *ngFor="let gem of noMetaGems()" [value]="gem">{{gem.name}}</mat-option>
         </mat-select>
       </mat-form-field>
       for
@@ -41,7 +41,7 @@
       or
       <mat-form-field class="small-form-field">
         <mat-select [typeaheadDebounceInterval]="1000" [(ngModel)]="gemAlterations.logic[1].gem">
-          <mat-option *ngFor="let gem of gems.data" [value]="gem">{{gem.name}}</mat-option>
+          <mat-option *ngFor="let gem of noMetaGems()" [value]="gem">{{gem.name}}</mat-option>
         </mat-select>
       </mat-form-field>
       for
@@ -162,85 +162,3 @@
     </mat-table>
   </div>
 </div>
-
-
-<!-- <div>
-  <h3>Gems</h3>
-  <div *ngFor="let socket of item.gemSockets">
-    <mat-form-field>
-      <mat-select>
-        <mat-option *ngIf="socket.color === GemSocketColor.meta">
-
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <h3>Enchants</h3>
-</div>
-
-
- -->
-
-
-<!-- FORM TO ADD GEMS IS UNDER THIS COMMENT -->
-
-
-
-
-<!-- <div>
-  <form [formGroup]="addForm" (ngSubmit)="addGem()">
-    <div>
-      <mat-form-field>
-        <mat-label>Name</mat-label>
-        <input matInput formControlName="name">
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-label>Color</mat-label>
-        <mat-select formControlName="color">
-          <mat-option *ngFor="let color of gemColor" [value]="color">{{color}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-label>Quality</mat-label>
-        <mat-select formControlName="quality">
-          <mat-option *ngFor="let q of quality" [value]="q">{{q}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-    <div>
-      <mat-form-field>
-        <mat-label>Attribute</mat-label>
-        <mat-select formControlName="statOne">
-          <mat-option *ngFor="let attr of attributes" [value]="attr">{{attr}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-label>Value</mat-label>
-        <input matInput formControlName="valueOne">
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-label>Attribute</mat-label>
-        <mat-select formControlName="statTwo">
-          <mat-option *ngFor="let attr of attributes" [value]="attr">{{attr}}</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-label>Value</mat-label>
-        <input matInput formControlName="valueTwo">
-      </mat-form-field>
-    </div>
-    <button mat-raised-button color="accent">Submit</button>
-  </form>
-</div>
- -->

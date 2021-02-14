@@ -28,6 +28,23 @@ export class Item {
 
   getTotalConfiguredStats(): ItemStats {
     const totals: ItemStats = JSON.parse(JSON.stringify(this.stats));
+    this.addGemValuesToTotal(totals);
+    this.addEnchantValuesToTotal(totals);
+    return totals;
+  }
+
+  private addEnchantValuesToTotal(totals: ItemStats): void {
+    if (this.enchant) {
+      Object.keys(this.enchant.stats).forEach(stat => {
+        if (!totals[stat as keyof typeof ItemStatsEnum]) {
+          totals[stat as keyof typeof ItemStatsEnum] = 0;
+        }
+        totals[stat as keyof typeof ItemStatsEnum]! += +(this.enchant!.stats[stat as keyof typeof ItemStatsEnum] || 0);
+      })
+    }
+  }
+
+  private addGemValuesToTotal(totals: ItemStats): void {
     let applySocketBonus: boolean = true;
     this.gemSockets.forEach(socket => {
       if (socket.gem) {
@@ -52,7 +69,6 @@ export class Item {
       }
       totals[socketBonusAttribute as keyof typeof ItemStatsEnum]! += +(this.gemSocketBonus[socketBonusAttribute as keyof typeof ItemStatsEnum] || 0);
     }
-    return totals;
   }
 }
 

@@ -95,6 +95,14 @@ export class GearAlterationComponent implements OnInit {
     this.gearService.applyGemsToGear(this.gemAlterations)
   }
 
+  noMetaGems(){
+    return this.gems.data.filter(gem => gem.color !== GemColor.meta)
+  }
+
+  metaGems(){
+    return this.gems.data.filter(gem => gem.color === GemColor.meta)
+  }
+
   private gemFilter(data: Gem, filter: any) {
     return (
       (filter.name !== '' ? data.name.toLowerCase().includes(filter.name.toLowerCase()) : true) &&

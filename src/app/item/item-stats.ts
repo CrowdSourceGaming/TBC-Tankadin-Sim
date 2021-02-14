@@ -7,6 +7,7 @@ export interface ItemStats {
   [ItemStatsEnum.strength]?: number,
   [ItemStatsEnum.agility]?: number,
   [ItemStatsEnum.spirit]?: number,
+  [ItemStatsEnum.intellectPercent]?: number,
   //defensive
   [ItemStatsEnum.armor]?: number,
   [ItemStatsEnum.defenseRating]?: number,
@@ -17,12 +18,14 @@ export interface ItemStats {
   [ItemStatsEnum.parryValue]?: number,
   [ItemStatsEnum.blockRating]?: number,
   [ItemStatsEnum.blockValue]?: number,
+  [ItemStatsEnum.shieldBlockValuePercent]?: number,
   [ItemStatsEnum.resilience]?: number,
   //melee
   [ItemStatsEnum.meleeHitRating]?: number,
   [ItemStatsEnum.meleeHitPercent]?: number,
   [ItemStatsEnum.meleeCritRating]?: number,
   [ItemStatsEnum.meleeCritPercent]?: number,
+  [ItemStatsEnum.meleeCritDamagePercent]?: number,
   [ItemStatsEnum.expertiseRating]?: number,
   [ItemStatsEnum.attackRating]?: number,
   [ItemStatsEnum.meleeExpertise]?: number,
@@ -61,6 +64,7 @@ export enum ItemStatsEnum {
   strength = 'strength',
   agility = 'agility',
   spirit = 'spirit',
+  intellectPercent = 'intellectPercent',
   //defensive
   armor = 'armor',
   defenseRating = 'defenseRating',
@@ -70,6 +74,7 @@ export enum ItemStatsEnum {
   parryValue = 'parryValue',
   blockRating = 'blockRating',
   blockValue = 'blockValue',
+  shieldBlockValuePercent = 'shieldBlockValuePercent',
   defenseValue = 'defenseValue',
   resilience = 'resilience',
   //melee
@@ -77,6 +82,7 @@ export enum ItemStatsEnum {
   meleeHitPercent = 'meleeHitPercent',
   meleeCritRating = 'meleeCritRating',
   meleeCritPercent = 'meleeCritPercent',
+  meleeCritDamagePercent = 'meleeCritDamagePercent',
   expertiseRating = 'expertiseRating',
   attackRating = 'attackRating',
   meleeExpertise = 'meleeExpertise',
