@@ -52,7 +52,7 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "baseHref": "/TBC-Tankadin-Sim",
+              "baseHref": "/TBC-Tankadin-Sim/",
               "budgets": [
                 {
                   "type": "initial",
