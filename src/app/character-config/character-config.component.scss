@@ -1,5 +1,7 @@
+@import "globalVars";
+
 .character-panel {
-  background-image: url("/assets/character-panel.png");
+  background-image: url($css-base-path + "/assets/character-panel.png");
   background-position: center;
   background-repeat: no-repeat;
   height: 650px;
@@ -13,27 +15,27 @@
 }
 
 .head {
-left: 26px;
+  left: 26px;
   top: 118px;
 }
 .neck {
-left: 26px;
+  left: 26px;
   top: 176px;
 }
 .shoulder {
-left: 26px;
+  left: 26px;
   top: 234px;
 }
 .back {
-left: 26px;
+  left: 26px;
   top: 292px;
 }
 .chest {
-left: 26px;
+  left: 26px;
   top: 349px;
 }
 .wrist {
-left: 26px;
+  left: 26px;
   top: 522px;
 }
 

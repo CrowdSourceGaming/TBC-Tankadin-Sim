@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "deploy-prod": "ng build --prod && git add . && git commit -am \"prod deploy\" && git push"
+    "deploy-prod": "ng build --prod && git add . && git commit -am \"prod deploy\" && git push origin main",
+    "deploy-beta": "ng build --test && git add . && git commit -am \"beta deploy\" && git push beta main"
   },
   "private": true,
   "dependencies": {
