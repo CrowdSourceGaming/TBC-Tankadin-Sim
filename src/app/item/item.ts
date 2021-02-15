@@ -17,13 +17,15 @@ export class Item {
   @JsonProperty() set: GearSet = GearSet.none;
   @JsonProperty() weaponType?: WeaponType
   @JsonProperty() enchant: Enchant | null = null;
+  @JsonProperty() unique: boolean
 
-  constructor(gearType: GearSlots | null = null, id: number = 0, name: string = '', stats: ItemStats = {}) {
+  constructor(gearType: GearSlots | null = null, id: number = 0, name: string = '', stats: ItemStats = {}, unique: boolean = false) {
     this.name = name;
     this.id = id;
     this._id = id;
     this.validSlot = gearType;
     this.stats = stats;
+    this.unique = unique
   }
 
   getTotalConfiguredStats(): ItemStats {

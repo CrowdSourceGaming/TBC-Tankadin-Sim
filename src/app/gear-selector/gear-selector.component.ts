@@ -9,6 +9,7 @@ import { ItemStats, ItemStatsEnum, ItemType } from '../item/item-stats';
 import { GearService } from '../gear/gear.service';
 import { NewGearComponent } from '../new-gear/new-gear.component';
 import { SharedDataService } from '../shared/shared-data.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: `app-gear-selector`,
@@ -29,7 +30,7 @@ export class GearSelectorComponent implements OnInit, AfterViewInit {
   ItemStatsEnum = ItemStatsEnum;
   gearOptions: Item[] = [];
 
-  constructor(private sharedDataService: SharedDataService, private gearService: GearService, public dialog: MatDialog) { }
+  constructor(private sharedDataService: SharedDataService, private gearService: GearService, public dialog: MatDialog, private snackbar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.sharedDataService.character.subscribe(character => this.character = character);
@@ -70,8 +71,20 @@ export class GearSelectorComponent implements OnInit, AfterViewInit {
 
   assignGear(armor: Item) {
     if (armor) {
-      this.character.gear[this.gearType] = armor;
-      this.sharedDataService.character.next(this.character);
+      let uniqueApply = true;
+      if (armor.unique) {
+        Object.keys(this.character.gear).forEach(slot => {
+          if (this.character.gear[slot as keyof typeof GearSlots].name === armor.name) {
+            this.snackbar.open(`Cannot add ${armor.name} because it's unique.`, undefined, { duration: 5000 })
+            uniqueApply = false;
+            return;
+          }
+        })
+      }
+      if (uniqueApply) {
+        this.character.gear[this.gearType] = armor;
+        this.sharedDataService.character.next(this.character);
+      }
     }
   }
 

@@ -21,6 +21,7 @@ export class NewGearComponent implements OnInit {
   GearSets = Object.values(GearSet).sort();
   selectedGearSlot!: GearSlots;
   weaponTypesKeys = Object.values(WeaponType).sort();
+  showUnique = false;
 
   errors = {
     weaponStats: {
@@ -61,10 +62,19 @@ export class NewGearComponent implements OnInit {
       itemName: new FormControl('', { validators: [Validators.required] }),
       gearSlot: new FormControl({ value: this.selectedGearSlot, disabled: true }),
       gearSet: new FormControl({ value: GearSet.none, disabled: false }, { validators: [Validators.required] }),
-      weaponType: new FormControl('', { validators: [Validators.required] })
+      weaponType: new FormControl('', { validators: [Validators.required] }),
+      unique: new FormControl(false)
     })
     if (this.selectedGearSlot !== GearSlots.mainHand) {
       this.removeWeaponStuff()
+    }
+    if (
+      this.selectedGearSlot === GearSlots.trinketOne ||
+      this.selectedGearSlot === GearSlots.trinketTwo ||
+      this.selectedGearSlot === GearSlots.fingerOne ||
+      this.selectedGearSlot === GearSlots.fingerTwo
+    ) {
+      this.showUnique = true;
     }
   }
 
@@ -107,6 +117,7 @@ export class NewGearComponent implements OnInit {
     if (this.createItemFormGroup.valid) {
       this.item.set = this.createItemFormGroup.get('gearSet')?.value;
       this.item.name = this.createItemFormGroup.get('itemName')?.value;
+      this.item.unique = this.createItemFormGroup.get('unique')?.value;
       const attribute = this.addGemSocketBonusFormGroup.get('attributeName')?.value;
       const value = this.addGemSocketBonusFormGroup.get('attributeValue')?.value
       this.item.gemSockets.sort((a, b) => {
@@ -139,6 +150,10 @@ export class NewGearComponent implements OnInit {
     const attackSpeedIdx = this.attributeList.findIndex(attr => attr === ItemStatsEnum.attackSpeed)
     this.attributeList.splice(attackSpeedIdx, 1);
     this.createItemFormGroup.removeControl('weaponType');
+  }
+
+  private removeUniqueStuff() {
+
   }
 
   private weaponIsValid(): boolean {

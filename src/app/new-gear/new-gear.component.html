@@ -33,6 +33,9 @@
         </mat-select>
       </mat-form-field>
     </div>
+    <div *ngIf="showUnique">
+      <mat-checkbox formControlName="unique" style="padding-bottom: 10px;" color="primary">Unique</mat-checkbox>
+    </div>
     <div *ngIf="this.selectedGearSlot === GearSlots.mainHand">
       <mat-form-field>
         <mat-label>Weapon Type</mat-label>

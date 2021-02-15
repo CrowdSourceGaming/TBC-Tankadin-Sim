@@ -20,7 +20,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { APP_BASE_HREF } from '@angular/common';
 import { NewSpecComponent } from './new-spec/new-spec.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { HumanizePipe } from './humanize.pipe';
@@ -35,6 +34,7 @@ import { CharacterItemDisplayComponent } from './character-item-display/characte
 import { EnchantsComponent } from './enchants/enchants.component';
 import { CurrentGemsComponent } from './current-gems/current-gems.component';
 import { NewEnchantComponent } from './new-enchant/new-enchant.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
   declarations: [
@@ -74,22 +74,23 @@ import { NewEnchantComponent } from './new-enchant/new-enchant.component';
     MatSelectModule,
     MatExpansionModule,
     MatToolbarModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatCheckboxModule
   ],
-/*   providers: [
-    {
-      provide: APP_BASE_HREF,
-      useFactory: function () {
-        const location = window.location.pathname.split('/')[1] || '';
-        console.log('location',)
-        if (location !== 'gear' && location !== 'character') {
-          return `/${location}/`
-        } else {
-          return '/'
+  /*   providers: [
+      {
+        provide: APP_BASE_HREF,
+        useFactory: function () {
+          const location = window.location.pathname.split('/')[1] || '';
+          console.log('location',)
+          if (location !== 'gear' && location !== 'character') {
+            return `/${location}/`
+          } else {
+            return '/'
+          }
         }
       }
-    }
-  ], */
+    ], */
   bootstrap: [AppComponent]
 })
 export class AppModule { }
