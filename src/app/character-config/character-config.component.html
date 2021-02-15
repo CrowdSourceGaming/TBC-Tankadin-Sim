@@ -8,8 +8,13 @@
 </div>
 
 
-<div class="character-panel">
-  <app-character-item-display *ngFor="let slot of GearSlotKeys" class="icon" [ngClass]="slot" [item]="character.gear[slot]"
-    [backgroundUrl]="getItemIcon(character.gear[slot].id)">
-  </app-character-item-display>
+<div class="flex-grid">
+  <div class="character-panel">
+    <app-character-item-display *ngFor="let slot of GearSlotKeys" class="icon" [ngClass]="slot"
+      [item]="character.gear[slot]" [backgroundUrl]="getItemIcon(character.gear[slot].id)">
+    </app-character-item-display>
+  </div>
+  <div style="margin-left: 30px;">
+    Spec: {{character.spec.holyProtRetCount}} <button style="margin-left: 100px" mat-raised-button color="accent" (click)="createNewSpec($event)">Import Spec</button>
+  </div>
 </div>

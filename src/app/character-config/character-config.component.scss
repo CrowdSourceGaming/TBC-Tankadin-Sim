@@ -2,7 +2,7 @@
 
 .character-panel {
   background-image: url($css-base-path + "/assets/character-panel.png");
-  background-position: center;
+  // background-position: center;
   background-repeat: no-repeat;
   height: 650px;
   width: 500px;
@@ -15,72 +15,72 @@
 }
 
 .head {
-  left: 26px;
-  top: 118px;
+  left: 15px;
+  top: 98px;
 }
 .neck {
-  left: 26px;
-  top: 176px;
+  left: 15px;
+  top: 156px;
 }
 .shoulder {
-  left: 26px;
-  top: 234px;
+  left: 15px;
+  top: 214px;
 }
 .back {
-  left: 26px;
-  top: 292px;
+  left: 15px;
+  top: 272px;
 }
 .chest {
-  left: 26px;
-  top: 349px;
+  left: 15px;
+  top: 329px;
 }
 .wrist {
-  left: 26px;
-  top: 522px;
+  left: 15px;
+  top: 502px;
 }
 
 .hands {
-  left: 426px;
-  top: 118px;
+  left: 415px;
+  top: 98px;
 }
 .waist {
-  left: 426px;
-  top: 176px;
+  left: 415px;
+  top: 156px;
 }
 .legs {
-  left: 426px;
-  top: 234px;
+  left: 415px;
+  top: 214px;
 }
 .feet {
-  left: 426px;
-  top: 292px;
+  left: 415px;
+  top: 272px;
 }
 .fingerOne {
-  left: 426px;
-  top: 349px;
+  left: 415px;
+  top: 329px;
 }
 .fingerTwo {
-  left: 426px;
-  top: 407px;
+  left: 415px;
+  top: 387px;
 }
 .trinketOne {
-  left: 426px;
-  top: 465px;
+  left: 415px;
+  top: 445px;
 }
 .trinketTwo {
-  left: 426px;
-  top: 522px;
+  left: 415px;
+  top: 502px;
 }
 
 .mainHand {
-  left: 167px;
-  top: 557px;
+  left: 156px;
+  top: 537px;
 }
 .offHand {
-  left: 226px;
-  top: 557px;
+  left: 216px;
+  top: 537px;
 }
 .relic {
-  left: 285px;
-  top: 557px;
+  left: 276px;
+  top: 537px;
 }

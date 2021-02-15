@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSelectChange } from '@angular/material/select';
 import { BlizzardApiService } from '../blizzard-api.service';
 import { Character } from '../character/character';
 import { GearSlots } from '../character/gearslot';
 import { Race, Races } from '../character/races/race';
 import { Item } from '../item/item';
+import { NewSpecComponent } from '../new-spec/new-spec.component';
 import { SharedDataService } from '../shared/shared-data.service';
 
 @Component({
@@ -14,7 +16,9 @@ import { SharedDataService } from '../shared/shared-data.service';
 })
 export class CharacterConfigComponent implements OnInit {
 
-  constructor(private sharedDataService: SharedDataService, private blizzardApiService: BlizzardApiService) { }
+  constructor(private sharedDataService: SharedDataService,
+    private blizzardApiService: BlizzardApiService,
+    private dialog: MatDialog) { }
 
   itemIconUrls: { [key: number]: string } = {};
 
@@ -54,6 +58,13 @@ export class CharacterConfigComponent implements OnInit {
       return `url('${this.itemIconUrls[id]}')`
     }
     return '';
+  }
+
+  createNewSpec(event: any) {
+    this.dialog.open(NewSpecComponent, {
+      width: '500px'
+    });
+    event.stopPropagation();
   }
 
 
