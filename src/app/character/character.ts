@@ -5,6 +5,7 @@ import { Race, Races } from "./races/race";
 import { Spec } from "./spec";
 
 import { JsonProperty, Serializable } from 'typescript-json-serializer';
+import { AttackTable } from "../shared/attack-table";
 
 @Serializable()
 export class Character {
@@ -12,6 +13,7 @@ export class Character {
   gear: { [key in GearSlots]: Item }
   @JsonProperty() baseStats: ItemStats;
   @JsonProperty() race: Race
+  level = 70;
 
   constructor(race: Races = Races.human) {
     this.spec = new Spec();
@@ -185,6 +187,20 @@ export class Character {
     total += this.getStatTotal(ItemStatsEnum.spellHitPercent)
     return total
 
+  }
+
+
+  get attackTable(): AttackTable {
+    return {
+      miss: 9 - this.hitChance,
+      dodge: 6.5 - (this.expertise / 4), // 1 expertise reduces dodge chance by 0.25%
+      parry: 14 - (this.expertise / 4), // 1 expertise reduces dodge chance by 0.25%,
+      glancing: 25,
+      block: 0, //most bosses can't block
+      crit: 0 + this.meleeCrit,
+      crushing: 0, //characters cannot crush bosses
+      hit: 0 // whatever the rest is
+    }
   }
 
   /* ************************** PRIVATE *************************** */
