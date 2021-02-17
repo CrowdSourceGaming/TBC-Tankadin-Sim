@@ -91,12 +91,14 @@ export class NewGearComponent implements OnInit {
   }
 
   addAttribute(event: any) {
-    const key = this.addAttributesFormGroup.get('attributeName')?.value;
-    const value = this.addAttributesFormGroup.get('attributeValue')
-    this.item.stats[key as keyof typeof ItemStatsEnum] = +value?.value;
-    key?.setValue('');
-    value?.setValue('');
-    event.stopPropagation();
+    const key = this.addAttributesFormGroup.get('attributeName');
+    const value = this.addAttributesFormGroup.get('attributeValue');
+    if (key?.value && value?.value) {
+      this.item.stats[key?.value as keyof typeof ItemStatsEnum] = +value?.value;
+      key?.setValue('');
+      value?.setValue('');
+      event.stopPropagation();
+    }
   }
 
   removeStat(key: string) {

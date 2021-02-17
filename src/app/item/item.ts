@@ -87,6 +87,7 @@ export enum GearSet {
   justicar = 'Justicar',
   crystalforge = 'Crystalforge',
   lightbringer = 'Lightbringer',
+  felsteel = 'Felsteel',
   lieutenantCommandersRedoubt = 'Lieutenant Commander\'s Redoubt',
   fieldMarshalsAegis = 'Field Marshal\'s Aegis',
   doomplateBattlegear = 'Doomplate Battlegear',
