@@ -7,9 +7,11 @@ export class Creature {
   basicMeleeDamage!: number;
   attackSpeed!: number;
   specialAttacks!: specialAttacksInterface[];
-  armor!: number;
+  armor: number = 7700;
   resistances!: Resistances[]
   level: number = 73;
+  buffs: { [key: string]: any } = {}
+  debuffs: { [key: string]: any } = {}
 
 
   /////////// coppied from character ////////////////

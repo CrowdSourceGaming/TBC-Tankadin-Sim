@@ -90,7 +90,7 @@
 <h3>Spell</h3>
 <div class="flex-grid flex-space-between">
   <span>Spell Damage</span>
-  <span>{{character.getStatTotal(ItemStatsEnum.spellDamage)}}</span>
+  <span>{{character.spellDamage | number: '1.0-0'}}</span>
 </div>
 <div class="flex-grid flex-space-between">
   <span>Spell Crit</span>

@@ -135,6 +135,11 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/environments/environment-scss"
+              ]
+            },
             "assets": [
               "src/favicon.ico",
               "src/assets"

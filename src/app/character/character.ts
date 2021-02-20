@@ -14,6 +14,9 @@ export class Character {
   @JsonProperty() baseStats: ItemStats;
   @JsonProperty() race: Race
   level = 70;
+  buffs = []
+  debuffs = [];
+
 
   constructor(race: Races = Races.human) {
     this.spec = new Spec();
@@ -102,6 +105,24 @@ export class Character {
     return this.getStatTotal(ItemStatsEnum.armorPenRating) / 5.92
   }
 
+  get weaponDamageMin(): number {
+    const weapon = this.gear.mainHand
+    let damage = weapon.stats.damageMin || 1;
+    damage += this.attackPower / (14 * (weapon.stats.attackSpeed || 2))
+    return damage || 1;
+  }
+
+  get weaponDamageMax(): number {
+    const weapon = this.gear.mainHand
+    let damage = weapon.stats.damageMax || 10;
+    damage += this.attackPower / (14 * (weapon.stats.attackSpeed || 2))
+    return damage || 10;
+  }
+
+  get attackSpeed(): number {
+    return (this.gear.mainHand?.stats?.attackSpeed) || 2;
+  }
+
   /* ************************** DEFENSE *************************** */
   get defense(): number {
     let total = 350 + (this.getStatTotal(ItemStatsEnum.defenseRating) / 2.37);
@@ -156,24 +177,6 @@ export class Character {
     return this.missChance + this.dodgeChance + this.parry + this.blockChance;
   }
 
-  get weaponDamageMin(): number {
-    const weapon = this.gear.mainHand
-    let damage = weapon.stats.damageMin || 0;
-    damage += this.attackPower / (14 * (weapon.stats.attackSpeed || 0))
-    return damage || 0;
-  }
-
-  get weaponDamageMax(): number {
-    const weapon = this.gear.mainHand
-    let damage = weapon.stats.damageMax || 0;
-    damage += this.attackPower / (14 * (weapon.stats.attackSpeed || 0))
-    return damage || 0;
-  }
-
-  get attackSpeed(): number {
-    return this.gear.mainHand.stats.attackSpeed || 0;
-  }
-
   /* ************************** SPELL *************************** */
   get spellCrit(): number {
     let total = 0;
@@ -186,7 +189,10 @@ export class Character {
     let total = this.getStatTotal(ItemStatsEnum.spellHitRating) / 12.62
     total += this.getStatTotal(ItemStatsEnum.spellHitPercent)
     return total
+  }
 
+  get spellDamage(): number {
+    return this.getStatTotal(ItemStatsEnum.spellDamage);
   }
 
 
