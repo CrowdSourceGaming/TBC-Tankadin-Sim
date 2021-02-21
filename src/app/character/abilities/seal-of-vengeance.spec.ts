@@ -18,6 +18,9 @@ describe('SealOfVengeance', () => {
     SoV = new SealOfVengeance();
   })
   describe('onHit', () => {
+    beforeEach(() => {
+      attacker.buffs[SoV.name] = { active: true, expires: 30000 }
+    })
     describe('success', () => {
       it('should apply a stack on attack', () => {
         expect(defender.debuffs['Seal of Vengeance']).toBeUndefined();
@@ -36,6 +39,13 @@ describe('SealOfVengeance', () => {
         spyOn(Math, 'random').and.returnValue(0.01);
         SoV.onHit(AttackTableEnum.glancing, attacker, defender);
         expect(defender.debuffs['Seal of Vengeance'].stacks).toEqual(5);
+      })
+      it('will only apply if attack has the SoV buff', () => {
+        attacker.buffs[SoV.name] = { active: false, expires: 30000 }
+        expect(defender.debuffs['Seal of Vengeance']).toBeUndefined();
+        spyOn(Math, 'random').and.returnValue(0.01);
+        SoV.onHit(AttackTableEnum.hit, attacker, defender);
+        expect(defender.debuffs['Seal of Vengeance']).toBeUndefined();
       })
     })
     describe('melee attack failed', () => {

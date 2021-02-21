@@ -9,12 +9,12 @@ export class Attack implements AbilityInterface {
   magicSchool: DamageType;
   name: string;
 
-  constructor(attackSpeed: number) {
+  constructor() {
     this.magicSchool = DamageType.physical;
     this.name = 'Attack'
   }
   onHit(rollResult: AttackTableEnum, attacker: Character, defender: Creature): void | damageTakenInterface {
-    let damage = 0;
+    let damage = 1;
     if (rollResult && rollResult !== AttackTableEnum.miss && rollResult !== AttackTableEnum.dodge && rollResult !== AttackTableEnum.parry) {
       damage = rollDamage(attacker.weaponDamageMin, attacker.weaponDamageMax, defender)
       if (rollResult === AttackTableEnum.glancing) {
@@ -26,10 +26,11 @@ export class Attack implements AbilityInterface {
     return {
       damageAmount: Math.round(damage),
       damageType: DamageType.physical,
-      circumstance: rollResult
+      circumstance: this.name,
+      comment: rollResult
     }
   }
-  onCast(attacker: Character, defender: Creature): void | damageTakenInterface {
+  onCast(attacker: Character, defender: Creature, timeElapsed: number): void | damageTakenInterface {
 
   }
   onCheck(attacker: Character, defender: Creature,  timeElapsed: number): void | damageTakenInterface {

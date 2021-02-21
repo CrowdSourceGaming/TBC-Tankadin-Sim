@@ -15,34 +15,41 @@ export class SealOfVengeance implements AbilityInterface {
     this.name = "Seal of Vengeance"
   }
   onHit(rollResult: AttackTableEnum, attacker: Character, defender: Creature): void | damageTakenInterface {
-    if (rollResult && rollResult !== AttackTableEnum.miss && rollResult !== AttackTableEnum.dodge && rollResult !== AttackTableEnum.parry) {
-      const procChance = 100 * (20 / 60 * attacker.attackSpeed);
-      const didProc = (Math.random() * 100 <= procChance)
-      if (didProc) {
-        if (!defender.debuffs[this.name]) {
-          defender.debuffs[this.name] = { stacks: 0, lastDamageAppliedTimestamp: -9999999999 };
-        }
-        const currentStacks = defender.debuffs[this.name].stacks;
-        if (currentStacks === 5) {
-          // apply melee damage
-        } else {
-          defender.debuffs[this.name].stacks += 1;
+    if (attacker.buffs[this.name] && attacker.buffs[this.name].active) {
+      if (rollResult && rollResult !== AttackTableEnum.miss && rollResult !== AttackTableEnum.dodge && rollResult !== AttackTableEnum.parry) {
+        const procChance = 100 * (20 / 60 * attacker.attackSpeed);
+        const didProc = (Math.random() * 100 <= procChance)
+        if (didProc) {
+          if (!defender.debuffs[this.name]) {
+            defender.debuffs[this.name] = { stacks: 0, lastDamageAppliedTimestamp: -9999999999 };
+          }
+          const currentStacks = defender.debuffs[this.name].stacks;
+          if (currentStacks === 5) {
+            // apply melee damage
+          } else {
+            defender.debuffs[this.name].stacks += 1;
+          }
         }
       }
     }
   }
-  onCast(attacker: Character, defender: Creature): void | damageTakenInterface {
-
+  onCast(attacker: Character, defender: Creature, timeElapsed: number): void | damageTakenInterface {
+    attacker.buffs[this.name] = { active: true, expires: timeElapsed + 30000 }
   }
   onCheck(attacker: Character, defender: Creature, timeElapsed: number): void | damageTakenInterface {
-    if (defender.debuffs[this.name].lastDamageAppliedTimestamp < 3000 - timeElapsed) {
+    if (attacker.buffs[this.name] && attacker.buffs[this.name].expires >= timeElapsed) {
+      attacker.buffs[this.name].active = false;
+    }
+    if (defender.debuffs[this.name]?.lastDamageAppliedTimestamp + 3000 <= timeElapsed  ) {
       const numOfStacks = defender.debuffs[this.name].stacks;
       const damagePer15 = (150 + (attacker.spellDamage * 0.034)) * numOfStacks;
-      const damagePerTick = damagePer15 / 5  // one tick every 3 seconds
+      const damagePerTick = Math.round(damagePer15 / 5)  // one tick every 3 seconds
+      defender.debuffs[this.name].lastDamageAppliedTimestamp = timeElapsed;
       return {
         circumstance: 'SoV Dot',
         damageAmount: damagePerTick,
-        damageType: this.magicSchool
+        damageType: this.magicSchool,
+        comment: `${numOfStacks} stacks`
       }
     }
   }

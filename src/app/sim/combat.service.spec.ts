@@ -22,7 +22,7 @@ describe('CombatService', () => {
   describe('attackRoll', () => {
     describe('character attacking creature', () => {
       beforeEach(() => {
-        service.registeredAbilities.playerAbiliities.push(new Attack(2.0))
+        service.registeredAbilities.playerAbiliities.push(new Attack());
       })
       afterEach(() => {
         service.registeredAbilities.playerAbiliities = [];

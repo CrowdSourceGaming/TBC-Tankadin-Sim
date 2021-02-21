@@ -14,8 +14,8 @@ export class Character {
   @JsonProperty() baseStats: ItemStats;
   @JsonProperty() race: Race
   level = 70;
-  buffs = []
-  debuffs = [];
+  buffs: { [key: string]: any } = {}
+  debuffs: { [key: string]: any } = {}
 
 
   constructor(race: Races = Races.human) {
@@ -128,6 +128,11 @@ export class Character {
     let total = 350 + (this.getStatTotal(ItemStatsEnum.defenseRating) / 2.37);
     total += this.getStatTotal(ItemStatsEnum.defenseValue)
     return total;
+  }
+
+  get critReduction(): number {
+    const reduction = 0 + (0.04 * (this.defense - 350));
+    return reduction > 5.6 ? 0 : reduction
   }
 
   get armor(): number {
