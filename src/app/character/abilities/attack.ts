@@ -8,10 +8,13 @@ export class Attack implements AbilityInterface {
 
   magicSchool: DamageType;
   name: string;
+  onGCD: boolean;
+  internalCD: number = 0;
 
   constructor() {
     this.magicSchool = DamageType.physical;
     this.name = 'Attack'
+    this.onGCD = false;
   }
   onHit(rollResult: AttackTableEnum, attacker: Character, defender: Creature): void | damageTakenInterface {
     let damage = 1;
@@ -30,8 +33,8 @@ export class Attack implements AbilityInterface {
       comment: rollResult
     }
   }
-  onCast(attacker: Character, defender: Creature, timeElapsed: number): void | damageTakenInterface {
-
+  onCast(attacker: Character, defender: Creature, timeElapsed: number): boolean {
+    return false;
   }
   onCheck(attacker: Character, defender: Creature,  timeElapsed: number): void | damageTakenInterface {
 

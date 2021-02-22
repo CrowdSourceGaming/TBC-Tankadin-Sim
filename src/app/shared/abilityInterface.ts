@@ -6,8 +6,10 @@ import { DamageType } from "./magic-school";
 export interface AbilityInterface {
   magicSchool: DamageType
   name: string;
-  onHit(rollResult: AttackTableEnum, attacker: Character, defender: Creature): damageTakenInterface | void;
-  onCast(attacker: Character, defender: Creature, timeElapsed: number): damageTakenInterface | void;
+  onGCD: boolean;
+  internalCD: number
+  onHit(rollResult: AttackTableEnum, attacker: Character, defender: Creature, timeElapsed: number): damageTakenInterface | void;
+  onCast(attacker: Character, defender: Creature, timeElapsed: number): boolean;
   onCheck(attacker: Character, defender: Creature, timeElapsed: number): damageTakenInterface | void
 }
 

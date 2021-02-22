@@ -4,7 +4,6 @@ import { SharedDataService } from 'src/app/shared/shared-data.service';
 import { BossAttack } from '../boss-abilities/boss-attack';
 import { CombatService } from '../combat.service';
 import { Creature } from '../creature';
-import { curveLinear } from 'd3-shape';
 import { BehaviorSubject } from 'rxjs';
 import { SealOfVengeance } from 'src/app/character/abilities/seal-of-vengeance';
 import { TimeSlotResults } from '../combat.service'
@@ -49,9 +48,6 @@ export class SimComponent {
   start() {
     this.overallResultsBarChart.next([{ name: 0, series: [{ name: '', value: 0 }] }])
     const date = Date.now();
-    this.combatService.registeredAbilities.playerAbiliities.push(new Attack());
-    this.combatService.registeredAbilities.playerAbiliities.push(new SealOfVengeance());
-    this.combatService.registeredAbilities.bossAbilities.push(new BossAttack());
     const combatResults = this.combatService.startCombat(this.sharedDataService.character.value, new Creature(), TWO_MINUTES)
     this.createBarChart(combatResults);
     this.createLineChart(combatResults);
@@ -85,16 +81,16 @@ export class SimComponent {
     const results = this.overallResultsBarChart.value;
     combatResults.forEach((tenMilliSeconds, index) => {
       tenMilliSeconds.damageDone.forEach(damage => {
-        const rootName = damage.circumstance;
+        const rootName = index / 100;
         const lookupResults = results && results.find((result: any) => result.name === rootName);
         if (!lookupResults) {
-          results.push({ name: index / 100, series: [{ name: rootName, value: damage.damageAmount }] });
+          results.push({ name: index / 100, series: [{ name: damage.circumstance, value: damage.damageAmount, comment: damage.comment }] });
         } else {
-          const damageThisTurn = lookupResults.series.find(r => r.name === rootName);
+          const damageThisTurn = lookupResults.series.find(r => r.name === damage.circumstance);
           if (damageThisTurn) {
             damageThisTurn.value += damage.damageAmount;
           } else {
-            lookupResults.series.push({ name: rootName, value: damage.damageAmount });
+            lookupResults.series.push({ name: damage.circumstance, value: damage.damageAmount, comment: damage.comment });
           }
         }
       });

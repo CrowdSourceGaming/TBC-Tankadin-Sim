@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Ability } from '../character/abilities/ability';
+import { Attack } from '../character/abilities/attack';
+import { HolyShield } from '../character/abilities/holy-shield';
+import { SealOfVengeance } from '../character/abilities/seal-of-vengeance';
 import { Character } from '../character/character';
 import { AbilityInterface, damageTakenInterface, BossAbilityInterface } from '../shared/abilityInterface';
 import { AttackTable, AttackTableEnum } from '../shared/attack-table';
 import { DamageType } from '../shared/magic-school';
+import { BossAttack } from './boss-abilities/boss-attack';
 import { Creature } from './creature';
 
 @Injectable({
@@ -14,14 +17,12 @@ export class CombatService {
   playerDamageTaken = [];
   creatureDamageTaken = [];
 
-  lastAutoAttack = {  // start the fight with an attack and then track the last hit.
-    player: -99999999999,
-    creature: -99999999999
-  }
+  spellPriority = ['Holy Shield', 'Seal of Vengeance']
+  onGCD = { value: false, timeUpdated: 0 };
 
-  registeredAbilities: registeredAbilitiesInterface = {
-    playerAbiliities: [], bossAbilities: []
-  }
+  lastAutoAttack!: { player: number; creature: number; };
+
+  registeredAbilities!: registeredAbilitiesInterface;
 
   startTime!: number;
 
@@ -32,15 +33,24 @@ export class CombatService {
       player: -99999999999,
       creature: -99999999999
     }
+    this.registeredAbilities = {
+      playerAbiliities: [new Attack(), new SealOfVengeance(), new HolyShield()],
+      bossAbilities: [new BossAttack()]
+    }
+    this.onGCD = { value: false, timeUpdated: 0 }
     this.startTime = Date.now();
     const results: TimeSlotResults[] = [];
     for (let i = 0; i < timeToRun; i += 10) {
-      this.registeredAbilities.playerAbiliities.find(ability => ability.name === 'Seal of Vengeance')?.onCast(character, creature, i)
       const result: TimeSlotResults = {
         damageTaken: [],
         damageDone: []
       }
+      if (this.onGCD.value === true && this.onGCD.timeUpdated + 1500 <= i) {
+        this.onGCD.value = false;
+        this.onGCD.timeUpdated = i;
+      }
       const rollResult: AttackTableEnum | false = this.playerAutoAttackCreature(character, creature, i)
+      this.castAllAvailableAbilities(character, creature, i);
       this.registeredAbilities.playerAbiliities.forEach((ability: AbilityInterface) => {
         this.triggerPlayerAbility(rollResult, ability, character, creature, result, i)
       });
@@ -53,15 +63,33 @@ export class CombatService {
     return results;
   }
 
+  private castAllAvailableAbilities(character: Character, creature: Creature, i: number) {
+    for (let spellName of this.spellPriority) {
+      const ability = this.registeredAbilities.playerAbiliities.find(ability => ability.name === spellName)!;
+      if (ability.onGCD && this.onGCD.value) {
+        // DO NOTHING
+      } else {
+        const triggerGCD = ability.onCast(character, creature, i);
+        if (triggerGCD) {
+          this.onGCD = { value: true, timeUpdated: i };
+        }
+      }
+    }
+  }
+
   private triggerPlayerAbility(rollResult: AttackTableEnum | false, ability: AbilityInterface, attacker: Character, defender: Creature, result: TimeSlotResults, timeElapsed: number) {
     if (rollResult) {
-      const onHitEffect = ability.onHit(rollResult, attacker, defender);
-      onHitEffect ? result.damageDone.push(onHitEffect) : null;
+      const onHitEffect = ability.onHit(rollResult, attacker, defender, timeElapsed);
+      if (onHitEffect) {
+        this.modifyDamage(attacker, onHitEffect)
+        result.damageDone.push(onHitEffect);
+      }
     }
-    const onCastEffect = ability.onCast(attacker, defender, timeElapsed)
-    onCastEffect ? result.damageDone.push(onCastEffect) : null;
     const onCheckEffect = ability.onCheck(attacker, defender, timeElapsed)
-    onCheckEffect ? result.damageDone.push(onCheckEffect) : null;
+    if (onCheckEffect) {
+      this.modifyDamage(attacker, onCheckEffect)
+      result.damageDone.push(onCheckEffect);
+    }
   }
 
   private triggerBossAbility(rollResult: AttackTableEnum | false, ability: BossAbilityInterface, attacker: Creature, defender: Character, result: TimeSlotResults, timeElapsed: number) {
@@ -69,8 +97,6 @@ export class CombatService {
       const onHitEffect = ability.onHit(rollResult, attacker, defender);
       onHitEffect ? result.damageTaken.push(onHitEffect) : null;
     }
-    const onCastEffect = ability.onCast(attacker, defender, timeElapsed)
-    onCastEffect ? result.damageTaken.push(onCastEffect) : null;
     const onCheckEffect = ability.onCheck(attacker, defender, timeElapsed)
     onCheckEffect ? result.damageTaken.push(onCheckEffect) : null;
   }
@@ -130,6 +156,24 @@ export class CombatService {
       }
     }
     return attack;
+  }
+
+  private modifyDamage(character: Character, damage: damageTakenInterface) {
+    if (damage.damageType === DamageType.holy) {
+      if (character.buffs['Sanctity Aura']) {
+        damage.damageAmount = damage.damageAmount * 1.10
+      }
+    }
+    if (character.buffs['Improved Sanctity Aura']) {
+      damage.damageAmount = damage.damageAmount * 1.02
+    }
+    if (character.spec.talents.oneHandedSpec > 0) {
+      damage.damageAmount = damage.damageAmount * (1 + (character.spec.talents.oneHandedSpec / 100))
+    }
+    if (character.spec.talents.crusade > 0) {
+      damage.damageAmount = damage.damageAmount * (1 + (character.spec.talents.crusade / 100))
+    }
+    damage.damageAmount = Math.round(damage.damageAmount);
   }
 }
 
