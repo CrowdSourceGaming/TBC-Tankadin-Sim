@@ -36,21 +36,36 @@ export class DatabaseService {
   get enchantCollection(): Promise<globalThis.Realm.Services.MongoDB.MongoDBCollection<Enchant>> {
     return new Promise(async (resolve) => {
       await this.waitForConnection();
-      return resolve(this.mongoDB.db(DBName).collection<Enchant>('enchants'))
+      try {
+        return resolve(this.mongoDB.db(DBName).collection<Enchant>('enchants'))
+      } catch (e) {
+        await this.init()
+        return resolve(this.mongoDB.db(DBName).collection<Enchant>('enchants'))
+      }
     });
   }
 
   get gearCollection(): Promise<globalThis.Realm.Services.MongoDB.MongoDBCollection<Item>> {
     return new Promise(async (resolve) => {
       await this.waitForConnection()
-      return resolve(this.mongoDB.db(DBName).collection<Item>('gear'));
+      try {
+        return resolve(this.mongoDB.db(DBName).collection<Item>('gear'));
+      } catch(e){
+        await this.init()
+        return resolve(this.mongoDB.db(DBName).collection<Item>('gear'));
+      }
     })
   }
 
   get gemCollection(): Promise<globalThis.Realm.Services.MongoDB.MongoDBCollection<Gem>> {
     return new Promise(async (resolve) => {
       await this.waitForConnection()
-      return resolve(this.mongoDB.db(DBName).collection<Gem>('gems'));
+      try {
+        return resolve(this.mongoDB.db(DBName).collection<Gem>('gems'));
+      } catch(e){
+        await this.init();
+        return resolve(this.mongoDB.db(DBName).collection<Gem>('gems'));
+      }
     })
 
   }
