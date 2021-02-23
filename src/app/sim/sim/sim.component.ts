@@ -1,14 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { Attack } from 'src/app/character/abilities/attack';
-import { SharedDataService } from 'src/app/shared/shared-data.service';
-import { BossAttack } from '../boss-abilities/boss-attack';
 import { CombatService } from '../combat.service';
 import { Creature } from '../creature';
 import { BehaviorSubject } from 'rxjs';
-import { SealOfVengeance } from 'src/app/character/abilities/seal-of-vengeance';
 import { TimeSlotResults } from '../combat.service'
+import { SharedDataService } from '../../shared/shared-data.service'
 
 const TWO_MINUTES = 2 * 60 * 1000
+
+
+interface resultsLineChartInterface {
+  name: string,
+  series: [{ name: number, value: number, comment?: string }],
+}
+
+interface resultsBarChartInterface { name: number, series: [{ name: string, value: number, comment?: string }] }
 
 @Component({
   selector: 'app-sim',
@@ -39,8 +44,8 @@ export class SimComponent {
 
   simComplete = false;
 
-  overallResultsBarChart: BehaviorSubject<[{ name: number, series: [{ name: string, value: number, comment?: string }] }]> = new BehaviorSubject([{ name: 0, series: [{ name: '', value: 0 }] }]);
-  overallResultsLineChart: BehaviorSubject<[{ name: string, series: [{ name: number, value: number, comment?: string }] }]> = new BehaviorSubject([{ name: '', series: [{ name: 0, value: 0 }] }]);
+  overallResultsBarChart: BehaviorSubject<resultsBarChartInterface[]> = new BehaviorSubject([{ name: 0, series: [{ name: '', value: 0 }] }]);
+  overallResultsLineChart: BehaviorSubject<resultsLineChartInterface[]> = new BehaviorSubject([{ name: '', series: [{ name: 0, value: 0 }] }]);
 
   ngOnInit(): void {
   }
@@ -57,7 +62,7 @@ export class SimComponent {
   }
 
   private createLineChart(combatResults: TimeSlotResults[]) {
-    const results = this.overallResultsLineChart.value;
+    const results: resultsLineChartInterface[] = [{ name: '', series: [{ name: 0, value: 0, comment: '' }] }]
     combatResults.forEach((tenMilliSeconds, index) => {
       tenMilliSeconds.damageDone.forEach(damage => {
         const rootName = damage.circumstance;
@@ -78,7 +83,7 @@ export class SimComponent {
   }
 
   private createBarChart(combatResults: TimeSlotResults[]) {
-    const results = this.overallResultsBarChart.value;
+    const results: resultsBarChartInterface[] = [{ name: 0, series: [{ name: '', value: 0 }] }]
     combatResults.forEach((tenMilliSeconds, index) => {
       tenMilliSeconds.damageDone.forEach(damage => {
         const rootName = index / 100;

@@ -38,6 +38,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { SimModule } from './sim/sim.module';
 import { SimRoutingModule } from './sim/sim-routing.module';
+import { TimelineFilterBarChartComponent } from './charts/timeline-filter-bar-chart/timeline-filter-bar-chart.component';
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { SimRoutingModule } from './sim/sim-routing.module';
     EnchantsComponent,
     CurrentGemsComponent,
     NewEnchantComponent,
+    TimelineFilterBarChartComponent,
   ],
   imports: [
     HttpClientModule,

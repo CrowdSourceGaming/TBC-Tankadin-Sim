@@ -12,7 +12,11 @@
 {
   name: 'SoV Dot',
   value: '#D1B000'
-}
+},
+{
+  name: 'Holy Shield',
+  value: '#AAE3F5'
+},
 ]" [legend]="legend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis"
     [yAxis]="yAxis" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [schemeType]="schemeType"
     [results]="overallResultsBarChart | async">
@@ -21,25 +25,4 @@
       <p>{{model.comment}}</p>
     </ng-template>
   </ngx-charts-bar-vertical-stacked>
-</div>
-
-
-<div>
-  <ngx-charts-line-chart *ngIf="simComplete" [view]="view" [legend]="false" [showXAxisLabel]="showXAxisLabel"
-    [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis" [yAxis]="yAxis" [xAxisLabel]="xAxisLabel"
-    [yAxisLabel]="yAxisLabel" [timeline]="timeline" [customColors]="[
-    {
-      name: 'Attack',
-      value: '#E44D25'
-    },
-    {
-      name: 'SoV Dot',
-      value: '#D1B000'
-    }
-  ]" [results]="overallResultsLineChart | async">
-    <ng-template #tooltipTemplate let-model="model">
-      <p>{{model.series}}: {{model.value}}</p>
-      <p>{{model.comment}}</p>
-    </ng-template>
-  </ngx-charts-line-chart>
 </div>

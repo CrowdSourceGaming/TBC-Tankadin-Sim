@@ -34,5 +34,19 @@ export class HolyShield implements AbilityInterface {
     return false;
   }
   onCheck(attacker: Character, defender: Creature, timeElapsed: number): void | damageTakenInterface {
+    if (attacker.buffs[this.name] && attacker.buffs[this.name].expired >= timeElapsed) {
+      attacker.buffs[this.name].charges = 0;
+    }
+  }
+
+  onReactive(rollResult: AttackTableEnum, attacker: Creature, defender: Character, timeElapsed: number): damageTakenInterface | void {
+    if (rollResult === AttackTableEnum.block && defender.buffs[this.name] && defender.buffs[this.name].charges > 0) {
+      const damageAmount = 155 + (defender.spellDamage * 0.05) * (1 + (10 * defender.spec.talents.improvedHolyShield / 100))
+      return {
+        damageAmount: damageAmount,
+        damageType: DamageType.holy,
+        circumstance: this.name
+      }
+    }
   }
 }

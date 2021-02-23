@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Attack } from '../character/abilities/attack';
+import { Consecration } from '../character/abilities/consecration';
 import { HolyShield } from '../character/abilities/holy-shield';
 import { SealOfVengeance } from '../character/abilities/seal-of-vengeance';
 import { Character } from '../character/character';
@@ -17,7 +18,7 @@ export class CombatService {
   playerDamageTaken = [];
   creatureDamageTaken = [];
 
-  spellPriority = ['Holy Shield', 'Seal of Vengeance']
+  spellPriority = ['Holy Shield', 'Consecration', 'Seal of Vengeance']
   onGCD = { value: false, timeUpdated: 0 };
 
   lastAutoAttack!: { player: number; creature: number; };
@@ -33,9 +34,17 @@ export class CombatService {
       player: -99999999999,
       creature: -99999999999
     }
+    const abilities = {
+      attack: new Attack(),
+      SoV: new SealOfVengeance(),
+      holyShield: new HolyShield(),
+      bossAttack: new BossAttack(),
+      consecration: new Consecration()
+    }
     this.registeredAbilities = {
-      playerAbiliities: [new Attack(), new SealOfVengeance(), new HolyShield()],
-      bossAbilities: [new BossAttack()]
+      playerAbiliities: [abilities.attack, abilities.SoV, abilities.holyShield, abilities.consecration],
+      bossAbilities: [abilities.bossAttack],
+      reactiveAbilities: [abilities.holyShield]
     }
     this.onGCD = { value: false, timeUpdated: 0 }
     this.startTime = Date.now();
@@ -58,6 +67,9 @@ export class CombatService {
       this.registeredAbilities.bossAbilities.forEach((ability: BossAbilityInterface) => {
         this.triggerBossAbility(enemyRollResult, ability, creature, character, result, i)
       });
+      this.registeredAbilities.reactiveAbilities.forEach((ability: AbilityInterface) => {
+        this.triggerReactivePlayerAbility(enemyRollResult, ability, creature, character, result, i)
+      });
       results.push(result);
     }
     return results;
@@ -73,6 +85,16 @@ export class CombatService {
         if (triggerGCD) {
           this.onGCD = { value: true, timeUpdated: i };
         }
+      }
+    }
+  }
+
+  private triggerReactivePlayerAbility(rollResult: AttackTableEnum | false, ability: AbilityInterface, attacker: Creature, defender: Character, result: TimeSlotResults, timeElapsed: number) {
+    if (rollResult) {
+      const onHitEffect = ability.onReactive!(rollResult, attacker, defender, timeElapsed);
+      if (onHitEffect) {
+        this.modifyDamage(defender, onHitEffect)
+        result.damageDone.push(onHitEffect);
       }
     }
   }
@@ -160,7 +182,7 @@ export class CombatService {
 
   private modifyDamage(character: Character, damage: damageTakenInterface) {
     if (damage.damageType === DamageType.holy) {
-      if (character.buffs['Sanctity Aura']) {
+      if (character.buffs['Sanctity Aura'] || character.buffs['Improved Sanctity Aura']) {
         damage.damageAmount = damage.damageAmount * 1.10
       }
     }
@@ -196,7 +218,7 @@ enum AvoidableBy {
 
 interface registeredAbilitiesInterface {
   playerAbiliities: AbilityInterface[],
-  bossAbilities: BossAbilityInterface[]
+  bossAbilities: BossAbilityInterface[],
+  reactiveAbilities: AbilityInterface[];
 }
-
 

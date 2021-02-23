@@ -11,6 +11,7 @@ export interface AbilityInterface {
   onHit(rollResult: AttackTableEnum, attacker: Character, defender: Creature, timeElapsed: number): damageTakenInterface | void;
   onCast(attacker: Character, defender: Creature, timeElapsed: number): boolean;
   onCheck(attacker: Character, defender: Creature, timeElapsed: number): damageTakenInterface | void
+  onReactive?(rollResult: AttackTableEnum, attacker: Creature, defender: Character, timeElapsed: number): damageTakenInterface | void
 }
 
 export interface BossAbilityInterface {
