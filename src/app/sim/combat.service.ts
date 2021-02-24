@@ -17,8 +17,6 @@ import { Creature } from './creature';
 })
 export class CombatService {
 
-
-
   spellPriority = ['Holy Shield', 'Judgement', 'Consecration', 'Seal of Vengeance']
   onGCD = { value: false, timeUpdated: 0 };
 
@@ -234,4 +232,3 @@ interface registeredAbilitiesInterface {
   bossAbilities: BossAbilityInterface[],
   reactiveAbilities: AbilityInterface[];
 }
-

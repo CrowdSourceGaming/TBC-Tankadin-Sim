@@ -93,7 +93,7 @@
     <div>
       <ul>
         <li class="flex-grid flex-space-between" *ngFor="let socket of item.gemSockets; let i = index;">
-          <span>{{socket}}</span>
+          <span>{{socket.color}}</span>
           <span><button mat-raised-button color="warn" (click)="removeGemSocket(i)">Remove</button></span>
         </li>
       </ul>
