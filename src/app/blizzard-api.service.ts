@@ -46,11 +46,12 @@ export class BlizzardApiService {
 
 
   private login(): Observable<any> {
+    console.log('auth header: Basic ' + btoa(`${environment.blizzardAPICreds.clientId}:${environment.blizzardAPICreds.clientSecret}`))
     const headers = new HttpHeaders({
       'Authorization': 'Basic ' + btoa(`${environment.blizzardAPICreds.clientId}:${environment.blizzardAPICreds.clientSecret}`)
     })
 
-    return this.httpClient.get('https://us.battle.net/oauth/token?grant_type=client_credentials', { headers })
+    return this.httpClient.post('https://us.battle.net/oauth/token?grant_type=client_credentials', '', { headers })
   }
 
 
