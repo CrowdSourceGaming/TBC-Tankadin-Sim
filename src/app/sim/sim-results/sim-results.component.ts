@@ -22,6 +22,8 @@ export class SimResultsComponent implements OnInit {
   BURST_SECONDS = 10;
   FULL_DURATION_SECONDS = 120
 
+  showColumns = ['valueType', 'min', 'onePercentLow', 'fivePercentLow', 'average', 'max']
+
   // BurstArray: DamageThreatInterface[] = new Array()
   // fullArray: DamageThreatInterface[] = new Array()
 
@@ -38,33 +40,41 @@ export class SimResultsComponent implements OnInit {
   }
 
   private translateDataToTable(burstValues: DamageThreatInterface[], fullRunValues: DamageThreatInterface[]): SimResultsGraphInterface[] {
-    const onePercentLowIndex = Math.floor(burstValues.length / 99);
-    const fivePercentLowIndex = Math.floor(burstValues.length / 95);
+    const burstOnePercentLowIndex = Math.floor(burstValues.length * 0.01);
+    const burstFivePercentLowIndex = Math.floor(burstValues.length * 0.05);
+    const onePercentLowIndex = Math.floor(burstValues.length * 0.01);
+    const fivePercentLowIndex = Math.floor(burstValues.length * 0.05);
     return [{
-      name: 'DPS',
-      "15 second average": Math.round(burstValues.reduce((a, b) => a + b.damage, 0) / burstValues.length / this.BURST_SECONDS),
-      "15 seconds 1% low": Math.round(burstValues.sort((a, b) => a.damage - b.damage)[onePercentLowIndex].damage / this.BURST_SECONDS),
-      "15 seconds 5% low": Math.round(burstValues.sort((a, b) => a.damage - b.damage)[fivePercentLowIndex].damage / this.BURST_SECONDS),
-      "15 seconds min": Math.round(Math.min(...burstValues.map(v => v.damage)) / this.BURST_SECONDS),
-      "15 second max": Math.round(Math.max(...burstValues.map(v => v.damage)) / this.BURST_SECONDS),
-      "2 minute average": Math.round(fullRunValues.reduce((a, b) => a + b.damage, 0) / fullRunValues.length / this.FULL_DURATION_SECONDS),
-      "2 minute 1% low": Math.round(fullRunValues.sort((a, b) => a.damage - b.damage)[onePercentLowIndex].damage / this.FULL_DURATION_SECONDS),
-      "2 minute 5% low": Math.round(fullRunValues.sort((a, b) => a.damage - b.damage)[fivePercentLowIndex].damage / this.FULL_DURATION_SECONDS),
-      "2 minute min": Math.round(Math.min(...fullRunValues.map(v => v.damage)) / this.FULL_DURATION_SECONDS),
-      "2 minute max": Math.round(Math.max(...fullRunValues.map(v => v.damage)) / this.FULL_DURATION_SECONDS)
+      name: 'DPS (First 15 Seconds)',
+      "min": Math.round(Math.min(...burstValues.map(v => v.damage)) / this.BURST_SECONDS),
+      "1% low": Math.round(burstValues.sort((a, b) => a.damage - b.damage)[burstOnePercentLowIndex].damage / this.BURST_SECONDS),
+      "5% low": Math.round(burstValues.sort((a, b) => a.damage - b.damage)[burstFivePercentLowIndex].damage / this.BURST_SECONDS),
+      "average": Math.round(burstValues.reduce((a, b) => a + b.damage, 0) / burstValues.length / this.BURST_SECONDS),
+      "max": Math.round(Math.max(...burstValues.map(v => v.damage)) / this.BURST_SECONDS)
     },
     {
-      name: 'TPS',
-      "15 second average": Math.round(burstValues.reduce((a, b) => a + b.threat, 0) / burstValues.length / this.BURST_SECONDS),
-      "15 seconds 1% low": Math.round(burstValues.sort((a, b) => a.threat - b.threat)[onePercentLowIndex].threat / this.BURST_SECONDS),
-      "15 seconds 5% low": Math.round(burstValues.sort((a, b) => a.threat - b.threat)[fivePercentLowIndex].threat / this.BURST_SECONDS),
-      "15 seconds min": Math.round(Math.min(...burstValues.map(v => v.threat)) / this.BURST_SECONDS),
-      "15 second max":Math.round( Math.max(...burstValues.map(v => v.threat)) / this.BURST_SECONDS),
-      "2 minute average": Math.round(fullRunValues.reduce((a, b) => a + b.threat, 0) / fullRunValues.length / this.FULL_DURATION_SECONDS),
-      "2 minute 1% low": Math.round(fullRunValues.sort((a, b) => a.threat - b.threat)[onePercentLowIndex].threat / this.FULL_DURATION_SECONDS),
-      "2 minute 5% low": Math.round(fullRunValues.sort((a, b) => a.threat - b.threat)[fivePercentLowIndex].threat / this.FULL_DURATION_SECONDS),
-      "2 minute min": Math.round(Math.min(...fullRunValues.map(v => v.threat)) / this.FULL_DURATION_SECONDS),
-      "2 minute max": Math.round(Math.max(...fullRunValues.map(v => v.threat)) / this.FULL_DURATION_SECONDS)
+      name: 'DPS (2 Minute Fight)',
+      "min": Math.round(Math.min(...fullRunValues.map(v => v.damage)) / this.FULL_DURATION_SECONDS),
+      "1% low": Math.round(fullRunValues.sort((a, b) => a.damage - b.damage)[onePercentLowIndex].damage / this.FULL_DURATION_SECONDS),
+      "5% low": Math.round(fullRunValues.sort((a, b) => a.damage - b.damage)[fivePercentLowIndex].damage / this.FULL_DURATION_SECONDS),
+      "average": Math.round(fullRunValues.reduce((a, b) => a + b.damage, 0) / fullRunValues.length / this.FULL_DURATION_SECONDS),
+      "max": Math.round(Math.max(...fullRunValues.map(v => v.damage)) / this.FULL_DURATION_SECONDS)
+    },
+    {
+      name: 'TPS (First 15 Seconds)',
+      "min": Math.round(Math.min(...burstValues.map(v => v.threat)) / this.BURST_SECONDS),
+      "1% low": Math.round(burstValues.sort((a, b) => a.threat - b.threat)[burstOnePercentLowIndex].threat / this.BURST_SECONDS),
+      "5% low": Math.round(burstValues.sort((a, b) => a.threat - b.threat)[burstFivePercentLowIndex].threat / this.BURST_SECONDS),
+      "average": Math.round(burstValues.reduce((a, b) => a + b.threat, 0) / burstValues.length / this.BURST_SECONDS),
+      "max": Math.round(Math.max(...burstValues.map(v => v.threat)) / this.BURST_SECONDS),
+    },
+    {
+      name: 'TPS (2 Minute Fight',
+      "min": Math.round(Math.min(...fullRunValues.map(v => v.threat)) / this.FULL_DURATION_SECONDS),
+      "1% low": Math.round(fullRunValues.sort((a, b) => a.threat - b.threat)[onePercentLowIndex].threat / this.FULL_DURATION_SECONDS),
+      "5% low": Math.round(fullRunValues.sort((a, b) => a.threat - b.threat)[fivePercentLowIndex].threat / this.FULL_DURATION_SECONDS),
+      "average": Math.round(fullRunValues.reduce((a, b) => a + b.threat, 0) / fullRunValues.length / this.FULL_DURATION_SECONDS),
+      "max": Math.round(Math.max(...fullRunValues.map(v => v.threat)) / this.FULL_DURATION_SECONDS)
     }]
   }
 
@@ -124,16 +134,11 @@ export class SimResultsComponent implements OnInit {
 
 interface SimResultsGraphInterface {
   name: string,
-  '15 seconds min': number,
-  '15 seconds 1% low': number,
-  '15 seconds 5% low': number,
-  '15 second average': number,
-  '15 second max': number,
-  '2 minute min': number,
-  '2 minute 1% low': number,
-  '2 minute 5% low': number,
-  '2 minute average': number,
-  '2 minute max': number,
+  'min': number,
+  '1% low': number,
+  '5% low': number,
+  'average': number,
+  'max': number,
 }
 
 interface DamageThreatInterface {
