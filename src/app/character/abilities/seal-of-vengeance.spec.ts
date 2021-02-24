@@ -71,7 +71,6 @@ describe('SealOfVengeance', () => {
   })
   describe('onCheck', () => {
     it('should do damage if it has been more than 3 seconds', () => {
-      console.log('a')
       defender.debuffs = { 'Seal of Vengeance': { stacks: 1, lastDamageAppliedTimestamp: -9999999999 } }
       const damage = SoV.onCheck(attacker, defender, 5000);
       expect(JSON.stringify(damage)).toEqual(JSON.stringify({
@@ -81,7 +80,6 @@ describe('SealOfVengeance', () => {
       }))
     })
     it('should do damage with multiple stacks if it has been more than 3 seconds', () => {
-      console.log('a')
       defender.debuffs = { 'Seal of Vengeance': { stacks: 5, lastDamageAppliedTimestamp: -9999999999 } }
       const damage = SoV.onCheck(attacker, defender, 5000);
       expect(JSON.stringify(damage)).toEqual(JSON.stringify({
@@ -91,7 +89,6 @@ describe('SealOfVengeance', () => {
       }))
     })
     it('should incorporate spell damage', () => {
-      console.log('a')
       defender.debuffs = { 'Seal of Vengeance': { stacks: 5, lastDamageAppliedTimestamp: -9999999999 } }
       attacker.gear.back.stats.spellDamage = 340
       const damage = SoV.onCheck(attacker, defender, 5000);

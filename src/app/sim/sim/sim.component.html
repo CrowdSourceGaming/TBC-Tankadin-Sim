@@ -1,28 +1,12 @@
-<div>
-  <button mat-raised-button color="primary" (click)="start()">Start Sim</button>
+<div style="margin-bottom: 30px" class="flex-grid">
+  <div class="flex-fill left">
+    <h3>Buffs / Debuffs</h3>
+    <button class="full-width" mat-raised-button color="primary" (click)="start()">Start Sim</button>
+  </div>
+  <div class="flex-fill right">
+    <h3>Sim Results</h3>
+    <app-sim-results></app-sim-results>
+  </div>
 </div>
-
 <!-- BAR CHART -->
-<div>
-  <ngx-charts-bar-vertical-stacked *ngIf="simComplete" [view]="view" [customColors]="[
-{
-  name: 'Attack',
-  value: '#E44D25'
-},
-{
-  name: 'SoV Dot',
-  value: '#D1B000'
-},
-{
-  name: 'Holy Shield',
-  value: '#AAE3F5'
-},
-]" [legend]="legend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis"
-    [yAxis]="yAxis" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [schemeType]="schemeType"
-    [results]="overallResultsBarChart | async">
-    <ng-template #tooltipTemplate let-model="model">
-      <p>{{model.name}}: {{model.value}}</p>
-      <p>{{model.comment}}</p>
-    </ng-template>
-  </ngx-charts-bar-vertical-stacked>
-</div>
+<app-bar-chart></app-bar-chart>

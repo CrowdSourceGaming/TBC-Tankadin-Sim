@@ -40,7 +40,6 @@ export class SealOfVengeance implements AbilityInterface {
   }
   onCast(attacker: Character, defender: Creature, timeElapsed: number): boolean {
     if (!attacker.buffs[this.name] || attacker.buffs[this.name].active === false || attacker.buffs[this.name].expires - 5000 <= timeElapsed) {
-      console.log(`${timeElapsed} - casted: ${this.name}`)
       attacker.buffs[this.name] = { active: true, expires: timeElapsed + 30000 }
       return true;
     }

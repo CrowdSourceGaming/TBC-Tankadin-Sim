@@ -1,0 +1,30 @@
+<div *ngIf="displayChart" class="sticky-chart">
+  <ngx-charts-bar-vertical-stacked [view]="view" [customColors]="[
+{
+  name: 'Attack',
+  value: '#120309'
+},
+{
+  name: 'SoV Dot',
+  value: '#E9D985'
+},
+{
+  name: 'Holy Shield',
+  value: '#AAE3F5'
+},
+{
+  name: 'Consecration',
+  value: '#F62DAE'
+},
+{
+  name: 'Judgement',
+  value: '#49A078'
+}]" [legend]="legend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis"
+    [yAxis]="yAxis" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [schemeType]="schemeType" [xAxisTickFormatting]="xAxisTickFormatting"
+    [results]="overallResultsBarChart | async" legendPosition="below" [noBarWhenZero]="noBarWhenZero">
+    <ng-template #tooltipTemplate let-model="model">
+      <p>{{model.name}}: {{model.value}}</p>
+      <p>{{model.comment}}</p>
+    </ng-template>
+  </ngx-charts-bar-vertical-stacked>
+</div>

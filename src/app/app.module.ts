@@ -35,10 +35,8 @@ import { EnchantsComponent } from './enchants/enchants.component';
 import { CurrentGemsComponent } from './current-gems/current-gems.component';
 import { NewEnchantComponent } from './new-enchant/new-enchant.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { SimModule } from './sim/sim.module';
 import { SimRoutingModule } from './sim/sim-routing.module';
-import { TimelineFilterBarChartComponent } from './charts/timeline-filter-bar-chart/timeline-filter-bar-chart.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +56,6 @@ import { TimelineFilterBarChartComponent } from './charts/timeline-filter-bar-ch
     EnchantsComponent,
     CurrentGemsComponent,
     NewEnchantComponent,
-    TimelineFilterBarChartComponent,
   ],
   imports: [
     HttpClientModule,
@@ -82,7 +79,8 @@ import { TimelineFilterBarChartComponent } from './charts/timeline-filter-bar-ch
     MatSnackBarModule,
     MatCheckboxModule,
     SimModule,
-    SimRoutingModule
+    SimRoutingModule,
+
   ],
   /*   providers: [
       {

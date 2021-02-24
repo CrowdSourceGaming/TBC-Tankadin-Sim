@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { Attack } from '../character/abilities/attack';
 import { Consecration } from '../character/abilities/consecration';
 import { HolyShield } from '../character/abilities/holy-shield';
+import { Judgement } from '../character/abilities/judgement';
 import { SealOfVengeance } from '../character/abilities/seal-of-vengeance';
 import { Character } from '../character/character';
 import { AbilityInterface, damageTakenInterface, BossAbilityInterface } from '../shared/abilityInterface';
@@ -15,10 +17,9 @@ import { Creature } from './creature';
 })
 export class CombatService {
 
-  playerDamageTaken = [];
-  creatureDamageTaken = [];
 
-  spellPriority = ['Holy Shield', 'Consecration', 'Seal of Vengeance']
+
+  spellPriority = ['Holy Shield', 'Judgement', 'Consecration', 'Seal of Vengeance']
   onGCD = { value: false, timeUpdated: 0 };
 
   lastAutoAttack!: { player: number; creature: number; };
@@ -27,52 +28,63 @@ export class CombatService {
 
   startTime!: number;
 
+  combatResults: BehaviorSubject<Array<TimeSlotResults[]>> = new BehaviorSubject(new Array());
+
   constructor() { }
 
-  startCombat(character: Character, creature: Creature, timeToRun: number): TimeSlotResults[] {
-    this.lastAutoAttack = {  // start the fight with an attack and then track the last hit.
-      player: -99999999999,
-      creature: -99999999999
-    }
-    const abilities = {
-      attack: new Attack(),
-      SoV: new SealOfVengeance(),
-      holyShield: new HolyShield(),
-      bossAttack: new BossAttack(),
-      consecration: new Consecration()
-    }
-    this.registeredAbilities = {
-      playerAbiliities: [abilities.attack, abilities.SoV, abilities.holyShield, abilities.consecration],
-      bossAbilities: [abilities.bossAttack],
-      reactiveAbilities: [abilities.holyShield]
-    }
-    this.onGCD = { value: false, timeUpdated: 0 }
-    this.startTime = Date.now();
-    const results: TimeSlotResults[] = [];
-    for (let i = 0; i < timeToRun; i += 10) {
-      const result: TimeSlotResults = {
-        damageTaken: [],
-        damageDone: []
+  startCombat(character: Character, creature: Creature, timeToRun: number): void {
+    const multipleCombatSessions: TimeSlotResults[][] = [];
+    for (let k = 0; k < 500; k++) {
+      character.buffs = [];
+      creature.buffs = [];
+      character.debuffs = [];
+      creature.debuffs = [];
+      this.lastAutoAttack = {  // start the fight with an attack and then track the last hit.
+        player: 0,
+        creature: 0
       }
-      if (this.onGCD.value === true && this.onGCD.timeUpdated + 1500 <= i) {
-        this.onGCD.value = false;
-        this.onGCD.timeUpdated = i;
+      const abilities = {
+        attack: new Attack(),
+        SoV: new SealOfVengeance(),
+        holyShield: new HolyShield(),
+        bossAttack: new BossAttack(),
+        consecration: new Consecration(),
+        judgement: new Judgement()
       }
-      const rollResult: AttackTableEnum | false = this.playerAutoAttackCreature(character, creature, i)
-      this.castAllAvailableAbilities(character, creature, i);
-      this.registeredAbilities.playerAbiliities.forEach((ability: AbilityInterface) => {
-        this.triggerPlayerAbility(rollResult, ability, character, creature, result, i)
-      });
-      const enemyRollResult: AttackTableEnum | false = this.creatureAutoAttackPlayer(creature, character, i)
-      this.registeredAbilities.bossAbilities.forEach((ability: BossAbilityInterface) => {
-        this.triggerBossAbility(enemyRollResult, ability, creature, character, result, i)
-      });
-      this.registeredAbilities.reactiveAbilities.forEach((ability: AbilityInterface) => {
-        this.triggerReactivePlayerAbility(enemyRollResult, ability, creature, character, result, i)
-      });
-      results.push(result);
+      this.registeredAbilities = {
+        playerAbiliities: [abilities.attack, abilities.judgement, abilities.SoV, abilities.holyShield, abilities.consecration],
+        bossAbilities: [abilities.bossAttack],
+        reactiveAbilities: [abilities.holyShield]
+      }
+      this.onGCD = { value: false, timeUpdated: 0 }
+      this.startTime = Date.now();
+      const results: TimeSlotResults[] = [];
+      for (let i = 0; i < timeToRun; i += 10) {
+        const result: TimeSlotResults = {
+          damageTaken: [],
+          damageDone: []
+        }
+        if (this.onGCD.value === true && this.onGCD.timeUpdated + 1500 <= i) {
+          this.onGCD.value = false;
+          this.onGCD.timeUpdated = i;
+        }
+        const rollResult: AttackTableEnum | false = this.playerAutoAttackCreature(character, creature, i)
+        this.castAllAvailableAbilities(character, creature, i);
+        this.registeredAbilities.playerAbiliities.forEach((ability: AbilityInterface) => {
+          this.triggerPlayerAbility(rollResult, ability, character, creature, result, i)
+        });
+        const enemyRollResult: AttackTableEnum | false = this.creatureAutoAttackPlayer(creature, character, i)
+        this.registeredAbilities.bossAbilities.forEach((ability: BossAbilityInterface) => {
+          this.triggerBossAbility(enemyRollResult, ability, creature, character, result, i)
+        });
+        this.registeredAbilities.reactiveAbilities.forEach((ability: AbilityInterface) => {
+          this.triggerReactivePlayerAbility(enemyRollResult, ability, creature, character, result, i)
+        });
+        results.push(result);
+      }
+      multipleCombatSessions.push(results);
     }
-    return results;
+    this.combatResults.next(multipleCombatSessions);
   }
 
   private castAllAvailableAbilities(character: Character, creature: Creature, i: number) {
@@ -142,7 +154,8 @@ export class CombatService {
         dodge: creature.AttackTable[AttackTableEnum.dodge] + character.dodgeChance,
         parry: creature.AttackTable[AttackTableEnum.parry] + character.parry,
         glancing: 0,
-        block: creature.AttackTable[AttackTableEnum.block] + character.blockChance,
+        block: creature.AttackTable[AttackTableEnum.block] + character.blockChance + (
+          (character.buffs['Holy Shield'] && character.buffs['Holy Shield'].charges > 0) ? 30 : 0),
         crit: creature.AttackTable[AttackTableEnum.crit] - character.critReduction,
         crushing: creature.AttackTable[AttackTableEnum.crushing],
         hit: 0

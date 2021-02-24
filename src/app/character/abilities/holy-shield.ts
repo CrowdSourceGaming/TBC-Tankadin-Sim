@@ -26,7 +26,6 @@ export class HolyShield implements AbilityInterface {
     if (attacker.spec.talents.holyShield && this.lastCastTime + this.internalCD <= timeElapsed) {
       let charges = 4
       charges += attacker.spec.talents.improvedHolyShield * 2
-      console.log(`${timeElapsed} - casted: ${this.name} with ${charges} charges`)
       attacker.buffs[this.name] = { charges: charges, expires: timeElapsed + 10000 }
       this.lastCastTime = timeElapsed;
       return true;
