@@ -69,7 +69,7 @@ export class SimResultsComponent implements OnInit {
       "max": Math.round(Math.max(...burstValues.map(v => v.threat)) / this.BURST_SECONDS),
     },
     {
-      name: 'TPS (2 Minute Fight',
+      name: 'TPS (2 Minute Fight)',
       "min": Math.round(Math.min(...fullRunValues.map(v => v.threat)) / this.FULL_DURATION_SECONDS),
       "1% low": Math.round(fullRunValues.sort((a, b) => a.threat - b.threat)[onePercentLowIndex].threat / this.FULL_DURATION_SECONDS),
       "5% low": Math.round(fullRunValues.sort((a, b) => a.threat - b.threat)[fivePercentLowIndex].threat / this.FULL_DURATION_SECONDS),
