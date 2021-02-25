@@ -17,7 +17,7 @@ export class Attack implements AbilityInterface {
     this.onGCD = false;
   }
   onHit(rollResult: AttackTableEnum, attacker: Character, defender: Creature): void | damageTakenInterface {
-    let damage = 0;
+    let damage = 1;
     if (rollResult && rollResult !== AttackTableEnum.miss && rollResult !== AttackTableEnum.dodge && rollResult !== AttackTableEnum.parry) {
       damage = rollDamage(attacker.weaponDamageMin, attacker.weaponDamageMax, defender)
       if (rollResult === AttackTableEnum.glancing) {

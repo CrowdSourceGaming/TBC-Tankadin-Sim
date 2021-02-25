@@ -9,4 +9,5 @@
   </div>
 </div>
 <!-- BAR CHART -->
-<app-bar-chart></app-bar-chart>
+<app-sim-results-bar-chart (changeDetailChart)="updateDetailChart($event)"></app-sim-results-bar-chart>
+<app-bar-chart [chartToDisplay]="detailChartCommand"></app-bar-chart>

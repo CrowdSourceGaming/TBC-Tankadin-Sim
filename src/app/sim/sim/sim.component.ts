@@ -12,13 +12,26 @@ const TWO_MINUTES = 2 * 60 * 1000
 })
 export class SimComponent {
 
-  constructor(private combatService: CombatService, private sharedDataService: SharedDataService) { }
+  detailChartCommand: DetailChartCommandInterface = {
+    simulationNumber: 0,
+    statToShow: 'DPS'
+  }
 
+  constructor(private combatService: CombatService, private sharedDataService: SharedDataService) { }
 
   ngOnInit(): void {
   }
 
   start() {
-    this.combatService.startCombat(this.sharedDataService.character.value, new Creature(), TWO_MINUTES)
+    this.combatService.startCombat(TWO_MINUTES)
   }
+
+  updateDetailChart(event: DetailChartCommandInterface) {
+    this.detailChartCommand = event;
+  }
+}
+
+export interface DetailChartCommandInterface {
+  simulationNumber: number,
+  statToShow: string
 }

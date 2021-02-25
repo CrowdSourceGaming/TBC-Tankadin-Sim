@@ -9,10 +9,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { BarChartComponent } from './bar-chart/bar-chart.component';
 import { SimResultsComponent } from './sim-results/sim-results.component';
 import { MatTableModule } from '@angular/material/table';
+import { SimResultsBarChartComponent } from './sim-results-bar-chart/sim-results-bar-chart.component';
 
 
 @NgModule({
-  declarations: [SimComponent, BarChartComponent, SimResultsComponent],
+  declarations: [SimComponent, BarChartComponent, SimResultsComponent, SimResultsBarChartComponent],
   imports: [
     CommonModule,
     BrowserModule,

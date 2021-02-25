@@ -28,4 +28,5 @@ export interface damageTakenInterface {
   damageType: DamageType
   circumstance: string
   comment?: string
+  threat?: number
 }
