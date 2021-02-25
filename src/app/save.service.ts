@@ -17,9 +17,9 @@ export class SaveService {
   save() {
     const character = this.sharedDataService.character.value;
     const characterJson = serialize(this.sharedDataService.character.value, true)
-    characterJson.gear = {};
+    characterJson.gs = {};
     Object.keys(character.gear).forEach(slot => {
-      characterJson.gear[slot] = {
+      characterJson.gs[slot] = {
         itemId: character.gear[slot as keyof typeof GearSlots].id,
         enchantId: character.gear[slot as keyof typeof GearSlots].enchant?.id
       }
@@ -38,10 +38,10 @@ export class SaveService {
       const characterJson = JSON.parse(saveDataString).character
       const character = deserialize(characterJson, Character);
       const realGear = this.gearService.gearOptions.value
-      const slots = Object.keys(characterJson.gear);
+      const slots = Object.keys(characterJson.gs);
       realGear.forEach(rg => {
         slots.forEach(slot => {
-          const jsonGearSlot = characterJson.gear[slot]
+          const jsonGearSlot = characterJson.gs[slot]
           if (jsonGearSlot.itemId === rg.id) {
             if (jsonGearSlot.enchantId) {
               rg.enchant = this.enchantService.enchants.value.find(e => e.id === jsonGearSlot.enchantId)!

@@ -39,8 +39,23 @@ export class Judgement implements AbilityInterface {
   }
   onCheck(attacker: Character, defender: Creature, timeElapsed: number): void | damageTakenInterface {
     if (this.doDamage && this.doDamage.activate && this.doDamage.seal === 'Seal of Vengeance') {
-      this.doDamage.activate=false;
-      return this.vengeanceDamage(attacker, defender);
+      this.doDamage.activate = false;
+      const missChance = Math.max(17 - attacker.spellHit, 1);
+      const roll = Math.random() * 100
+      if (roll <= missChance) {
+        return {
+          circumstance: this.name,
+          damageAmount: 1,
+          damageType: DamageType.holy,
+          comment: `Judgement of Vengeance: Resist`
+        }
+      }
+      const damage = this.vengeanceDamage(attacker, defender);
+      if(roll - missChance <= attacker.spellCrit){
+        damage.damageAmount = damage.damageAmount * 1.5
+        damage.comment += ' - CRITICAL'
+      }
+      return damage;
     }
   }
 

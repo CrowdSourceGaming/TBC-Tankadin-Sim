@@ -10,12 +10,12 @@ import { AttackTable } from "../shared/attack-table";
 @Serializable()
 export class Character {
   @JsonProperty() spec: Spec;
-  gear: { [key in GearSlots]: Item }
+  @JsonProperty({ type: Item, isDictionary: true }) gear: { [key in GearSlots]: Item }
   @JsonProperty() baseStats: ItemStats;
   @JsonProperty() race: Race
   level = 70;
-  buffs: { [key: string]: any } = {}
-  debuffs: { [key: string]: any } = {}
+  @JsonProperty() buffs: { [key: string]: any } = {}
+  @JsonProperty() debuffs: { [key: string]: any } = {}
 
 
   constructor(race: Races = Races.human) {

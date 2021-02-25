@@ -20,10 +20,11 @@
   name: 'Judgement',
   value: '#49A078'
 }]" [legend]="legend" [showXAxisLabel]="showXAxisLabel" [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis"
-    [yAxis]="yAxis" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [schemeType]="schemeType" [xAxisTickFormatting]="xAxisTickFormatting"
-    [results]="overallResultsBarChart | async" legendPosition="below" [noBarWhenZero]="noBarWhenZero">
+    [yAxis]="yAxis" [xAxisLabel]="xAxisLabel" [yAxisLabel]="yAxisLabel" [schemeType]="schemeType"
+    [xAxisTickFormatting]="xAxisTickFormatting" [results]="overallResultsBarChart | async" legendPosition="below"
+    [noBarWhenZero]="noBarWhenZero">
     <ng-template #tooltipTemplate let-model="model">
-      <p>{{model.name}}: {{model.value}}</p>
+      <p>{{model.name}}: {{model.value | number: '1.0-0'}}</p>
       <p>{{model.comment}}</p>
     </ng-template>
   </ngx-charts-bar-vertical-stacked>
