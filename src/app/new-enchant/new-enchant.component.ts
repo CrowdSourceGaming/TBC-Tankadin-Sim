@@ -3,7 +3,6 @@ import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GearSlots } from '../character/gearslot';
 import { Enchant } from '../item/enchant';
-import { EnchantService } from '../item/enchant.service';
 import { ItemStats, ItemStatsEnum } from '../item/item-stats';
 
 @Component({
@@ -15,7 +14,7 @@ export class NewEnchantComponent implements OnInit {
 
   attributes = Object.values(ItemStatsEnum).sort();
 
-  enchant: Enchant = { _id: 0, id: 0, name: '', stats: {}, slot: GearSlots.head }
+  enchant: Enchant = { _id: 0, id: 0, name: '', stats: {}, slot: GearSlots.head, type: 'Item' }
   GearSlotsKeys = Object.keys(GearSlots).sort();
 
   newEnchantFG!: FormGroup;
@@ -70,19 +69,19 @@ export class NewEnchantComponent implements OnInit {
     if (this.newEnchantFG.valid) {
       this.enchant.name = this.newEnchantFG.get('enchantName')?.value
       this.enchant.slot = this.data.gearSlot;
-
+      this.dialogRef.close(this.enchant);
     }
-    this.dialogRef.close(this.enchant);
   }
 
 
   private validateTBCDBLink(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
-      const regEx = new RegExp(/^https:\/\/tbcdb.com\/\?item\=(\d+)$/)
+      const regEx = new RegExp(/^https:\/\/tbcdb.com\/\?(spell|item)\=(\d+)$/)
       const matchers = control.value.match(regEx);
-      if (matchers && matchers[1]) {
-        this.enchant._id = matchers[1]
-        this.enchant.id = matchers[1]
+      if (matchers && matchers[1] && matchers[2]) {
+        this.enchant.type = matchers[1]
+        this.enchant._id = matchers[2]
+        this.enchant.id = matchers[2]
         return null;
       } else {
         return { invalidLink: { value: control.value } }

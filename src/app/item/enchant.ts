@@ -7,4 +7,5 @@ export interface Enchant {
   name: string
   stats: ItemStats
   slot: GearSlots
+  type: string
 }
