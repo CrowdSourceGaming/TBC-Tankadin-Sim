@@ -46,7 +46,7 @@
       </mat-form-field>
       for
       <mat-form-field class="small-form-field">
-        <mat-select [typeaheadDebounceInterval]="1000" [(ngModel)]="gemAlterations.logic[1].gem">
+        <mat-select [typeaheadDebounceInterval]="1000" [(ngModel)]="gemAlterations.logic[1].socketColor">
           <mat-option *ngFor="let color of GemSocketColors" [value]="color">{{color}}</mat-option>
         </mat-select>
       </mat-form-field>

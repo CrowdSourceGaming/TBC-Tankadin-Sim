@@ -34,19 +34,16 @@ export class GearService {
     const gearOptions = this.gearOptions.value
     gearOptions.forEach((item: Item) => {
       item.gemSockets.forEach(socket => {
+        if (socket.color === GemSocketColor.meta) {
+          socket.gem = gemLogic.defaultMeta
+        } else {
+          socket.gem = gemLogic.default
+        }
         gemLogic.logic.forEach(logicalInsertion => {
           if (logicalInsertion.gem && logicalInsertion.setBonusAttribute && logicalInsertion.socketColor) {
             if (item.gemSocketBonus[logicalInsertion.setBonusAttribute as keyof typeof ItemStatsEnum] && socket.color === logicalInsertion.socketColor) {
               socket.gem = logicalInsertion.gem
-            } else if (socket.color === GemSocketColor.meta) {
-              socket.gem = gemLogic.defaultMeta
-            } else {
-              socket.gem = gemLogic.default
             }
-          } else if (socket.color === GemSocketColor.meta) {
-            socket.gem = gemLogic.defaultMeta
-          } else {
-            socket.gem = gemLogic.default
           }
         });
       });
