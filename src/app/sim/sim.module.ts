@@ -1,4 +1,4 @@
-import { NgModule} from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SimComponent } from './sim/sim.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
@@ -10,6 +10,7 @@ import { BarChartComponent } from './bar-chart/bar-chart.component';
 import { SimResultsComponent } from './sim-results/sim-results.component';
 import { MatTableModule } from '@angular/material/table';
 import { SimResultsBarChartComponent } from './sim-results-bar-chart/sim-results-bar-chart.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { SimResultsBarChartComponent } from './sim-results-bar-chart/sim-results
     NgxChartsModule,
     MatButtonModule,
     BrowserAnimationsModule,
-    MatTableModule
+    MatTableModule,
+    MatSlideToggleModule
   ],
 })
 export class SimModule { }

@@ -1,7 +1,9 @@
 /// <reference lib="webworker" />
 
 import { deserialize } from "typescript-json-serializer";
+import { Ability } from "../character/abilities/ability";
 import { Attack } from "../character/abilities/attack";
+import { AvengersShield } from "../character/abilities/avengers-shield";
 import { Consecration } from "../character/abilities/consecration";
 import { HolyShield } from "../character/abilities/holy-shield";
 import { Judgement } from "../character/abilities/judgement";
@@ -19,10 +21,12 @@ let registeredAbilities: any;
 let onGCD: any;
 let character: any;
 let creature: any;
+let casting: boolean;
 
 addEventListener('message', ({ data }) => {
   const multipleCombatSessions: SimulationResults[] = new Array();
   for (let k = 0; k < 250; k++) {
+    casting = false;
     creature = new Creature();
     character = deserialize(data.character, Character);
     lastAutoAttack = {  // start the fight with an attack and then track the last hit.
@@ -35,15 +39,36 @@ addEventListener('message', ({ data }) => {
       holyShield: new HolyShield(),
       bossAttack: new BossAttack(),
       consecration: new Consecration(),
-      judgement: new Judgement()
+      judgement: new Judgement(),
+      as: new AvengersShield()
     }
     registeredAbilities = {
-      playerAbiliities: [abilities.attack, abilities.judgement, abilities.SoV, abilities.holyShield, abilities.consecration],
+      playerAbilities: [abilities.as, abilities.attack, abilities.judgement, abilities.SoV, abilities.holyShield, abilities.consecration],
       bossAbilities: [abilities.bossAttack],
       reactiveAbilities: [abilities.holyShield]
     }
     onGCD = { value: false, timeUpdated: 0 }
     const results: any[] = [];
+    const precastAbilities: AbilityInterface[] = data.precast.map((abilityName: string) => registeredAbilities.playerAbilities.find((ability: AbilityInterface) => ability.name === abilityName));
+    precastAbilities.forEach((ability: AbilityInterface, i) => {
+      const timeCasted = -1500 * (precastAbilities.length - i)
+      ability.onCast(character, creature, timeCasted)
+    })
+    for (let i = precastAbilities.length * -1500; i < 0; i += 10) {
+      const result: any = {
+        damageTaken: [],
+        damageDone: []
+      }
+      precastAbilities.forEach(ability => {
+        const onCheckEffect = ability.onCheck(character, creature, i)
+        if (onCheckEffect) {
+          modifyDamage(character, onCheckEffect)
+          determineThreat(character, onCheckEffect);
+          result.damageDone.push(onCheckEffect);
+        }
+      })
+      results.push(result);
+    }
     for (let i = 0; i < data.timeToRun; i += 10) {
       const result: any = {
         damageTaken: [],
@@ -53,9 +78,12 @@ addEventListener('message', ({ data }) => {
         onGCD.value = false;
         onGCD.timeUpdated = i;
       }
-      const rollResult: AttackTableEnum | false = playerAutoAttackCreature(character, creature, i)
-      castAllAvailableAbilities(character, creature, i, data);
-      registeredAbilities.playerAbiliities.forEach((ability: AbilityInterface) => {
+      let rollResult: AttackTableEnum | false = false;
+      if (!casting) {
+        rollResult = playerAutoAttackCreature(character, creature, i)
+        castAllAvailableAbilities(character, creature, i, data);
+      }
+      registeredAbilities.playerAbilities.forEach((ability: AbilityInterface) => {
         triggerPlayerAbility(rollResult, ability, character, creature, result, i)
       });
       const enemyRollResult: AttackTableEnum | false = creatureAutoAttackPlayer(creature, character, i)
@@ -79,11 +107,14 @@ addEventListener('message', ({ data }) => {
 
 function castAllAvailableAbilities(character: Character, creature: Creature, i: number, data: any) {
   for (let spellName of data.spellPriority) {
-    const ability = registeredAbilities.playerAbiliities.find((ability: any) => ability.name === spellName)!;
+    const ability: AbilityInterface = registeredAbilities.playerAbilities.find((ability: AbilityInterface) => ability.name === spellName)!;
     if (ability.onGCD && onGCD.value) {
       // DO NOTHING
     } else {
       const triggerGCD = ability.onCast(character, creature, i);
+      if (ability.name === 'Avenger\s Shield') {
+        casting = true;
+      }
       if (triggerGCD) {
         onGCD = { value: true, timeUpdated: i };
       }

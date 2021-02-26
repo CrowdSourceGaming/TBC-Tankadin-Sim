@@ -17,7 +17,6 @@ export class BlizzardApiService {
   constructor(private httpClient: HttpClient) {
     if (!this.blizzardAccessToken) {
       this.login().subscribe(token => {
-        console.log('token', token)
         this.blizzardAccessToken = 'Bearer ' + token.access_token;
       })
     }
@@ -46,7 +45,6 @@ export class BlizzardApiService {
 
 
   private login(): Observable<any> {
-    console.log('auth header: Basic ' + btoa(`${environment.blizzardAPICreds.clientId}:${environment.blizzardAPICreds.clientSecret}`))
     const headers = new HttpHeaders({
       'Authorization': 'Basic ' + btoa(`${environment.blizzardAPICreds.clientId}:${environment.blizzardAPICreds.clientSecret}`)
     })

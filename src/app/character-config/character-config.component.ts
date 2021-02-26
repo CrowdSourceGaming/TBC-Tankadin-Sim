@@ -47,7 +47,6 @@ export class CharacterConfigComponent implements OnInit {
   }
 
   raceChange(event: MatSelectChange) {
-    console.log()
     const character = this.sharedDataService.character.value
     character.race = new Race(event.value)
     this.sharedDataService.character.next(character);

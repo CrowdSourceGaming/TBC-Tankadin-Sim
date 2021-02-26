@@ -51,7 +51,8 @@ export class Judgement implements AbilityInterface {
         }
       }
       const damage = this.vengeanceDamage(attacker, defender);
-      if(roll - missChance <= attacker.spellCrit){
+      const critRoll = Math.random() * 100
+      if (critRoll <= attacker.spellCrit) {
         damage.damageAmount = damage.damageAmount * 1.5
         damage.comment += ' - CRITICAL'
       }

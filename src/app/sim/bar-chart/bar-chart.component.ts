@@ -36,7 +36,6 @@ export class BarChartComponent implements OnInit, OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('change detected', changes)
     if (changes['chartToDisplay']) {
       this.chartToDisplay = (changes['chartToDisplay'].currentValue || { simulationNumber: 0, statToShow: 'DPS' })
       this.createBarChart(this.combatResults)
@@ -58,7 +57,7 @@ export class BarChartComponent implements OnInit, OnChanges {
         const results: resultsBarChartInterface[] = []
         simulation.simResults.forEach((tenMilliSeconds, index) => {
           tenMilliSeconds.damageDone.forEach(damage => {
-            const rootName = index / 100;
+            const rootName = (index + this.combatService.precast.length * -150) / 100;
             const lookupResults = results && results.find((result: any) => result.name === rootName);
             let value = 0;
             if (this.chartToDisplay.statToShow === 'DPS') {
@@ -69,7 +68,7 @@ export class BarChartComponent implements OnInit, OnChanges {
               value = damage.threat || 0
             }
             if (!lookupResults) {
-              results.push({ name: index / 100, series: [{ name: damage.circumstance, value: value, comment: damage.comment }] });
+              results.push({ name: rootName, series: [{ name: damage.circumstance, value: value, comment: damage.comment }] });
             } else {
               const damageThisTurn = lookupResults.series.find(r => r.name === damage.circumstance);
               if (damageThisTurn) {

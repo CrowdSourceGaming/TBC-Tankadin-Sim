@@ -12,7 +12,7 @@ export class SimResultsBarChartComponent implements OnInit {
 
   @Output() changeDetailChart = new EventEmitter<DetailChartCommandInterface>();
 
-  openingBurst: boolean = false;
+  fullRun: boolean = true;
   displayChart: boolean = false;
 
   legend: boolean = false;
@@ -23,46 +23,53 @@ export class SimResultsBarChartComponent implements OnInit {
   showYAxisLabel: boolean = true;
   showXAxisLabel: boolean = true;
   xAxisLabel: string = 'Simulation (sorted)';
-  yAxisLabel: string = 'Damage/Threat Done';
+  yAxisLabel: string = 'DPS/TPS';
   schemeType: string = 'ordinal'
   noBarWhenZero: boolean = false;
   view: any[number] = [10000, 400];
   colorScheme = {
     domain: ['#5AA454', '#C7B42C', '#AAAAAA']
   };
+
+  simResults: SimResults[] = new Array();
   overallResultsBarChart: BehaviorSubject<resultsBarChartInterface[]> = new BehaviorSubject(new Array());
 
   constructor(private combatService: CombatService) { }
 
   ngOnInit(): void {
     this.combatService.combatResults.subscribe((simResults: SimResults[]) => {
-      this.createBarChat(simResults);
+      this.simResults = simResults
+      this.createBarChat();
     });
   }
 
+  updateFullRunToggle(event: any) {
+    this.fullRun = event.checked
+    this.createBarChat();
+  }
+
   selectChart(event: any) {
-    console.log('click event', event)
     this.changeDetailChart.emit({
       simulationNumber: event.series,
       statToShow: event.name
     })
   }
 
-  private createBarChat(simResults: SimResults[]) {
-    if (simResults[0]) {
+  private createBarChat() {
+    if (this.simResults[0]) {
       const results: resultsBarChartInterface[] = new Array();
-      this.combatService.sortForThreat(simResults, this.openingBurst)
-      simResults.forEach(simulation => {
+      this.combatService.sortForThreat(this.simResults, !this.fullRun)
+      this.simResults.forEach(simulation => {
         results.push({
           name: simulation.runNumber,
           series: [
             {
               name: 'TPS',
-              value: this.combatService.tpsForRun(simulation, this.openingBurst)
+              value: this.combatService.tpsForRun(simulation, !this.fullRun)
             },
             {
               name: 'DPS',
-              value: this.combatService.dpsForRun(simulation, this.openingBurst)
+              value: this.combatService.dpsForRun(simulation, !this.fullRun)
             }]
         })
       })

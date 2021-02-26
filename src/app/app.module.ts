@@ -82,20 +82,6 @@ import { SimRoutingModule } from './sim/sim-routing.module';
     SimRoutingModule,
 
   ],
-  /*   providers: [
-      {
-        provide: APP_BASE_HREF,
-        useFactory: function () {
-          const location = window.location.pathname.split('/')[1] || '';
-          console.log('location',)
-          if (location !== 'gear' && location !== 'character') {
-            return `/${location}/`
-          } else {
-            return '/'
-          }
-        }
-      }
-    ], */
   bootstrap: [AppComponent]
 })
 export class AppModule { }

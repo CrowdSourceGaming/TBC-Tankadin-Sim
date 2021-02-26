@@ -113,7 +113,6 @@ describe('CombatService', () => {
           if (result) {
             expect(result.damageDone).toContain({ damageType: DamageType.physical, damageAmount: 7, circumstance: AttackTableEnum.hit });
           } else {
-            // console.log('void');
           }
         }
       })
