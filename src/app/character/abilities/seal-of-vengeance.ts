@@ -5,6 +5,7 @@ import { Creature } from "src/app/sim/creature";
 import { Character } from "../character";
 
 export class SealOfVengeance implements AbilityInterface {
+  id = 31801
   magicSchool: DamageType;
   name: string;
   onGCD: boolean;

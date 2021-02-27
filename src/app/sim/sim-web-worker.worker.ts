@@ -7,6 +7,7 @@ import { AvengersShield } from "../character/abilities/avengers-shield";
 import { Consecration } from "../character/abilities/consecration";
 import { HolyShield } from "../character/abilities/holy-shield";
 import { Judgement } from "../character/abilities/judgement";
+import { SealOfRighteousness } from "../character/abilities/seal-of-righteousness";
 import { SealOfVengeance } from "../character/abilities/seal-of-vengeance";
 import { Character } from "../character/character";
 import { AbilityInterface, BossAbilityInterface, damageTakenInterface } from "../shared/abilityInterface";
@@ -22,8 +23,11 @@ let onGCD: any;
 let character: any;
 let creature: any;
 let casting: boolean;
+let activeAbilities: Set<string>;
+let stopCasting: number = 0;
 
 addEventListener('message', ({ data }) => {
+  activeAbilities = data.activeAbilities;
   const multipleCombatSessions: SimulationResults[] = new Array();
   for (let k = 0; k < 250; k++) {
     casting = false;
@@ -40,10 +44,11 @@ addEventListener('message', ({ data }) => {
       bossAttack: new BossAttack(),
       consecration: new Consecration(),
       judgement: new Judgement(),
-      as: new AvengersShield()
+      as: new AvengersShield(),
+      SoR: new SealOfRighteousness()
     }
     registeredAbilities = {
-      playerAbilities: [abilities.as, abilities.attack, abilities.judgement, abilities.SoV, abilities.holyShield, abilities.consecration],
+      playerAbilities: [abilities.SoR, abilities.as, abilities.attack, abilities.judgement, abilities.SoV, abilities.holyShield, abilities.consecration],
       bossAbilities: [abilities.bossAttack],
       reactiveAbilities: [abilities.holyShield]
     }
@@ -52,7 +57,9 @@ addEventListener('message', ({ data }) => {
     const precastAbilities: AbilityInterface[] = data.precast.map((abilityName: string) => registeredAbilities.playerAbilities.find((ability: AbilityInterface) => ability.name === abilityName));
     precastAbilities.forEach((ability: AbilityInterface, i) => {
       const timeCasted = -1500 * (precastAbilities.length - i)
-      ability.onCast(character, creature, timeCasted)
+      if (activeAbilities.has(ability.name)) {
+        ability.onCast(character, creature, timeCasted)
+      }
     })
     for (let i = precastAbilities.length * -1500; i < 0; i += 10) {
       const result: any = {
@@ -60,16 +67,19 @@ addEventListener('message', ({ data }) => {
         damageDone: []
       }
       precastAbilities.forEach(ability => {
-        const onCheckEffect = ability.onCheck(character, creature, i)
-        if (onCheckEffect) {
-          modifyDamage(character, onCheckEffect)
-          determineThreat(character, onCheckEffect);
-          result.damageDone.push(onCheckEffect);
+        if (activeAbilities.has(ability.name)) {
+          const onCheckEffect = ability.onCheck(character, creature, i)
+          if (onCheckEffect) {
+            modifyDamage(character, onCheckEffect)
+            determineThreat(character, onCheckEffect);
+            result.damageDone.push(onCheckEffect);
+          }
         }
       })
       results.push(result);
     }
     for (let i = 0; i < data.timeToRun; i += 10) {
+      i <= stopCasting ? casting = false : null
       const result: any = {
         damageTaken: [],
         damageDone: []
@@ -107,23 +117,27 @@ addEventListener('message', ({ data }) => {
 
 function castAllAvailableAbilities(character: Character, creature: Creature, i: number, data: any) {
   for (let spellName of data.spellPriority) {
-    const ability: AbilityInterface = registeredAbilities.playerAbilities.find((ability: AbilityInterface) => ability.name === spellName)!;
-    if (ability.onGCD && onGCD.value) {
-      // DO NOTHING
-    } else {
-      const triggerGCD = ability.onCast(character, creature, i);
-      if (ability.name === 'Avenger\s Shield') {
-        casting = true;
-      }
-      if (triggerGCD) {
-        onGCD = { value: true, timeUpdated: i };
+    if (activeAbilities.has(spellName)) {
+      const ability: AbilityInterface = registeredAbilities.playerAbilities.find((ability: AbilityInterface) => ability.name === spellName)!;
+      if (ability.onGCD && onGCD.value) {
+        // DO NOTHING
+      } else {
+        const triggerGCD = ability.onCast(character, creature, i);
+        if (ability.name === 'Avenger\'s Shield') {
+          casting = true;
+          stopCasting = i + 1000;
+        }
+        if (triggerGCD) {
+          onGCD = { value: true, timeUpdated: i };
+        }
       }
     }
   }
 }
 
 function triggerReactivePlayerAbility(rollResult: AttackTableEnum | false, ability: AbilityInterface, attacker: Creature, defender: Character, result: any, timeElapsed: number) {
-  if (rollResult) {
+  if (rollResult && activeAbilities.has(ability.name)) {
+    // if (rollResult) {
     const onHitEffect = ability.onReactive!(rollResult, attacker, defender, timeElapsed);
     if (onHitEffect) {
       modifyDamage(defender, onHitEffect)
@@ -134,19 +148,21 @@ function triggerReactivePlayerAbility(rollResult: AttackTableEnum | false, abili
 }
 
 function triggerPlayerAbility(rollResult: AttackTableEnum | false, ability: AbilityInterface, attacker: Character, defender: Creature, result: any, timeElapsed: number) {
-  if (rollResult) {
-    const onHitEffect = ability.onHit(rollResult, attacker, defender, timeElapsed);
-    if (onHitEffect) {
-      modifyDamage(attacker, onHitEffect)
-      determineThreat(attacker, onHitEffect);
-      result.damageDone.push(onHitEffect);
+  if (activeAbilities.has(ability.name)) {
+    if (rollResult) {
+      const onHitEffect = ability.onHit(rollResult, attacker, defender, timeElapsed);
+      if (onHitEffect) {
+        modifyDamage(attacker, onHitEffect)
+        determineThreat(attacker, onHitEffect);
+        result.damageDone.push(onHitEffect);
+      }
     }
-  }
-  const onCheckEffect = ability.onCheck(attacker, defender, timeElapsed)
-  if (onCheckEffect) {
-    modifyDamage(attacker, onCheckEffect)
-    determineThreat(attacker, onCheckEffect);
-    result.damageDone.push(onCheckEffect);
+    const onCheckEffect = ability.onCheck(attacker, defender, timeElapsed)
+    if (onCheckEffect) {
+      modifyDamage(attacker, onCheckEffect)
+      determineThreat(attacker, onCheckEffect);
+      result.damageDone.push(onCheckEffect);
+    }
   }
 }
 

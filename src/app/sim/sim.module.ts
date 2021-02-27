@@ -11,10 +11,11 @@ import { SimResultsComponent } from './sim-results/sim-results.component';
 import { MatTableModule } from '@angular/material/table';
 import { SimResultsBarChartComponent } from './sim-results-bar-chart/sim-results-bar-chart.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { SimSetupComponent } from './sim-setup/sim-setup.component';
 
 
 @NgModule({
-  declarations: [SimComponent, BarChartComponent, SimResultsComponent, SimResultsBarChartComponent],
+  declarations: [SimComponent, BarChartComponent, SimResultsComponent, SimResultsBarChartComponent, SimSetupComponent],
   imports: [
     CommonModule,
     BrowserModule,
