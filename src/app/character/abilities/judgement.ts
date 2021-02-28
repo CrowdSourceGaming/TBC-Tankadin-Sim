@@ -30,7 +30,7 @@ export class Judgement implements AbilityInterface {
       }
       if (attacker.buffs['Seal of Righteousness']) {
         this.lastCasted = timeElapsed;
-        this.doDamage = { activate: true, seal: 'Seal of Vengeance' }
+        this.doDamage = { activate: true, seal: 'Seal of Righteousness' }
         return false;
       }
       return false;
@@ -38,7 +38,7 @@ export class Judgement implements AbilityInterface {
     return false;
   }
   onCheck(attacker: Character, defender: Creature, timeElapsed: number): void | damageTakenInterface {
-    if (this.doDamage && this.doDamage.activate && this.doDamage.seal === 'Seal of Vengeance') {
+    if (this.doDamage && this.doDamage.activate) {
       this.doDamage.activate = false;
       const missChance = Math.max(17 - attacker.spellHit, 1);
       const roll = Math.random() * 100
@@ -47,16 +47,33 @@ export class Judgement implements AbilityInterface {
           circumstance: this.name,
           damageAmount: 1,
           damageType: DamageType.holy,
-          comment: `Judgement of Vengeance: Resist`
+          comment: `Judgement: Resist`
         }
       }
-      const damage = this.vengeanceDamage(attacker, defender);
+      let damage!: damageTakenInterface;
+      if (this.doDamage.seal === 'Seal of Vengeance') {
+        damage = this.vengeanceDamage(attacker, defender);
+      } else if (this.doDamage.seal === 'Seal of Righteousness') {
+        damage = this.righteousnessDamage(attacker);
+      } else {
+        return
+      }
       const critRoll = Math.random() * 100
       if (critRoll <= attacker.spellCrit) {
         damage.damageAmount = damage.damageAmount * 1.5
         damage.comment += ' - CRITICAL'
       }
       return damage;
+    }
+  }
+
+  private righteousnessDamage(attacker: Character): damageTakenInterface {
+    const damage = 219 + (0.7143 * attacker.spellDamage)
+    return {
+      circumstance: this.name,
+      damageAmount: damage,
+      damageType: DamageType.holy,
+      comment: 'Judgement of Righteousness'
     }
   }
 

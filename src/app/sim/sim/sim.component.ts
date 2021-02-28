@@ -20,6 +20,7 @@ export class SimComponent {
   constructor(private combatService: CombatService, private sharedDataService: SharedDataService) { }
 
   ngOnInit(): void {
+    this.sharedDataService.title.next('Sim');
   }
 
   start() {

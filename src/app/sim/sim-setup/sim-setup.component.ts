@@ -13,14 +13,76 @@ export class SimSetupComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  activeBuff(nameOfSpell: string) {
+  activeSpell(nameOfSpell: string) {
     return this.combatService.activeAbilities.has(nameOfSpell) ? '' : 'inactive';
+  }
+
+  activeBuff(nameOfSpell: string) {
+    return this.combatService.activeBuffs.has(nameOfSpell) ? '' : 'inactive';
   }
 
   setSeal(nameOfSeal: string) {
     this.combatService.activeAbilities.delete('Seal of Righteousness')
     this.combatService.activeAbilities.delete('Seal of Vengeance')
     this.combatService.activeAbilities.add(nameOfSeal);
+  }
+
+  setAvengersShield() {
+    if (this.combatService.activeAbilities.has('Avenger\'s Shield')) {
+      this.combatService.activeAbilities.delete('Avenger\'s Shield')
+    } else {
+      this.combatService.activeAbilities.add('Avenger\'s Shield')
+    }
+  }
+
+  setRetributionAura(rank: number) {
+    const activeSpells = this.combatService.activeAbilities.values()
+    let done = false;
+    let wipeAll = false;
+    while (!done) {
+      const ability = activeSpells.next()
+      if (ability.done) {
+        done = true;
+      } else {
+        const match = ability.value.match(/Retribution Aura - (\d){1}/)
+        if (match && match[1]) {
+          if (+match[1] === +rank) {
+            wipeAll = true;
+          }
+        }
+      }
+    }
+    this.combatService.activeAbilities.delete('Retribution Aura - 0')
+    this.combatService.activeAbilities.delete('Retribution Aura - 1')
+    this.combatService.activeAbilities.delete('Retribution Aura - 2')
+    if (!wipeAll) {
+      this.combatService.activeAbilities.add(`Retribution Aura - ${rank}`)
+    }
+  }
+
+  setSanctityAura(rank: number) {
+    const activeBuffs = this.combatService.activeBuffs.values()
+    let done = false;
+    let wipeAll = false;
+    while (!done) {
+      const ability = activeBuffs.next()
+      if (ability.done) {
+        done = true;
+      } else {
+        const match = ability.value.match(/Sanctity Aura - (\d){1}/)
+        if (match && match[1]) {
+          if (+match[1] === +rank) {
+            wipeAll = true;
+          }
+        }
+      }
+    }
+    this.combatService.activeBuffs.delete('Sanctity Aura - 0')
+    this.combatService.activeBuffs.delete('Sanctity Aura - 1')
+    this.combatService.activeBuffs.delete('Sanctity Aura - 2')
+    if (!wipeAll) {
+      this.combatService.activeBuffs.add(`Sanctity Aura - ${rank}`)
+    }
   }
 
 }

@@ -2,11 +2,22 @@
   filter: grayscale(100%);
 }
 
-img {
+img, .icon {
   width: 45px;
+  height: 45px;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .center {
   display: flex;
   align-items: center;
+}
+
+.padding-left {
+  margin-left: 20px;
+}
+
+.padding-left-sm {
+  padding-left: 10px;
 }

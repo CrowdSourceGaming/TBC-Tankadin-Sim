@@ -30,6 +30,7 @@ export class CharacterConfigComponent implements OnInit {
   currentRaceValue: string = '';
 
   ngOnInit(): void {
+    this.sharedDataService.title.next('Character');
     this.sharedDataService.character.subscribe(character => {
       this.currentRaceValue = character.race.name
       this.character = character;

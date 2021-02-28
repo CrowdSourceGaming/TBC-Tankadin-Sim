@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute } from '@angular/router';
 import { GearSlots } from '../character/gearslot';
+import { SharedDataService } from '../shared/shared-data.service';
 
 const tabs = {
   [GearSlots.head]: 0,
@@ -38,9 +39,10 @@ export class GearSlotComponent implements AfterViewInit {
 
   activeTabIndex = 0;
 
-  constructor(private router: ActivatedRoute) { }
+  constructor(private sharedDataService: SharedDataService, private router: ActivatedRoute) { }
 
   ngAfterViewInit(): void {
+    this.sharedDataService.title.next('Gear');
     const slot: GearSlots = this.router.snapshot.params.slot
     this.tabGroup.selectedIndex = tabs[GearSlots[slot as keyof typeof GearSlots]];
   }

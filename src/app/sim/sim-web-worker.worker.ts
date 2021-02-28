@@ -7,6 +7,7 @@ import { AvengersShield } from "../character/abilities/avengers-shield";
 import { Consecration } from "../character/abilities/consecration";
 import { HolyShield } from "../character/abilities/holy-shield";
 import { Judgement } from "../character/abilities/judgement";
+import { RetributionAura } from "../character/abilities/retribution-aura";
 import { SealOfRighteousness } from "../character/abilities/seal-of-righteousness";
 import { SealOfVengeance } from "../character/abilities/seal-of-vengeance";
 import { Character } from "../character/character";
@@ -25,9 +26,20 @@ let creature: any;
 let casting: boolean;
 let activeAbilities: Set<string>;
 let stopCasting: number = 0;
+let buffs: Set<string>
+let retributionRank = 0;
 
 addEventListener('message', ({ data }) => {
   activeAbilities = data.activeAbilities;
+  buffs = data.buffs;
+  activeAbilities.forEach(value => {
+    const match = value.match(/Retribution Aura - (\d)/)
+    if(match && match[1]){
+      retributionRank = +match[1];
+      activeAbilities.delete(value);
+      activeAbilities.add('Retribution Aura')
+    }
+  });
   const multipleCombatSessions: SimulationResults[] = new Array();
   for (let k = 0; k < 250; k++) {
     casting = false;
@@ -45,12 +57,13 @@ addEventListener('message', ({ data }) => {
       consecration: new Consecration(),
       judgement: new Judgement(),
       as: new AvengersShield(),
-      SoR: new SealOfRighteousness()
+      SoR: new SealOfRighteousness(),
+      retAura: new RetributionAura(retributionRank)
     }
     registeredAbilities = {
       playerAbilities: [abilities.SoR, abilities.as, abilities.attack, abilities.judgement, abilities.SoV, abilities.holyShield, abilities.consecration],
       bossAbilities: [abilities.bossAttack],
-      reactiveAbilities: [abilities.holyShield]
+      reactiveAbilities: [abilities.holyShield, abilities.retAura]
     }
     onGCD = { value: false, timeUpdated: 0 }
     const results: any[] = [];
@@ -235,12 +248,13 @@ function shouldAttack(attackSpeed: number, timeElapsed: number, lastAttackTime: 
 
 function modifyDamage(character: Character, damage: damageTakenInterface) {
   if (damage.damageType === DamageType.holy) {
-    if (character.buffs['Sanctity Aura'] || character.buffs['Improved Sanctity Aura']) {
+    if (buffs.has('Sanctity Aura - 0')) {
       damage.damageAmount = damage.damageAmount * 1.10
+    } else if (buffs.has('Sanctity Aura - 1')) {
+      damage.damageAmount = damage.damageAmount * 1.11
+    } else if (buffs.has('Sanctity Aura - 2')) {
+      damage.damageAmount = damage.damageAmount * 1.12
     }
-  }
-  if (character.buffs['Improved Sanctity Aura']) {
-    damage.damageAmount = damage.damageAmount * 1.02
   }
   if (character.spec.talents.oneHandedSpec > 0) {
     damage.damageAmount = damage.damageAmount * (1 + (character.spec.talents.oneHandedSpec / 100))

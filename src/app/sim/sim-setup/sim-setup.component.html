@@ -1,11 +1,30 @@
-<h3>Bonuses</h3>
-<h4>Buffs</h4>
+<h3>Configuration</h3>
+<!-- <h4>Buffs</h4> -->
 <div class="flex-grid center">
-  <div class="">seal:</div>
-  <img (click)="setSeal('Seal of Vengeance')" [ngClass]="activeBuff('Seal of Vengeance')" src="assets/sov.png">
-  <img (click)="setSeal('Seal of Righteousness')" [ngClass]="activeBuff('Seal of Righteousness')" src="assets/sor.png">
+  <div>
+    <div class="">seal:</div>
+    <img (click)="setSeal('Seal of Vengeance')" [ngClass]="activeSpell('Seal of Vengeance')" src="assets/sov.png">
+    <img (click)="setSeal('Seal of Righteousness')" [ngClass]="activeSpell('Seal of Righteousness')"
+      src="assets/sor.png">
+  </div>
+  <div class="padding-left">
+    <div>auras:</div>
+    <div class="flex-grid">
+      <div (click)="setSanctityAura(0)" [ngClass]="activeBuff('Sanctity Aura - 0')" class="icon" style="background-image: url('assets/sa.png')">0</div>
+      <div (click)="setSanctityAura(1)" [ngClass]="activeBuff('Sanctity Aura - 1')" class="icon" style="background-image: url('assets/sa.png')">1</div>
+      <div (click)="setSanctityAura(2)" [ngClass]="activeBuff('Sanctity Aura - 2')" class="icon" style="background-image: url('assets/sa.png')">2</div>
+      <div class="padding-left-sm"></div>
+      <div (click)="setRetributionAura(0)"[ngClass]="activeSpell('Retribution Aura - 0')" class="icon" style="background-image: url('assets/ret-aura.png')">0</div>
+      <div (click)="setRetributionAura(1)"[ngClass]="activeSpell('Retribution Aura - 1')" class="icon" style="background-image: url('assets/ret-aura.png')">1</div>
+      <div (click)="setRetributionAura(2)"[ngClass]="activeSpell('Retribution Aura - 2')" class="icon" style="background-image: url('assets/ret-aura.png')">2</div>
+    </div>
+  </div>
+  <div class="padding-left">
+    <div>spells:</div>
+    <div (click)="setAvengersShield()"[ngClass]="activeSpell('Avenger\'s Shield')" class="icon" style="background-image: url('assets/as.png')"></div>
+  </div>
 </div>
-<h4>Debuffs</h4>
-<div>
+<!-- <h4>Debuffs</h4> -->
+<!-- <div>
 
-</div>
+</div> -->

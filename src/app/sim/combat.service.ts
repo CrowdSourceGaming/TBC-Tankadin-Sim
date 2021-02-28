@@ -14,6 +14,7 @@ export class CombatService {
   precast = ['Seal of Vengeance', 'Avenger\'s Shield']
   spellPriority = ['Holy Shield', 'Avenger\'s Shield', 'Judgement', 'Consecration', 'Seal of Vengeance', 'Seal of Righteousness']
   activeAbilities = new Set(['Attack', 'Holy Shield', 'Avenger\'s Shield', 'Judgement', 'Consecration', 'Seal of Vengeance'])
+  activeBuffs = new Set<string>()
 
   pool: Worker[] = new Array();
   webWorker: Worker;
@@ -35,7 +36,7 @@ export class CombatService {
       this.combatResults.next(result.data);
       console.log('finished combat simulation in ', new Date().getTime() - startTime.getTime(), ' ms');
     })
-    this.webWorker.postMessage({ character: character, activeAbilities: this.activeAbilities, spellPriority: this.spellPriority, precast: this.precast, timeToRun: timeToRun })
+    this.webWorker.postMessage({ character: character, activeAbilities: this.activeAbilities, spellPriority: this.spellPriority, precast: this.precast, timeToRun: timeToRun, buffs: this.activeBuffs })
   }
 
   sortForDamage(fullRunValues: SimResults[], burst: boolean): SimResults[] {
