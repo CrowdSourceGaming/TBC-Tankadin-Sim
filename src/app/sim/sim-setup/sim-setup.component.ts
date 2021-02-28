@@ -21,10 +21,30 @@ export class SimSetupComponent implements OnInit {
     return this.combatService.activeBuffs.has(nameOfSpell) ? '' : 'inactive';
   }
 
+  activeDebuff(nameOfSpell: string) {
+    return this.combatService.activeDebuffs.has(nameOfSpell) ? '' : 'inactive';
+  }
+
   setSeal(nameOfSeal: string) {
     this.combatService.activeAbilities.delete('Seal of Righteousness')
     this.combatService.activeAbilities.delete('Seal of Vengeance')
     this.combatService.activeAbilities.add(nameOfSeal);
+  }
+
+  setDebuff(nameOfDebuff: string) {
+    if (this.combatService.activeDebuffs.has(nameOfDebuff)) {
+      this.combatService.activeDebuffs.delete(nameOfDebuff)
+    } else {
+      this.combatService.activeDebuffs.add(nameOfDebuff)
+    }
+  }
+
+  setBuff(nameOfBuff: string){
+    if (this.combatService.activeBuffs.has(nameOfBuff)) {
+      this.combatService.activeBuffs.delete(nameOfBuff)
+    } else {
+      this.combatService.activeBuffs.add(nameOfBuff)
+    }
   }
 
   setAvengersShield() {

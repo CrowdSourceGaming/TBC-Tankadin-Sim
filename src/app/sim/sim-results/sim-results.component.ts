@@ -11,6 +11,7 @@ import { CombatService, SimResults, TimeSlotResults } from '../combat.service';
 export class SimResultsComponent implements OnInit {
 
   showGraph: boolean = false;
+  runningSimulation: boolean = false;
 
   dataSource: MatTableDataSource<SimResultsGraphInterface> = new MatTableDataSource(new Array());
 
@@ -21,10 +22,12 @@ export class SimResultsComponent implements OnInit {
   showColumns = ['valueType', 'min', 'onePercentLow', 'fivePercentLow', 'average', 'max']
 
   ngOnInit(): void {
+    this.combatService.runningSimulation.subscribe((runningSim) => { this.runningSimulation = runningSim })
     this.combatService.combatResults.subscribe((combatResults: SimResults[]) => {
       if (combatResults[0]) {
         const dataTable = this.translateDataToTable(combatResults);
         this.dataSource.data = dataTable;
+        this.showGraph = true;
       }
     })
   }

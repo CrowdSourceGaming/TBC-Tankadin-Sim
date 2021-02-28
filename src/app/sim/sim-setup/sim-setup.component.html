@@ -1,30 +1,38 @@
-<h3>Configuration</h3>
+<h3 class="center">Configuration</h3>
 <!-- <h4>Buffs</h4> -->
-<div class="flex-grid center">
-  <div>
-    <div class="">seal:</div>
-    <img (click)="setSeal('Seal of Vengeance')" [ngClass]="activeSpell('Seal of Vengeance')" src="assets/sov.png">
-    <img (click)="setSeal('Seal of Righteousness')" [ngClass]="activeSpell('Seal of Righteousness')"
-      src="assets/sor.png">
-  </div>
-  <div class="padding-left">
-    <div>auras:</div>
-    <div class="flex-grid">
-      <div (click)="setSanctityAura(0)" [ngClass]="activeBuff('Sanctity Aura - 0')" class="icon" style="background-image: url('assets/sa.png')">0</div>
-      <div (click)="setSanctityAura(1)" [ngClass]="activeBuff('Sanctity Aura - 1')" class="icon" style="background-image: url('assets/sa.png')">1</div>
-      <div (click)="setSanctityAura(2)" [ngClass]="activeBuff('Sanctity Aura - 2')" class="icon" style="background-image: url('assets/sa.png')">2</div>
-      <div class="padding-left-sm"></div>
-      <div (click)="setRetributionAura(0)"[ngClass]="activeSpell('Retribution Aura - 0')" class="icon" style="background-image: url('assets/ret-aura.png')">0</div>
-      <div (click)="setRetributionAura(1)"[ngClass]="activeSpell('Retribution Aura - 1')" class="icon" style="background-image: url('assets/ret-aura.png')">1</div>
-      <div (click)="setRetributionAura(2)"[ngClass]="activeSpell('Retribution Aura - 2')" class="icon" style="background-image: url('assets/ret-aura.png')">2</div>
+<div>
+  <div class="flex-grid">
+    <div>
+      <div class="">seal:</div>
+      <a data-wowhead="spell=31801"><img (click)="setSeal('Seal of Vengeance')" [ngClass]="activeSpell('Seal of Vengeance')" src="assets/sov.png"></a>
+      <a data-wowhead="spell=27155"><img (click)="setSeal('Seal of Righteousness')" [ngClass]="activeSpell('Seal of Righteousness')" src="assets/sor.png"></a>
+
+    </div>
+    <div class="padding-left">
+      <div>auras:</div>
+      <div class="flex-grid">
+        <a data-wowhead="spell=20218"><div (click)="setSanctityAura(0)" [ngClass]="activeBuff('Sanctity Aura - 0')" class="icon" style="background-image: url('assets/sa.png')">0</div></a>
+        <a data-wowhead="spell=31869"><div (click)="setSanctityAura(1)" [ngClass]="activeBuff('Sanctity Aura - 1')" class="icon" style="background-image: url('assets/sa.png')">1</div></a>
+        <a data-wowhead="spell=31870"><div (click)="setSanctityAura(2)" [ngClass]="activeBuff('Sanctity Aura - 2')" class="icon" style="background-image: url('assets/sa.png')">2</div></a>
+        <div class="padding-left-sm"></div>
+        <a data-wowhead="spell=27150"><div (click)="setRetributionAura(0)"[ngClass]="activeSpell('Retribution Aura - 0')" class="icon" style="background-image: url('assets/ret-aura.png')">0</div></a>
+        <a data-wowhead="spell=20091"><div (click)="setRetributionAura(1)"[ngClass]="activeSpell('Retribution Aura - 1')" class="icon" style="background-image: url('assets/ret-aura.png')">1</div></a>
+        <a data-wowhead="spell=20092"><div (click)="setRetributionAura(2)"[ngClass]="activeSpell('Retribution Aura - 2')" class="icon" style="background-image: url('assets/ret-aura.png')">2</div></a>
+      </div>
+    </div>
+    <div class="padding-left">
+      <div>spells:</div>
+      <a data-wowhead="spell=32700"><div (click)="setAvengersShield()"[ngClass]="activeSpell('Avenger\'s Shield')" class="icon" style="background-image: url('assets/as.png')"></div></a>
     </div>
   </div>
-  <div class="padding-left">
-    <div>spells:</div>
-    <div (click)="setAvengersShield()"[ngClass]="activeSpell('Avenger\'s Shield')" class="icon" style="background-image: url('assets/as.png')"></div>
-  </div>
-</div>
-<!-- <h4>Debuffs</h4> -->
-<!-- <div>
 
-</div> -->
+  <h4>Debuffs</h4>
+  <div class="flex-grid">
+    <a data-wowhead="spell=33195"><img (click)="setDebuff('Misery')" [ngClass]="activeDebuff('Misery')" src="assets/misery.png"></a>
+    <div class="padding-left-sm"></div>
+    <a data-wowhead="spell=27159"><img (click)="setDebuff('Judgement of the Crusader')" [ngClass]="activeDebuff('Judgement of the Crusader')" src="assets/crusader.png"></a>
+  </div>
+
+  <h4>Buffs</h4>
+  <a data-wowhead="spell=2895"><img (click)="setBuff('Wrath of Air Totem')" [ngClass]="activeBuff('Wrath of Air Totem')" src="assets/wrath-of-air.png"></a>
+</div>

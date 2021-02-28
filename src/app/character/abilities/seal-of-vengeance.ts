@@ -31,7 +31,12 @@ export class SealOfVengeance implements AbilityInterface {
           defender.debuffs[this.name].lastStackAppliedTimestamp = timeElapsed
           let currentStacks = defender.debuffs[this.name].stacks;
           if (currentStacks === 5) {
-            // apply melee damage
+            const damage = (150 / 15 + (attacker.spellDamage * 0.034)) * attacker.attackSpeed
+            return {
+              circumstance: 'SoV Melee',
+              damageAmount: damage,
+              damageType: this.magicSchool
+            }
           } else {
             defender.debuffs[this.name].stacks += 1;
           }

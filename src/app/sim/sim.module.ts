@@ -12,6 +12,7 @@ import { MatTableModule } from '@angular/material/table';
 import { SimResultsBarChartComponent } from './sim-results-bar-chart/sim-results-bar-chart.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SimSetupComponent } from './sim-setup/sim-setup.component';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { SimSetupComponent } from './sim-setup/sim-setup.component';
     MatButtonModule,
     BrowserAnimationsModule,
     MatTableModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatProgressSpinnerModule
   ],
 })
 export class SimModule { }

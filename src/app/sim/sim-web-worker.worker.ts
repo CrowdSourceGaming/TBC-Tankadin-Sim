@@ -21,17 +21,19 @@ let lastAutoAttack: any;
 let abilities: any;
 let registeredAbilities: any;
 let onGCD: any;
-let character: any;
+let character: Character;
 let creature: any;
 let casting: boolean;
 let activeAbilities: Set<string>;
 let stopCasting: number = 0;
 let buffs: Set<string>
 let retributionRank = 0;
+let debuffs: Set<string>
 
 addEventListener('message', ({ data }) => {
   activeAbilities = data.activeAbilities;
   buffs = data.buffs;
+  debuffs = data.debuffs;
   activeAbilities.forEach(value => {
     const match = value.match(/Retribution Aura - (\d)/)
     if(match && match[1]){
@@ -45,6 +47,13 @@ addEventListener('message', ({ data }) => {
     casting = false;
     creature = new Creature();
     character = deserialize(data.character, Character);
+    character.additionalStats.spellDamage = 0;
+    if(debuffs.has('Judgement of the Crusader')){
+      character.additionalStats.spellDamage += 219
+    }
+    if(buffs.has('Wrath of Air Totem')){
+      character.additionalStats.spellDamage += 101
+    }
     lastAutoAttack = {  // start the fight with an attack and then track the last hit.
       player: 0,
       creature: 0
@@ -254,6 +263,9 @@ function modifyDamage(character: Character, damage: damageTakenInterface) {
       damage.damageAmount = damage.damageAmount * 1.11
     } else if (buffs.has('Sanctity Aura - 2')) {
       damage.damageAmount = damage.damageAmount * 1.12
+    }
+    if(debuffs.has('Misery')){
+      damage.damageAmount = damage.damageAmount * 1.05;
     }
   }
   if (character.spec.talents.oneHandedSpec > 0) {

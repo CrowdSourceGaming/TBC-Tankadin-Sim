@@ -1,8 +1,11 @@
-.inactive{
+@import "src/styles_variables.scss";
+
+.inactive {
   filter: grayscale(100%);
 }
 
-img, .icon {
+img,
+.icon {
   width: 45px;
   height: 45px;
   background-repeat: no-repeat;
@@ -20,4 +23,20 @@ img, .icon {
 
 .padding-left-sm {
   padding-left: 10px;
+}
+
+a {
+  color: white;
+}
+
+a:visited {
+  color: white;
+}
+
+a:hover {
+  color: white;
+}
+
+a:active {
+  color: white;
 }

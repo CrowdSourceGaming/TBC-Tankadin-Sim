@@ -15,6 +15,8 @@ export class CombatService {
   spellPriority = ['Holy Shield', 'Avenger\'s Shield', 'Judgement', 'Consecration', 'Seal of Vengeance', 'Seal of Righteousness']
   activeAbilities = new Set(['Attack', 'Holy Shield', 'Avenger\'s Shield', 'Judgement', 'Consecration', 'Seal of Vengeance'])
   activeBuffs = new Set<string>()
+  activeDebuffs = new Set<string>();
+  runningSimulation = new BehaviorSubject<boolean>(false);
 
   pool: Worker[] = new Array();
   webWorker: Worker;
@@ -28,6 +30,7 @@ export class CombatService {
   FULL_DURATION_SECONDS = ((120 * 1000) + (this.precast.length * 1500)) / 10;
 
   startCombat(timeToRun: number): void {
+    this.runningSimulation.next(true);
     this.FULL_DURATION_SECONDS = timeToRun / 1000;
     console.log('starting combat simulation');
     const startTime = new Date();
@@ -35,8 +38,14 @@ export class CombatService {
     this.webWorker.onmessage = ((result: MessageEvent<SimResults[]>) => {
       this.combatResults.next(result.data);
       console.log('finished combat simulation in ', new Date().getTime() - startTime.getTime(), ' ms');
+      this.runningSimulation.next(false);
     })
-    this.webWorker.postMessage({ character: character, activeAbilities: this.activeAbilities, spellPriority: this.spellPriority, precast: this.precast, timeToRun: timeToRun, buffs: this.activeBuffs })
+    this.webWorker.postMessage(
+      {
+        character: character, activeAbilities: this.activeAbilities,
+        spellPriority: this.spellPriority, precast: this.precast,
+        timeToRun: timeToRun, buffs: this.activeBuffs, debuffs: this.activeDebuffs
+      })
   }
 
   sortForDamage(fullRunValues: SimResults[], burst: boolean): SimResults[] {

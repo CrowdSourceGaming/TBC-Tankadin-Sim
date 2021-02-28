@@ -16,6 +16,7 @@ export class Character {
   level = 70;
   @JsonProperty() buffs: { [key: string]: any } = {}
   @JsonProperty() debuffs: { [key: string]: any } = {}
+  @JsonProperty() additionalStats: ItemStats = {};
 
 
   constructor(race: Races = Races.human) {
@@ -37,6 +38,7 @@ export class Character {
       this.spec.getValues()[stat] || 0,
       this.race.stats[stat] || 0,
       this.raceBonuses[stat] || 0,
+      this.additionalStats[stat] || 0,
       this.calculateGearStats(stat)])
   }
 
