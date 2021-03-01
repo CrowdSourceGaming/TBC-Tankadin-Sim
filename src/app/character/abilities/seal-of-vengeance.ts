@@ -5,6 +5,7 @@ import { Creature } from "src/app/sim/creature";
 import { Character } from "../character";
 
 export class SealOfVengeance implements AbilityInterface {
+  id = 31801
   magicSchool: DamageType;
   name: string;
   onGCD: boolean;
@@ -30,7 +31,12 @@ export class SealOfVengeance implements AbilityInterface {
           defender.debuffs[this.name].lastStackAppliedTimestamp = timeElapsed
           let currentStacks = defender.debuffs[this.name].stacks;
           if (currentStacks === 5) {
-            // apply melee damage
+            const damage = (150 / 15 + (attacker.spellDamage * 0.034)) * attacker.attackSpeed
+            return {
+              circumstance: 'SoV Melee',
+              damageAmount: damage,
+              damageType: this.magicSchool
+            }
           } else {
             defender.debuffs[this.name].stacks += 1;
           }
@@ -40,7 +46,6 @@ export class SealOfVengeance implements AbilityInterface {
   }
   onCast(attacker: Character, defender: Creature, timeElapsed: number): boolean {
     if (!attacker.buffs[this.name] || attacker.buffs[this.name].active === false || attacker.buffs[this.name].expires - 5000 <= timeElapsed) {
-      console.log(`${timeElapsed} - casted: ${this.name}`)
       attacker.buffs[this.name] = { active: true, expires: timeElapsed + 30000 }
       return true;
     }

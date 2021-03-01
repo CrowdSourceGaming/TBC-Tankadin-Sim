@@ -1,202 +1,92 @@
 import { Injectable } from '@angular/core';
-import { Attack } from '../character/abilities/attack';
-import { HolyShield } from '../character/abilities/holy-shield';
-import { SealOfVengeance } from '../character/abilities/seal-of-vengeance';
-import { Character } from '../character/character';
-import { AbilityInterface, damageTakenInterface, BossAbilityInterface } from '../shared/abilityInterface';
-import { AttackTable, AttackTableEnum } from '../shared/attack-table';
-import { DamageType } from '../shared/magic-school';
-import { BossAttack } from './boss-abilities/boss-attack';
+import { BehaviorSubject } from 'rxjs';
+import { SaveService } from '../save.service';
+import { damageTakenInterface } from '../shared/abilityInterface';
+import { SharedDataService } from '../shared/shared-data.service';
 import { Creature } from './creature';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CombatService {
+  combatResults: BehaviorSubject<SimResults[]> = new BehaviorSubject(new Array());
+  openingBurstResults: BehaviorSubject<Array<TimeSlotResults[]>> = new BehaviorSubject(new Array());
+  precast = ['Seal of Vengeance', 'Avenger\'s Shield']
+  spellPriority = ['Holy Shield', 'Avenger\'s Shield', 'Judgement', 'Consecration', 'Seal of Vengeance', 'Seal of Righteousness']
+  activeAbilities = new Set(['Attack', 'Holy Shield', 'Avenger\'s Shield', 'Judgement', 'Consecration', 'Seal of Vengeance'])
+  activeBuffs = new Set<string>()
+  activeDebuffs = new Set<string>();
+  runningSimulation = new BehaviorSubject<boolean>(false);
 
-  playerDamageTaken = [];
-  creatureDamageTaken = [];
+  pool: Worker[] = new Array();
+  webWorker: Worker;
 
-  spellPriority = ['Holy Shield', 'Seal of Vengeance']
-  onGCD = { value: false, timeUpdated: 0 };
-
-  lastAutoAttack!: { player: number; creature: number; };
-
-  registeredAbilities!: registeredAbilitiesInterface;
-
-  startTime!: number;
-
-  constructor() { }
-
-  startCombat(character: Character, creature: Creature, timeToRun: number): TimeSlotResults[] {
-    this.lastAutoAttack = {  // start the fight with an attack and then track the last hit.
-      player: -99999999999,
-      creature: -99999999999
-    }
-    this.registeredAbilities = {
-      playerAbiliities: [new Attack(), new SealOfVengeance(), new HolyShield()],
-      bossAbilities: [new BossAttack()]
-    }
-    this.onGCD = { value: false, timeUpdated: 0 }
-    this.startTime = Date.now();
-    const results: TimeSlotResults[] = [];
-    for (let i = 0; i < timeToRun; i += 10) {
-      const result: TimeSlotResults = {
-        damageTaken: [],
-        damageDone: []
-      }
-      if (this.onGCD.value === true && this.onGCD.timeUpdated + 1500 <= i) {
-        this.onGCD.value = false;
-        this.onGCD.timeUpdated = i;
-      }
-      const rollResult: AttackTableEnum | false = this.playerAutoAttackCreature(character, creature, i)
-      this.castAllAvailableAbilities(character, creature, i);
-      this.registeredAbilities.playerAbiliities.forEach((ability: AbilityInterface) => {
-        this.triggerPlayerAbility(rollResult, ability, character, creature, result, i)
-      });
-      const enemyRollResult: AttackTableEnum | false = this.creatureAutoAttackPlayer(creature, character, i)
-      this.registeredAbilities.bossAbilities.forEach((ability: BossAbilityInterface) => {
-        this.triggerBossAbility(enemyRollResult, ability, creature, character, result, i)
-      });
-      results.push(result);
-    }
-    return results;
+  constructor(private sharedDataService: SharedDataService) {
+    this.webWorker = new Worker('./sim-web-worker.worker.ts', { type: `module` })
   }
 
-  private castAllAvailableAbilities(character: Character, creature: Creature, i: number) {
-    for (let spellName of this.spellPriority) {
-      const ability = this.registeredAbilities.playerAbiliities.find(ability => ability.name === spellName)!;
-      if (ability.onGCD && this.onGCD.value) {
-        // DO NOTHING
-      } else {
-        const triggerGCD = ability.onCast(character, creature, i);
-        if (triggerGCD) {
-          this.onGCD = { value: true, timeUpdated: i };
-        }
-      }
-    }
+  BURST_SECONDS = 10;
+  BURST_COUNT = ((this.BURST_SECONDS * 1000) + (this.precast.length * 1500)) / 10;
+  FULL_DURATION_SECONDS = ((120 * 1000) + (this.precast.length * 1500)) / 10;
+
+  startCombat(timeToRun: number): void {
+    this.runningSimulation.next(true);
+    this.FULL_DURATION_SECONDS = timeToRun / 1000;
+    console.log('starting combat simulation');
+    const startTime = new Date();
+    const character = this.sharedDataService.character.value;
+    this.webWorker.onmessage = ((result: MessageEvent<SimResults[]>) => {
+      this.combatResults.next(result.data);
+      console.log('finished combat simulation in ', new Date().getTime() - startTime.getTime(), ' ms');
+      this.runningSimulation.next(false);
+    })
+    this.webWorker.postMessage(
+      {
+        character: character, activeAbilities: this.activeAbilities,
+        spellPriority: this.spellPriority, precast: this.precast,
+        timeToRun: timeToRun, buffs: this.activeBuffs, debuffs: this.activeDebuffs
+      })
   }
 
-  private triggerPlayerAbility(rollResult: AttackTableEnum | false, ability: AbilityInterface, attacker: Character, defender: Creature, result: TimeSlotResults, timeElapsed: number) {
-    if (rollResult) {
-      const onHitEffect = ability.onHit(rollResult, attacker, defender, timeElapsed);
-      if (onHitEffect) {
-        this.modifyDamage(attacker, onHitEffect)
-        result.damageDone.push(onHitEffect);
-      }
-    }
-    const onCheckEffect = ability.onCheck(attacker, defender, timeElapsed)
-    if (onCheckEffect) {
-      this.modifyDamage(attacker, onCheckEffect)
-      result.damageDone.push(onCheckEffect);
-    }
+  sortForDamage(fullRunValues: SimResults[], burst: boolean): SimResults[] {
+    return fullRunValues.sort((a, b) => this.totalDamageForRun(a, burst) - this.totalDamageForRun(b, burst));
   }
 
-  private triggerBossAbility(rollResult: AttackTableEnum | false, ability: BossAbilityInterface, attacker: Creature, defender: Character, result: TimeSlotResults, timeElapsed: number) {
-    if (rollResult) {
-      const onHitEffect = ability.onHit(rollResult, attacker, defender);
-      onHitEffect ? result.damageTaken.push(onHitEffect) : null;
-    }
-    const onCheckEffect = ability.onCheck(attacker, defender, timeElapsed)
-    onCheckEffect ? result.damageTaken.push(onCheckEffect) : null;
+  sortForThreat(fullRunValues: SimResults[], burst: boolean): SimResults[] {
+    return fullRunValues.sort((a, b) => this.totalThreatForRun(a, burst) - this.totalThreatForRun(b, burst));
   }
 
-  private playerAutoAttackCreature(character: Character, creature: Creature, timeElapsed: number): AttackTableEnum | false {
-    const weaponSpeed = character.attackSpeed;
-    if (this.shouldAttack(weaponSpeed, timeElapsed, this.lastAutoAttack.player, 'player')) {
-      const rollResult = this.attackRoll(character.attackTable)
-      this.lastAutoAttack.player = timeElapsed;
-      return rollResult
-    } else {
-      return false;
+  totalDamageForRun(run: SimResults, burst: boolean) {
+    if (burst) {
+      return run.simResults.slice(0, this.BURST_COUNT).reduce((a, b) => a + b.damageDone.reduce((c, d) => c + d.damageAmount, 0), 0)
     }
+    return run.simResults.reduce((a, b) => a + b.damageDone.reduce((c, d) => c + d.damageAmount, 0), 0)
   }
 
-  private creatureAutoAttackPlayer(creature: Creature, character: Character, timeElapsed: number): AttackTableEnum | false {
-    const weaponSpeed = creature.attackSpeed;
-    if (this.shouldAttack(weaponSpeed, timeElapsed, this.lastAutoAttack.creature, 'creature')) {
-      const attackTable: AttackTable = {
-        miss: creature.AttackTable[AttackTableEnum.miss] + character.missChance,
-        dodge: creature.AttackTable[AttackTableEnum.dodge] + character.dodgeChance,
-        parry: creature.AttackTable[AttackTableEnum.parry] + character.parry,
-        glancing: 0,
-        block: creature.AttackTable[AttackTableEnum.block] + character.blockChance,
-        crit: creature.AttackTable[AttackTableEnum.crit] - character.critReduction,
-        crushing: creature.AttackTable[AttackTableEnum.crushing],
-        hit: 0
-      }
-      const rollResult = this.attackRoll(attackTable)
-      this.lastAutoAttack.creature = timeElapsed;
-      return rollResult
-    } else {
-      return false;
+  totalThreatForRun(run: SimResults, burst: boolean) {
+    if (burst) {
+      return run.simResults.slice(0, this.BURST_COUNT).reduce((a, b) => a + b.damageDone.reduce((c, d) => c + (d.threat || 0), 0), 0)
     }
+    return run.simResults.reduce((a, b) => a + b.damageDone.reduce((c, d) => c + (d.threat || 0), 0), 0)
   }
 
-  private attackRoll(attackTable: AttackTable): AttackTableEnum {
-    let roll = Math.random() * 100
-    for (let attackOutcome of Object.keys(attackTable)) {
-      const rollRange = attackTable[attackOutcome as keyof typeof attackTable]
-      if (roll <= rollRange) {
-        return AttackTableEnum[attackOutcome as keyof typeof AttackTableEnum];
-      } else {
-        roll -= rollRange
-      }
-    };
-    return AttackTableEnum.hit;
+  tpsForRun(run: SimResults, burst: boolean) {
+    return this.totalThreatForRun(run, burst) / (burst ? this.BURST_SECONDS : this.FULL_DURATION_SECONDS)
   }
 
-  private shouldAttack(attackSpeed: number, timeElapsed: number, lastAttackTime: number, attacker: string): boolean {
-    const attack = (lastAttackTime + (attackSpeed * 1000) <= timeElapsed)
-    if (attack) {
-      if (attacker === 'player') {
-        this.lastAutoAttack.player = timeElapsed;
-      } else {
-        this.lastAutoAttack.creature = timeElapsed;
-      }
-    }
-    return attack;
-  }
-
-  private modifyDamage(character: Character, damage: damageTakenInterface) {
-    if (damage.damageType === DamageType.holy) {
-      if (character.buffs['Sanctity Aura'] || character.buffs['Improved Sanctity Aura']) {
-        damage.damageAmount = damage.damageAmount * 1.10
-      }
-    }
-    if (character.buffs['Improved Sanctity Aura']) {
-      damage.damageAmount = damage.damageAmount * 1.02
-    }
-    if (character.spec.talents.oneHandedSpec > 0) {
-      damage.damageAmount = damage.damageAmount * (1 + (character.spec.talents.oneHandedSpec / 100))
-    }
-    if (character.spec.talents.crusade > 0) {
-      damage.damageAmount = damage.damageAmount * (1 + (character.spec.talents.crusade / 100))
-    }
-    damage.damageAmount = Math.round(damage.damageAmount);
+  dpsForRun(run: SimResults, burst: boolean) {
+    return this.totalDamageForRun(run, burst) / (burst ? this.BURST_SECONDS : this.FULL_DURATION_SECONDS)
   }
 }
 
 
-
+export interface SimResults {
+  runNumber: number,
+  simResults: TimeSlotResults[]
+}
 
 
 export interface TimeSlotResults {
   damageDone: damageTakenInterface[],
   damageTaken: damageTakenInterface[]
 }
-
-enum AvoidableBy {
-  block = "block",
-  parry = "parry",
-  miss = "miss",
-  dodge = "dodge",
-  resist = "resist"
-}
-
-interface registeredAbilitiesInterface {
-  playerAbiliities: AbilityInterface[],
-  bossAbilities: BossAbilityInterface[]
-}
-
-

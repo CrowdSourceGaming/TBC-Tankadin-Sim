@@ -1,0 +1,42 @@
+@import "src/styles_variables.scss";
+
+.inactive {
+  filter: grayscale(100%);
+}
+
+img,
+.icon {
+  width: 45px;
+  height: 45px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+}
+
+.padding-left {
+  margin-left: 20px;
+}
+
+.padding-left-sm {
+  padding-left: 10px;
+}
+
+a {
+  color: white;
+}
+
+a:visited {
+  color: white;
+}
+
+a:hover {
+  color: white;
+}
+
+a:active {
+  color: white;
+}

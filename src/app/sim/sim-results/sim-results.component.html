@@ -1,0 +1,45 @@
+<div *ngIf="!runningSimulation; else runningSim">
+  <div *ngIf="showGraph; else runSimulator">
+    <mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="valueType">
+        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="min">
+        <mat-header-cell *matHeaderCellDef>Min</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.min}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="onePercentLow">
+        <mat-header-cell *matHeaderCellDef>1% Lows</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row['1% low']}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="fivePercentLow">
+        <mat-header-cell *matHeaderCellDef>5% Lows</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row['5% low']}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="average">
+        <mat-header-cell *matHeaderCellDef>Average</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.average}}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="max">
+        <mat-header-cell *matHeaderCellDef>Max</mat-header-cell>
+        <mat-cell *matCellDef="let row">{{row.max}}</mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="showColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: showColumns"></mat-row>
+    </mat-table>
+  </div>
+</div>
+<ng-template #runSimulator>
+  <div class="center">
+    Run a simulation to view results
+  </div>
+</ng-template>
+<ng-template #runningSim>
+  <div class="center" style="flex-direction: column;">
+    <mat-spinner></mat-spinner>
+    <div>Simulating 250 fights</div>
+  </div>
+
+</ng-template>

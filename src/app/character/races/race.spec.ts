@@ -1,7 +1,7 @@
-import { Race } from './race';
+import { Race, Races } from './race';
 
 describe('Race', () => {
   it('should create an instance', () => {
-    expect(new Race()).toBeTruthy();
+    expect(new Race(Races.human)).toBeTruthy();
   });
 });

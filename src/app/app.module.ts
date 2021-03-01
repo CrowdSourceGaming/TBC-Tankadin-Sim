@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -35,6 +35,8 @@ import { EnchantsComponent } from './enchants/enchants.component';
 import { CurrentGemsComponent } from './current-gems/current-gems.component';
 import { NewEnchantComponent } from './new-enchant/new-enchant.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { SimModule } from './sim/sim.module';
+import { SimRoutingModule } from './sim/sim-routing.module';
 
 @NgModule({
   declarations: [
@@ -75,22 +77,11 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatExpansionModule,
     MatToolbarModule,
     MatSnackBarModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    SimModule,
+    SimRoutingModule,
+
   ],
-  /*   providers: [
-      {
-        provide: APP_BASE_HREF,
-        useFactory: function () {
-          const location = window.location.pathname.split('/')[1] || '';
-          console.log('location',)
-          if (location !== 'gear' && location !== 'character') {
-            return `/${location}/`
-          } else {
-            return '/'
-          }
-        }
-      }
-    ], */
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -113,3 +113,13 @@ h1 {
 .default-pointer {
   cursor: default;
 }
+
+.full-width {
+  width: 100%
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

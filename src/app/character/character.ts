@@ -5,13 +5,19 @@ import { Race, Races } from "./races/race";
 import { Spec } from "./spec";
 
 import { JsonProperty, Serializable } from 'typescript-json-serializer';
+import { AttackTable } from "../shared/attack-table";
 
 @Serializable()
 export class Character {
   @JsonProperty() spec: Spec;
-  gear: { [key in GearSlots]: Item }
+  @JsonProperty({ type: Item, isDictionary: true }) gear: { [key in GearSlots]: Item }
   @JsonProperty() baseStats: ItemStats;
   @JsonProperty() race: Race
+  level = 70;
+  @JsonProperty() buffs: { [key: string]: any } = {}
+  @JsonProperty() debuffs: { [key: string]: any } = {}
+  @JsonProperty() additionalStats: ItemStats = {};
+
 
   constructor(race: Races = Races.human) {
     this.spec = new Spec();
@@ -32,6 +38,7 @@ export class Character {
       this.spec.getValues()[stat] || 0,
       this.race.stats[stat] || 0,
       this.raceBonuses[stat] || 0,
+      this.additionalStats[stat] || 0,
       this.calculateGearStats(stat)])
   }
 
@@ -100,11 +107,34 @@ export class Character {
     return this.getStatTotal(ItemStatsEnum.armorPenRating) / 5.92
   }
 
+  get weaponDamageMin(): number {
+    const weapon = this.gear.mainHand
+    let damage = weapon.stats.damageMin || 1;
+    damage += this.attackPower / (14 * (weapon.stats.attackSpeed || 2))
+    return damage || 1;
+  }
+
+  get weaponDamageMax(): number {
+    const weapon = this.gear.mainHand
+    let damage = weapon.stats.damageMax || 10;
+    damage += this.attackPower / (14 * (weapon.stats.attackSpeed || 2))
+    return damage || 10;
+  }
+
+  get attackSpeed(): number {
+    return (this.gear.mainHand?.stats?.attackSpeed) || 2;
+  }
+
   /* ************************** DEFENSE *************************** */
   get defense(): number {
     let total = 350 + (this.getStatTotal(ItemStatsEnum.defenseRating) / 2.37);
     total += this.getStatTotal(ItemStatsEnum.defenseValue)
     return total;
+  }
+
+  get critReduction(): number {
+    const reduction = 0 + (0.04 * (this.defense - 350));
+    return reduction > 5.6 ? 0 : reduction
   }
 
   get armor(): number {
@@ -154,24 +184,6 @@ export class Character {
     return this.missChance + this.dodgeChance + this.parry + this.blockChance;
   }
 
-  get weaponDamageMin(): number {
-    const weapon = this.gear.mainHand
-    let damage = weapon.stats.damageMin || 0;
-    damage += this.attackPower / (14 * (weapon.stats.attackSpeed || 0))
-    return damage || 0;
-  }
-
-  get weaponDamageMax(): number {
-    const weapon = this.gear.mainHand
-    let damage = weapon.stats.damageMax || 0;
-    damage += this.attackPower / (14 * (weapon.stats.attackSpeed || 0))
-    return damage || 0;
-  }
-
-  get attackSpeed(): number {
-    return this.gear.mainHand.stats.attackSpeed || 0;
-  }
-
   /* ************************** SPELL *************************** */
   get spellCrit(): number {
     let total = 0;
@@ -184,7 +196,24 @@ export class Character {
     let total = this.getStatTotal(ItemStatsEnum.spellHitRating) / 12.62
     total += this.getStatTotal(ItemStatsEnum.spellHitPercent)
     return total
+  }
 
+  get spellDamage(): number {
+    return this.getStatTotal(ItemStatsEnum.spellDamage);
+  }
+
+
+  get attackTable(): AttackTable {
+    return {
+      miss: 9 - this.hitChance,
+      dodge: 6.5 - (this.expertise / 4), // 1 expertise reduces dodge chance by 0.25%
+      parry: 14 - (this.expertise / 4), // 1 expertise reduces dodge chance by 0.25%,
+      glancing: 25,
+      block: 0, //most bosses can't block
+      crit: 0 + this.meleeCrit,
+      crushing: 0, //characters cannot crush bosses
+      hit: 0 // whatever the rest is
+    }
   }
 
   /* ************************** PRIVATE *************************** */

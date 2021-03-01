@@ -1,0 +1,18 @@
+<div *ngIf="displayChart">
+  <div>
+    <pre><span>Opening Burst </span><mat-slide-toggle color="primary" (change)="updateFullRunToggle($event)" [checked]="fullRun"></mat-slide-toggle><span> Full Run</span></pre>
+  </div>
+
+  <div class="sticky-chart">
+    <ngx-charts-bar-vertical-2d [view]="view" [legend]="legend" [scheme]="colorScheme" [showXAxisLabel]="showXAxisLabel"
+      [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis" [yAxis]="yAxis" [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel" [schemeType]="schemeType" [results]="overallResultsBarChart | async"
+      legendPosition="below" [noBarWhenZero]="noBarWhenZero" [barPadding]="0" [groupPadding]="0"
+      (select)="selectChart($event)">
+      <ng-template #tooltipTemplate let-model="model">
+        <p>{{model.name}}</p>
+        <p>{{model.value | number:'1.0-2'}}</p>
+      </ng-template>
+    </ngx-charts-bar-vertical-2d>
+  </div>
+</div>

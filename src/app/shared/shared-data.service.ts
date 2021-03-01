@@ -9,6 +9,8 @@ import { GemAlterationInterface } from '../gear/gear.service';
 })
 export class SharedDataService {
 
+  title: BehaviorSubject<string> = new BehaviorSubject('');
+
   character: BehaviorSubject<Character> = new BehaviorSubject<Character>(new Character());
   gemLogic!: GemAlterationInterface;
 

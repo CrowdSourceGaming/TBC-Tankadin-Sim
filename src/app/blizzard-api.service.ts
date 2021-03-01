@@ -17,7 +17,6 @@ export class BlizzardApiService {
   constructor(private httpClient: HttpClient) {
     if (!this.blizzardAccessToken) {
       this.login().subscribe(token => {
-        console.log('token', token)
         this.blizzardAccessToken = 'Bearer ' + token.access_token;
       })
     }
@@ -50,7 +49,7 @@ export class BlizzardApiService {
       'Authorization': 'Basic ' + btoa(`${environment.blizzardAPICreds.clientId}:${environment.blizzardAPICreds.clientSecret}`)
     })
 
-    return this.httpClient.get('https://us.battle.net/oauth/token?grant_type=client_credentials', { headers })
+    return this.httpClient.post('https://us.battle.net/oauth/token?grant_type=client_credentials', '', { headers })
   }
 
 

@@ -1,0 +1,13 @@
+<div style="margin-bottom: 30px" class="flex-grid">
+  <div class="flex-fill left">
+    <app-sim-setup></app-sim-setup>
+    <button class="full-width" mat-raised-button color="primary" (click)="start()">Start Sim</button>
+  </div>
+  <div class="flex-fill right">
+    <h3>Sim Results</h3>
+    <app-sim-results></app-sim-results>
+  </div>
+</div>
+<!-- BAR CHART -->
+<app-sim-results-bar-chart (changeDetailChart)="updateDetailChart($event)"></app-sim-results-bar-chart>
+<app-bar-chart [chartToDisplay]="detailChartCommand"></app-bar-chart>
