@@ -1,7 +1,6 @@
 /// <reference lib="webworker" />
 
 import { deserialize } from "typescript-json-serializer";
-import { Ability } from "../character/abilities/ability";
 import { Attack } from "../character/abilities/attack";
 import { AvengersShield } from "../character/abilities/avengers-shield";
 import { Consecration } from "../character/abilities/consecration";
@@ -36,7 +35,7 @@ addEventListener('message', ({ data }) => {
   debuffs = data.debuffs;
   activeAbilities.forEach(value => {
     const match = value.match(/Retribution Aura - (\d)/)
-    if(match && match[1]){
+    if (match && match[1]) {
       retributionRank = +match[1];
       activeAbilities.delete(value);
       activeAbilities.add('Retribution Aura')
@@ -48,10 +47,10 @@ addEventListener('message', ({ data }) => {
     creature = new Creature();
     character = deserialize(data.character, Character);
     character.additionalStats.spellDamage = 0;
-    if(debuffs.has('Judgement of the Crusader')){
+    if (debuffs.has('Judgement of the Crusader')) {
       character.additionalStats.spellDamage += 219
     }
-    if(buffs.has('Wrath of Air Totem')){
+    if (buffs.has('Wrath of Air Totem')) {
       character.additionalStats.spellDamage += 101
     }
     lastAutoAttack = {  // start the fight with an attack and then track the last hit.
@@ -264,7 +263,7 @@ function modifyDamage(character: Character, damage: damageTakenInterface) {
     } else if (buffs.has('Sanctity Aura - 2')) {
       damage.damageAmount = damage.damageAmount * 1.12
     }
-    if(debuffs.has('Misery')){
+    if (debuffs.has('Misery')) {
       damage.damageAmount = damage.damageAmount * 1.05;
     }
   }
