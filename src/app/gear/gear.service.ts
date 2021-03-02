@@ -92,13 +92,13 @@ export class GearService {
         }
         case "replace": {
           const { documentKey, fullDocument, } = change as globalThis.Realm.Services.MongoDB.ReplaceEvent<Item>;
-          const index = currentGearOptions.findIndex((gear) => gear.id === fullDocument._id);
+          const index = currentGearOptions.findIndex((gear) => +gear.id === +fullDocument._id);
           currentGearOptions[index] = fullDocument;
           break;
         }
         case "delete": {
           const { documentKey } = change as globalThis.Realm.Services.MongoDB.DeleteEvent<Item>;
-          const index = currentGearOptions.findIndex((gear) => gear.id === documentKey._id);
+          const index = currentGearOptions.findIndex((gear) => +gear.id === +documentKey._id);
           currentGearOptions.splice(index, 1);
           break;
         }
