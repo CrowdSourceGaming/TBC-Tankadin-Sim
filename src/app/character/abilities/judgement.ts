@@ -68,7 +68,8 @@ export class Judgement implements AbilityInterface {
   }
 
   private righteousnessDamage(attacker: Character): damageTakenInterface {
-    const damage = 219 + (0.7143 * attacker.spellDamage)
+    let damage = 219 + (0.7143 * attacker.spellDamage)
+    damage = damage * (1 + (0.03 * attacker.spec.talents.improvedRighteousFury))
     return {
       circumstance: this.name,
       damageAmount: damage,

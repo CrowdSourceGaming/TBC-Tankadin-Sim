@@ -60,7 +60,7 @@ export class SealOfVengeance implements AbilityInterface {
     }
     if (defender.debuffs[this.name]?.lastDamageAppliedTimestamp + 3000 <= timeElapsed) {
       const numOfStacks = defender.debuffs[this.name].stacks;
-      let damagePer15 = (150 + (attacker.spellDamage * 0.034)) * numOfStacks;
+      let damagePer15 = (150 + (attacker.spellDamage * (0.034 * numOfStacks))) * numOfStacks;
       const damagePerTick = damagePer15 / 5  // one tick every 3 seconds
       defender.debuffs[this.name].lastDamageAppliedTimestamp = timeElapsed;
       return {

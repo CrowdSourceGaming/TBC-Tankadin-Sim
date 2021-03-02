@@ -12,7 +12,8 @@ export class SealOfRighteousness implements AbilityInterface {
   onHit(rollResult: AttackTableEnum, attacker: Character, defender: Creature, timeElapsed: number): void | damageTakenInterface {
     if (attacker.buffs[this.name] && attacker.buffs[this.name].active === true && [AttackTableEnum.hit, AttackTableEnum.crit, AttackTableEnum.glancing].includes(rollResult)) {
       const baseDamage = 0.85 * (2113 * 1.2 * 1.03 * attacker.attackSpeed / 100) + 0.03 * (attacker.weaponDamageMax + attacker.weaponDamageMin) / 2 - 1
-      const spellDamage = baseDamage + (0.092 * attacker.attackSpeed * attacker.spellDamage);
+      let spellDamage = baseDamage + (0.092 * attacker.attackSpeed * attacker.spellDamage);
+      spellDamage = spellDamage * (1 + (0.03 * attacker.spec.talents.improvedRighteousFury))
       return {
         circumstance: this.name,
         damageAmount: spellDamage,
