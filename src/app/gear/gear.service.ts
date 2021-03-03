@@ -87,13 +87,13 @@ export class GearService {
       switch (operationType) {
         case "insert": {
           const { documentKey, fullDocument, } = change as globalThis.Realm.Services.MongoDB.InsertEvent<Item>;
-          currentGearOptions.push(fullDocument);
+          currentGearOptions.push(deserialize(fullDocument, Item));
           break;
         }
         case "replace": {
           const { documentKey, fullDocument, } = change as globalThis.Realm.Services.MongoDB.ReplaceEvent<Item>;
           const index = currentGearOptions.findIndex((gear) => +gear.id === +fullDocument._id);
-          currentGearOptions[index] = fullDocument;
+          currentGearOptions[index] = deserialize(fullDocument, Item);
           break;
         }
         case "delete": {
