@@ -68,7 +68,8 @@ export class Character {
     return this.getStatTotal(ItemStatsEnum.intellect) * 15;
   }
   get totalHealth(): number {
-    return this.getStatTotal(ItemStatsEnum.stamina) * 10;
+    let total = 3237
+    return total + this.getStatTotal(ItemStatsEnum.stamina) * 10;
   }
 
 
