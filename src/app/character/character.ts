@@ -153,10 +153,10 @@ export class Character {
 
   get dodgeChance(): number {
     const agility = this.getStatTotal(ItemStatsEnum.agility);
-    const itemDodge = this.getStatTotal(ItemStatsEnum.dodgeRating) / 18.92;
+    const itemDodge = this.getStatTotal(ItemStatsEnum.dodgeRating) / 18.9231;
     const defenseDodge = this.getStatTotal(ItemStatsEnum.defenseRating) / 59.25;
     const defenseValueDodge = this.getStatTotal(ItemStatsEnum.defenseValue) / (59.25 / 2.36);
-    return 0.7 + (agility / 19.767) + itemDodge + defenseDodge + defenseValueDodge;
+    return 0.65 + (agility / 25) + itemDodge + defenseDodge + defenseValueDodge;
   }
 
   get blockValue(): number {
