@@ -65,11 +65,12 @@ export class Character {
 
   /* ************************** STATS *************************** */
   get totalMana(): number {
-    return this.getStatTotal(ItemStatsEnum.intellect) * 15;
+    let total = 2953 + 20
+    return total + ((this.getStatTotal(ItemStatsEnum.intellect) - 20) * 15);
   }
   get totalHealth(): number {
-    let total = 3237
-    return total + this.getStatTotal(ItemStatsEnum.stamina) * 10;
+    let total = 3397
+    return total + ((this.getStatTotal(ItemStatsEnum.stamina) - 20) * 10);
   }
 
 
@@ -87,16 +88,16 @@ export class Character {
   }
 
   get attackPower(): number {
-    let total = 0;
+    let total = 70 * 3 - 20;
     total += this.getStatTotal(ItemStatsEnum.strength) * 2;
     total += this.getStatTotal(ItemStatsEnum.attackPower);
     return total;
   }
 
   get meleeCrit(): number {
-    let total = 0;
+    let total = 0.65;
     total += this.getStatTotal(ItemStatsEnum.meleeCritRating) / 22.08;
-    total += this.getStatTotal(ItemStatsEnum.agility) / 20;
+    total += this.getStatTotal(ItemStatsEnum.agility) / 25;
     return total;
   }
 
@@ -187,9 +188,9 @@ export class Character {
 
   /* ************************** SPELL *************************** */
   get spellCrit(): number {
-    let total = 0;
-    total += this.getStatTotal(ItemStatsEnum.spellCritRating);
-    total += this.getStatTotal(ItemStatsEnum.intellect) / 54;
+    let total = 3.336;
+    total += this.getStatTotal(ItemStatsEnum.spellCritRating) / 22.08;
+    total += this.getStatTotal(ItemStatsEnum.intellect) / 80;
     return total;
   }
 

@@ -22,7 +22,7 @@ export class Creature {
       dodge: -0.6, // 1 expertise reduces dodge chance by 0.25%
       parry: -0.6, // 1 expertise reduces dodge chance by 0.25%,
       glancing: 0,
-      block: -0.6, //most bosses can't block
+      block: 5,
       crit: 5.6,
       crushing: 15, //characters cannot crush bosses
       hit: 0 // whatever the rest is

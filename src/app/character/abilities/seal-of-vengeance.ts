@@ -32,11 +32,16 @@ export class SealOfVengeance implements AbilityInterface {
           let currentStacks = defender.debuffs[this.name].stacks;
           if (currentStacks === 5) {
             // const damage = ((150 / 15 + (attacker.spellDamage * 0.034)) * attacker.attackSpeed) * 5
-            const damage = 50 + ((attacker.spellDamage * 0.022) * 5)
-            return {
-              circumstance: 'SoV Melee',
-              damageAmount: damage,
+            const damageAmt = 50 + ((attacker.spellDamage * 0.022) * 5)
+            const damage: damageTakenInterface = {
+              circumstance: 'Seal of Vengeance',
+              damageAmount: damageAmt,
               damageType: this.magicSchool
+            }
+            const critRoll = Math.random() * 100
+            if (critRoll <= attacker.spellCrit) {
+              damage.damageAmount = damage.damageAmount * 1.5
+              damage.comment = 'CRITICAL'
             }
           } else {
             defender.debuffs[this.name].stacks += 1;
@@ -65,7 +70,7 @@ export class SealOfVengeance implements AbilityInterface {
       const damagePerTick = damagePer15 / 5  // one tick every 3 seconds
       defender.debuffs[this.name].lastDamageAppliedTimestamp = timeElapsed;
       return {
-        circumstance: 'SoV Dot',
+        circumstance: 'Holy Vengeance',
         damageAmount: damagePerTick,
         damageType: this.magicSchool,
         comment: `${numOfStacks} stacks`

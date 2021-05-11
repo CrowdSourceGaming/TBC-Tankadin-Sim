@@ -24,6 +24,8 @@ export class Attack implements AbilityInterface {
         damage = damage * 0.65
       } else if (rollResult === AttackTableEnum.crit) {
         damage = damage * 2;
+      } else if (rollResult === AttackTableEnum.block) {
+        damage = damage - 54
       }
     }
     return {

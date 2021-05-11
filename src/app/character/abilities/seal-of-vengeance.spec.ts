@@ -74,7 +74,7 @@ describe('SealOfVengeance', () => {
       defender.debuffs = { 'Seal of Vengeance': { stacks: 1, lastDamageAppliedTimestamp: -9999999999 } }
       const damage = SoV.onCheck(attacker, defender, 5000);
       expect(JSON.stringify(damage)).toEqual(JSON.stringify({
-        circumstance: 'SoV Dot',
+        circumstance: 'Holy Vengeance',
         damageAmount: 150 / 5,
         damageType: SoV.magicSchool
       }))
@@ -83,7 +83,7 @@ describe('SealOfVengeance', () => {
       defender.debuffs = { 'Seal of Vengeance': { stacks: 5, lastDamageAppliedTimestamp: -9999999999 } }
       const damage = SoV.onCheck(attacker, defender, 5000);
       expect(JSON.stringify(damage)).toEqual(JSON.stringify({
-        circumstance: 'SoV Dot',
+        circumstance: 'Holy Vengeance',
         damageAmount: 150 / 5 * 5,
         damageType: SoV.magicSchool
       }))
@@ -93,7 +93,7 @@ describe('SealOfVengeance', () => {
       attacker.gear.back.stats.spellDamage = 340
       const damage = SoV.onCheck(attacker, defender, 5000);
       expect(JSON.stringify(damage)).toEqual(JSON.stringify({
-        circumstance: 'SoV Dot',
+        circumstance: 'Holy Vengeance',
         damageAmount: 161.56,
         damageType: SoV.magicSchool
       }))
