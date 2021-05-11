@@ -32,7 +32,7 @@ export class SealOfVengeance implements AbilityInterface {
           let currentStacks = defender.debuffs[this.name].stacks;
           if (currentStacks === 5) {
             // const damage = ((150 / 15 + (attacker.spellDamage * 0.034)) * attacker.attackSpeed) * 5
-            const damageAmt = 50 + ((attacker.spellDamage * 0.022) * 5)
+            const damageAmt = 30 + ((attacker.spellDamage * 0.022) * 5)
             const damage: damageTakenInterface = {
               circumstance: 'Seal of Vengeance',
               damageAmount: damageAmt,
