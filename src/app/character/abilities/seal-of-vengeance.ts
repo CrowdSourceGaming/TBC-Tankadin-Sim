@@ -24,7 +24,8 @@ export class SealOfVengeance implements AbilityInterface {
       if (rollResult && rollResult !== AttackTableEnum.miss && rollResult !== AttackTableEnum.dodge && rollResult !== AttackTableEnum.parry) {
         const procChance = 100 * (20 / 60 * attacker.attackSpeed);
         const didProc = (Math.random() * 100 <= procChance)
-        if (didProc) {
+        const binaryResist = (Math.random() * 100 > (100 - 17 + attacker.spellHit))
+        if (didProc && !binaryResist) {
           if (!defender.debuffs[this.name]) {
             defender.debuffs[this.name] = { stacks: 0, lastDamageAppliedTimestamp: -9999999999, expires: -999999999 };
           }
@@ -32,7 +33,7 @@ export class SealOfVengeance implements AbilityInterface {
           let currentStacks = defender.debuffs[this.name].stacks;
           if (currentStacks === 5) {
             // const damage = ((150 / 15 + (attacker.spellDamage * 0.034)) * attacker.attackSpeed) * 5
-            const damageAmt = 30 + ((attacker.spellDamage * 0.022) * 5)
+            const damageAmt = (10 + (attacker.spellDamage * 0.014)) * (attacker.gear.mainHand.stats.attackSpeed || 2)
             const damage: damageTakenInterface = {
               circumstance: 'Seal of Vengeance',
               damageAmount: damageAmt,
@@ -43,6 +44,7 @@ export class SealOfVengeance implements AbilityInterface {
               damage.damageAmount = damage.damageAmount * 1.5
               damage.comment = 'CRITICAL'
             }
+            return damage
           } else {
             defender.debuffs[this.name].stacks += 1;
           }
