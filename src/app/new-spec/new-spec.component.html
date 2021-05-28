@@ -9,10 +9,9 @@
         <mat-panel-title> Instructions </mat-panel-title>
       </mat-expansion-panel-header>
       <ol>
-        <li>Open <a target="_blank" href="https://tbcdb.com/talents/index.html?en&paladin">TBCDB's Talent Calculator</a>
+        <li>Open <a target="_blank" href="https://tbc.wowhead.com/talent-calc/paladin/">Wowhead's Talent Calculator</a>
         </li>
         <li>Fill in your desired spec</li>
-        <li>Click "Link to this talents"</li>
         <li>Copy the URL with all the numbers into this window</li>
       </ol>
       <div>
@@ -24,9 +23,9 @@
 <div style="margin-top: 20px;">
   <form [formGroup] = "newSpecFormGroup" (ngSubmit)="apply(); false">
     <mat-form-field appearance="outline">
-      <mat-label>TBCDB talents link</mat-label>
+      <mat-label>Wowhead talents link</mat-label>
       <input matInput formControlName="newSpecURL"
-        placeholder="https://tbcdb.com/talents/index.html?en&paladin&0000000000000000000000000000000000000000000000000000000000000000">
+        placeholder="https://tbc.wowhead.com/talent-calc/paladin/-0520513150002102521051-052050003023">
     </mat-form-field>
     <div class="flex-grid flex-space-between">
       <button mat-raised-button color="accent" (click)="cancel(); false;">Cancel</button>

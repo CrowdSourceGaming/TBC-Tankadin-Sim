@@ -8,7 +8,7 @@ export class Spec {
   @JsonProperty() talents!: TalentMap;
   @JsonProperty() talentString: string;
 
-  constructor(talentAllocation: string = '0000000000000000000000000000000000000000000000000000000000000000') {
+  constructor(talentAllocation: string = '0-0-0') {
     this.initTalents(talentAllocation);
     this.talentString = talentAllocation;
   }
@@ -34,10 +34,10 @@ export class Spec {
   }
 
   get holyProtRetCount(): string {
-    const specStringArray = this.talentString.split('')
-    const holyCount = specStringArray.slice(0, 20).reduce((a, b) => +a + +b, 0);
-    const protCount = specStringArray.slice(20, 42).reduce((a, b) => +a + +b, 0);
-    const retCount = specStringArray.slice(42, -1).reduce((a, b) => +a + +b, 0);
+    const specStringArray = this.talentString.split('-')
+    const holyCount = specStringArray[0].split('').reduce((a, b) => +a + +b, 0);
+    const protCount = specStringArray[1].split('').reduce((a, b) => +a + +b, 0) ;
+    const retCount = specStringArray[2].split('').reduce((a, b) => +a + +b, 0) ;
     return `${holyCount}/${protCount}/${retCount}`
   }
 
@@ -48,7 +48,21 @@ export class Spec {
   }
 
   private initTalents(talentAllocation: string) {
-    const digits = talentAllocation.split('');
+    const specString = talentAllocation.split('-');
+    const holy = specString[0].split('')
+    const prot = specString[1].split('')
+    const ret = specString[2].split('')
+
+    const holyArr = new Array(20).fill(0);
+    const protArr = new Array(22).fill(0);
+    const retArr = new Array(22).fill(0);
+
+    holyArr.splice(0, holy.length, ...holy)
+    protArr.splice(0, prot.length, ...prot)
+    retArr.splice(0, ret.length, ...ret)
+
+    const digits = [holyArr, protArr, retArr].join().split(',')
+    this.talentString = digits.join();
     this.talents = {
       // holy
       divineStrength: +digits[0],
@@ -118,6 +132,7 @@ export class Spec {
       fanaticism: +digits[62],
       crusaderStrike: +digits[63]
     };
+    console.log('tallents');
   }
 }
 
