@@ -41,7 +41,6 @@ export class BlizzardApiService {
           const valueMatch = spell.description.match(/\d+/)
           const value = valueMatch ? valueMatch[0] : 0;
           item.stats[spellResponse as keyof typeof ItemStatsEnum] = +value;
-          console.log(spellResponse);
         })
         res.preview_item.stats.forEach(apiStat => {
           const stat = this.convertApiStatToAppStat(apiStat.type.type)
