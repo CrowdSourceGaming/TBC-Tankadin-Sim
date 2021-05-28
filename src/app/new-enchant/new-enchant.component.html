@@ -1,10 +1,25 @@
 <h1 mat-dialog-title>New Enchant</h1>
 <div mat-dialog-content>
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title> Instructions </mat-panel-title>
+      </mat-expansion-panel-header>
+      <ol>
+        <li>Search for your item on wowhead</li>
+        <li>Copy the Item number from the URL</li>
+        <img src="assets/item-number-example.png">
+        <li>Paste it into the "Item Number" field below</li>
+        <li>Add the bonuses from the enchant</li>
+        <li>Submit</li>
+      </ol>
+    </mat-expansion-panel>
+  </mat-accordion>
   <form [formGroup]="newEnchantFG">
     <div>
       <mat-form-field>
-        <mat-label>tbcdb link</mat-label>
-        <input formControlName="tbcdbLink" matInput placeholder="https://tbcdb.com/?item=29068">
+        <mat-label>Item Number</mat-label>
+        <input formControlName="tbcdbLink" matInput placeholder="https://tbc.wowhead.com/item=29185/continuum-blade">
       </mat-form-field>
     </div>
     <div>

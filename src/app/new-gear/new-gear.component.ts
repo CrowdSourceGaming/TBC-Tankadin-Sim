@@ -5,6 +5,7 @@ import { GearSet, GemSocketColor, Item, WeaponType } from '../item/item';
 import { ItemStats, ItemStatsEnum } from '../item/item-stats';
 import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { GemSocket } from '../gem-socket';
+import { BlizzardApiService, ItemResponse } from '../blizzard-api.service';
 
 @Component({
   selector: 'app-new-gear',
@@ -15,13 +16,8 @@ export class NewGearComponent implements OnInit {
 
   item: Item = new Item();
   GearSlots = GearSlots
-  GearSlotsKeys = Object.keys(GearSlots).sort();
   attributeList = Object.keys(ItemStatsEnum).sort();
   GemSocketColors = Object.keys(GemSocketColor).sort();
-  GearSets = Object.values(GearSet).sort();
-  selectedGearSlot!: GearSlots;
-  weaponTypesKeys = Object.values(WeaponType).sort();
-  showUnique = false;
 
   errors = {
     weaponStats: {
@@ -32,14 +28,10 @@ export class NewGearComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<NewGearComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) {
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private blizzardApiService: BlizzardApiService) {
     dialogRef.disableClose = true;
   }
-
-  addAttributesFormGroup = new FormGroup({
-    attributeName: new FormControl(''),
-    attributeValue: new FormControl('')
-  })
 
   createItemFormGroup!: FormGroup;
 
@@ -56,53 +48,13 @@ export class NewGearComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.selectedGearSlot = this.data.gearSlot;
     this.createItemFormGroup = new FormGroup({
-      tbcdbLink: new FormControl('', { validators: [Validators.required, this.validateTBCDBLink()] }),
-      itemName: new FormControl('', { validators: [Validators.required] }),
-      gearSlot: new FormControl({ value: this.selectedGearSlot, disabled: true }),
-      gearSet: new FormControl({ value: GearSet.none, disabled: false }, { validators: [Validators.required] }),
-      weaponType: new FormControl('', { validators: [Validators.required] }),
-      unique: new FormControl(false)
+      itemNumber: new FormControl('', { validators: [Validators.required, this.validateWowheadLink()] }),
     })
-    if (this.selectedGearSlot !== GearSlots.mainHand) {
-      this.removeWeaponStuff()
-    }
-    if (
-      this.selectedGearSlot === GearSlots.trinketOne ||
-      this.selectedGearSlot === GearSlots.trinketTwo ||
-      this.selectedGearSlot === GearSlots.fingerOne ||
-      this.selectedGearSlot === GearSlots.fingerTwo
-    ) {
-      this.showUnique = true;
-    }
   }
 
   onNoClick(): void {
     this.dialogRef.close();
-  }
-
-  getAttributes() {
-    const keys = [];
-    for (const [key] of Object.entries(this.item.stats)) {
-      keys.push(key as keyof ItemStats);
-    }
-    return keys;
-  }
-
-  addAttribute(event: any) {
-    const key = this.addAttributesFormGroup.get('attributeName');
-    const value = this.addAttributesFormGroup.get('attributeValue');
-    if (key?.value && value?.value) {
-      this.item.stats[key?.value as keyof typeof ItemStatsEnum] = +value?.value;
-      key?.setValue('');
-      value?.setValue('');
-      event.stopPropagation();
-    }
-  }
-
-  removeStat(key: string) {
-    delete this.item.stats[key as keyof typeof ItemStatsEnum];
   }
 
   addGemSocket(event: any) {
@@ -115,62 +67,9 @@ export class NewGearComponent implements OnInit {
     this.item.gemSockets.splice(gemSocketIndex, 1);
   }
 
-  createItem() {
-    if (this.createItemFormGroup.valid) {
-      this.item.set = this.createItemFormGroup.get('gearSet')?.value;
-      this.item.name = this.createItemFormGroup.get('itemName')?.value;
-      this.item.unique = this.createItemFormGroup.get('unique')?.value;
-      const attribute = this.addGemSocketBonusFormGroup.get('attributeName')?.value;
-      const value = this.addGemSocketBonusFormGroup.get('attributeValue')?.value
-      this.item.gemSockets.sort((a, b) => {
-        if (a.color === GemSocketColor.meta) { // always list meta first
-          return -1
-        } else {
-          return 0
-        }
-      })
-      if (attribute && value) {
-        this.item.gemSocketBonus = { [attribute as keyof ItemStats]: value }
-      }
-      if (this.selectedGearSlot === GearSlots.mainHand) {
-        this.item.weaponType = this.createItemFormGroup.get('weaponType')?.value;
-        if (!this.weaponIsValid()) {
-          this.errors.weaponStats.active = true;
-          return;
-        }
-      }
-      this.item.validSlot = this.selectedGearSlot;
-      this.dialogRef.close(this.item);
-    }
-  }
-
-  private removeWeaponStuff() {
-    const damageMinIdx = this.attributeList.findIndex(attr => attr === ItemStatsEnum.damageMin)
-    this.attributeList.splice(damageMinIdx, 1);
-    const damageMaxIdx = this.attributeList.findIndex(attr => attr === ItemStatsEnum.damageMax)
-    this.attributeList.splice(damageMaxIdx, 1);
-    const attackSpeedIdx = this.attributeList.findIndex(attr => attr === ItemStatsEnum.attackSpeed)
-    this.attributeList.splice(attackSpeedIdx, 1);
-    this.createItemFormGroup.removeControl('weaponType');
-  }
-
-  private removeUniqueStuff() {
-
-  }
-
-  private weaponIsValid(): boolean {
-    return (
-      this.item.weaponType && Object.values(WeaponType).includes(this.item.weaponType) &&
-        this.item.stats.attackSpeed && this.item.stats.attackSpeed > 0 &&
-        this.item.stats.damageMin && this.item.stats.damageMin > 0 &&
-        this.item.stats.damageMax && this.item.stats.damageMax > 0
-        ? true : false);
-  }
-
-
-  private validateTBCDBLink(): ValidatorFn {
+  private validateWowheadLink(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
-      const regEx = new RegExp(/^https:\/\/tbcdb.com\/\?item\=(\d+)$/)
+      const regEx = new RegExp(/^https:\/\/tbc.wowhead.com\/item\=(\d+)/)
       const matchers = control.value.match(regEx);
       if (matchers && matchers[1]) {
         this.item._id = matchers[1]
@@ -181,5 +80,48 @@ export class NewGearComponent implements OnInit {
       }
     }
   }
+
+  async createItem() {
+    if (this.createItemFormGroup.valid) {
+      const apiCall = await this.blizzardApiService.getItemInfo(this.item)
+      apiCall.subscribe((res: ItemResponse) => {
+        const attribute = this.addGemSocketBonusFormGroup.get('attributeName')?.value;
+        const value = this.addGemSocketBonusFormGroup.get('attributeValue')?.value
+        if (attribute && value) {
+          this.item.gemSocketBonus = { [attribute as keyof ItemStats]: value }
+        }
+        this.dialogRef.close(this.item);
+      });
+    }
+  }
+
+  // createItem() {
+  //   if (this.createItemFormGroup.valid) {
+  //     this.item.set = this.createItemFormGroup.get('gearSet')?.value;
+  //     this.item.name = this.createItemFormGroup.get('itemName')?.value;
+  //     this.item.unique = this.createItemFormGroup.get('unique')?.value;
+  //     const attribute = this.addGemSocketBonusFormGroup.get('attributeName')?.value;
+  //     const value = this.addGemSocketBonusFormGroup.get('attributeValue')?.value
+  //     this.item.gemSockets.sort((a, b) => {
+  //       if (a.color === GemSocketColor.meta) { // always list meta first
+  //         return -1
+  //       } else {
+  //         return 0
+  //       }
+  //     })
+  //     if (attribute && value) {
+  //       this.item.gemSocketBonus = { [attribute as keyof ItemStats]: value }
+  //     }
+  //     if (this.selectedGearSlot === GearSlots.mainHand) {
+  //       this.item.weaponType = this.createItemFormGroup.get('weaponType')?.value;
+  //       if (!this.weaponIsValid()) {
+  //         this.errors.weaponStats.active = true;
+  //         return;
+  //       }
+  //     }
+  //     this.item.validSlot = this.selectedGearSlot;
+  //     this.dialogRef.close(this.item);
+  //   }
+  // }
 
 }

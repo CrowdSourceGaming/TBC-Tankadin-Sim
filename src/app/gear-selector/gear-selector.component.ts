@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortable } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Character } from '../character/character';
 import { GearSlots } from '../character/gearslot';
@@ -112,6 +112,7 @@ export class GearSelectorComponent implements OnInit, AfterViewInit {
           return accumulator ? accumulator[key] : undefined;
         }, item);
     }
+    this.sort.sort(({id: 'name', start: 'asc'}) as MatSortable)
     this.dataSourceGearOptions.sort = this.sort;
   }
 

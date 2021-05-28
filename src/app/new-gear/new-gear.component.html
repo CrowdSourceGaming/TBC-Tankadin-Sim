@@ -1,93 +1,28 @@
 <h1 mat-dialog-title>Add New Gear</h1>
 <div mat-dialog-content>
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title> Instructions </mat-panel-title>
+      </mat-expansion-panel-header>
+      <ol>
+        <li>Search for your item on wowhead</li>
+        <li>Copy the URL</li>
+        <img src="assets/item-number-example.png">
+        <li>Paste it into the "Item Number" field below</li>
+        <li>Add any gems or socket bonuses to the item</li>
+        <li>Submit</li>
+      </ol>
+    </mat-expansion-panel>
+  </mat-accordion>
   <form [formGroup]="createItemFormGroup">
     <div>
       <mat-form-field>
-        <mat-label>tbcdb link</mat-label>
-        <input formControlName="tbcdbLink" matInput placeholder="https://tbcdb.com/?item=29068">
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-label>Item Name</mat-label>
-        <input formControlName="itemName" matInput placeholder="Justicar Faceguard">
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-label>Gear Slot</mat-label>
-        <mat-select formControlName="gearSlot">
-          <mat-option *ngFor="let slot of GearSlotsKeys" [value]="slot">
-            {{slot | humanize}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field>
-        <mat-label>Part of set?</mat-label>
-        <mat-select formControlName="gearSet">
-          <mat-option *ngFor="let set of GearSets;" [value]="set">
-            {{set | humanize}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-    <div *ngIf="showUnique">
-      <mat-checkbox formControlName="unique" style="padding-bottom: 10px;" color="primary">Unique</mat-checkbox>
-    </div>
-    <div *ngIf="this.selectedGearSlot === GearSlots.mainHand">
-      <mat-form-field>
-        <mat-label>Weapon Type</mat-label>
-        <mat-select formControlName="weaponType">
-          <mat-option *ngFor="let type of weaponTypesKeys;" [value]="type">
-            {{type | humanize}}
-          </mat-option>
-        </mat-select>
+        <mat-label>Item Number</mat-label>
+        <input formControlName="itemNumber" matInput placeholder="https://tbc.wowhead.com/item=29185/continuum-blade">
       </mat-form-field>
     </div>
   </form>
-
-  <div>
-    <h3>Attributes</h3>
-    <app-error *ngIf="errors.weaponStats.active" [errorMessage]="errors.weaponStats.errorMessage"></app-error>
-    <div>
-      <table>
-        <thead>
-          <th>Attribute</th>
-          <th>Value</th>
-          <th></th>
-        </thead>
-        <tbody>
-          <tr *ngFor="let key of getAttributes()">
-            <td>{{key | humanize}}</td>
-            <td>{{item.stats[key]}}</td>
-            <td><button style="float:right;" mat-raised-button color="warn" (click)="removeStat(key)">Remove</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <form [formGroup]="addAttributesFormGroup" (ngSubmit)="addAttribute($event); false">
-      <div class="flex-grid flex-space-between">
-        <div>
-          <mat-form-field class="small-form-field">
-            <mat-label>Attribute</mat-label>
-            <mat-select formControlName="attributeName">
-              <mat-option *ngFor="let key of attributeList" [value]="key">{{key | humanize}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field style="padding-left: 10px;" class="small-form-field">
-            <mat-label>Value</mat-label>
-            <input formControlName="attributeValue" matInput placeholder="0">
-          </mat-form-field>
-        </div>
-        <button mat-raised-button color="accent">Add</button>
-      </div>
-    </form>
-  </div>
-
   <div>
     <h3>Gem Sockets</h3>
     <div>
@@ -130,3 +65,4 @@
     <button mat-raised-button color="accent" (click)="onNoClick()">Cancel</button>
     <button mat-raised-button color="primary" (click)="createItem()" cdkFocusInitial>Add Gear</button>
   </div>
+</div>

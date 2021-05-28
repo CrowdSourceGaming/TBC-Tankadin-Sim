@@ -59,7 +59,7 @@ export class NewEnchantComponent implements OnInit {
 
   ngOnInit(): void {
     this.newEnchantFG = new FormGroup({
-      tbcdbLink: new FormControl('', [Validators.required, this.validateTBCDBLink()]),
+      tbcdbLink: new FormControl('', [Validators.required, this.validateWowheadLink()]),
       enchantName: new FormControl('', [Validators.required]),
       gearSlot: new FormControl({ value: this.data.gearSlot, disabled: true }, [Validators.required])
     });
@@ -74,9 +74,9 @@ export class NewEnchantComponent implements OnInit {
   }
 
 
-  private validateTBCDBLink(): ValidatorFn {
+  private validateWowheadLink(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
-      const regEx = new RegExp(/^https:\/\/tbcdb.com\/\?(spell|item)\=(\d+)$/)
+      const regEx = new RegExp(/^https:\/\/tbc.wowhead.com\/?(spell|item)\=(\d+)/)
       const matchers = control.value.match(regEx);
       if (matchers && matchers[1] && matchers[2]) {
         this.enchant.type = matchers[1]

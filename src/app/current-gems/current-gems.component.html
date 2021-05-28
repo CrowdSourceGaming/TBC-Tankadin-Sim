@@ -8,7 +8,7 @@
       <li *ngFor="let socket of gear.gemSockets">
         {{socket.color}} socket:
         <span *ngIf="socket.gem; else none">
-          <a class="default-pointer" [ngClass]="getRarityClass(socket.gem)" attr.data-wowhead="item={{socket.gem.id}}">{{socket.gem?.name}}</a>
+          <a class="default-pointer" [ngClass]="getRarityClass(socket.gem)" attr.data-wowhead="item={{socket.gem.id}}&domain=tbc">{{socket.gem?.name}}</a>
         </span>
       </li>
     </ul>
