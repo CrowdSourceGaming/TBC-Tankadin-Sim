@@ -37,6 +37,7 @@ import { NewEnchantComponent } from './new-enchant/new-enchant.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { SimModule } from './sim/sim.module';
 import { SimRoutingModule } from './sim/sim-routing.module';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +57,7 @@ import { SimRoutingModule } from './sim/sim-routing.module';
     EnchantsComponent,
     CurrentGemsComponent,
     NewEnchantComponent,
+    FooterComponent,
   ],
   imports: [
     HttpClientModule,
