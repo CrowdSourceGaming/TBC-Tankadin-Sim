@@ -20,14 +20,14 @@ export class NewSpecComponent implements OnInit {
   }
 
   newSpecFormGroup = new FormGroup({
-    newSpecURL: new FormControl('', [Validators.required, this.validateTBCDBLink()])
+    newSpecURL: new FormControl('', [Validators.required, this.validateWowheadLink()])
   })
 
-  talentUrlRegex = new RegExp(/^https:\/\/tbcdb.com\/talents\/index.html\?en\&paladin\&(\d{64})$/);
+  talentUrlRegex = new RegExp(/https:\/\/tbc.wowhead.com\/talent-calc\/paladin\/(.*)$/);
 
   ngOnInit(): void {
     this.spec = this.sharedDataService.character.value.spec;
-    this.currentSpecUrl = `https://tbcdb.com/talents/index.html?en&paladin&${this.spec.talentString}`
+    this.currentSpecUrl = `https://tbc.wowhead.com/talent-calc/paladin/${this.spec.talentString}`
   }
 
   cancel(): void {
@@ -44,7 +44,7 @@ export class NewSpecComponent implements OnInit {
     }
   }
 
-  private validateTBCDBLink(): ValidatorFn {
+  private validateWowheadLink(): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const matchers = control.value.match(this.talentUrlRegex);
       if (matchers && matchers[1]) {
