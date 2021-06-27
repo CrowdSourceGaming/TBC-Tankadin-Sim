@@ -35,13 +35,15 @@ export class BlizzardApiService {
         item.unique = res.preview_item.unique_equipped === 'Unique'
         item.validSlot = this.convertSlot(res.inventory_type.type);
         item.stats.armor = (res.preview_item.armor?.value || 0);
-        res.preview_item.spells.forEach(async spell => {
-          // const spellResponse = await this.lookupSpell(spell.spell.key.href);
-          const spellResponse = this.convertSpell(spell.description);
-          const valueMatch = spell.description.match(/\d+/)
-          const value = valueMatch ? valueMatch[0] : 0;
-          item.stats[spellResponse as keyof typeof ItemStatsEnum] = +value;
-        })
+        if (res.preview_item.spells) {
+          res.preview_item.spells.forEach(async spell => {
+            // const spellResponse = await this.lookupSpell(spell.spell.key.href);
+            const spellResponse = this.convertSpell(spell.description);
+            const valueMatch = spell.description.match(/\d+/)
+            const value = valueMatch ? valueMatch[0] : 0;
+            item.stats[spellResponse as keyof typeof ItemStatsEnum] = +value;
+          })
+        }
         res.preview_item.stats.forEach(apiStat => {
           const stat = this.convertApiStatToAppStat(apiStat.type.type)
           item.stats[stat as keyof typeof ItemStatsEnum] = apiStat.value;
@@ -280,7 +282,7 @@ export interface ItemResponse {
         description: string
       }
     ],
-    shield_block?:{
+    shield_block?: {
       value: number
     }
     stats: [
