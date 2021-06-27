@@ -132,7 +132,6 @@ export class Spec {
       fanaticism: +digits[62],
       crusaderStrike: +digits[63]
     };
-    console.log('tallents');
   }
 }
 
